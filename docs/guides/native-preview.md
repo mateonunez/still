@@ -65,3 +65,5 @@ The live biometric flow, password dialog and desktop-mode coverage still need th
 ## Latest visual fix
 
 The current preview removes the forced initial password focus and the extra outline, while retaining native keyboard focus. The embedded fingerprint now uses regular control size and explicit hosting bounds. Quit/reopen the preview to load the new binary. Verify initial presentation and keyboard navigation; OS accessibility/keyboard settings still govern native focus behavior. [Evidence and large-screen follow-up](../verification/phase-01-visual-polish.md).
+
+Three-finger horizontal swipes, including slow partial transitions, remain a failing visual-privacy case. See the [desktop-transition acceptance guide](desktop-coverage.md) and [current finding](../verification/native-trackpad-coverage.md). No gesture restriction is currently implemented.

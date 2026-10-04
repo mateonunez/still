@@ -3,6 +3,7 @@ import type { NextConfig } from 'next';
 
 const config: NextConfig = {
   poweredByHeader: false,
+  agentRules: false,
   turbopack: { root: resolve(import.meta.dirname, '../..') },
   async headers() {
     const base = [
@@ -12,7 +13,10 @@ const config: NextConfig = {
     if (process.env.VERCEL_ENV !== 'production' && process.env.STILL_INDEXABLE !== 'true') {
       base.push({ key: 'X-Robots-Tag', value: 'noindex, nofollow' });
     }
-    return [{ source: '/:path*', headers: base }];
+    return [
+      { source: '/:path*', headers: base },
+      { source: '/preview/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+    ];
   },
 };
 export default config;

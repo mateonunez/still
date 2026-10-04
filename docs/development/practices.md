@@ -40,7 +40,7 @@ Use the CoreGraphics elapsed-input scalar only while enabled. Do not record inpu
 
 Acquire finite named IOKit assertions with OS timeout-release safety. Release only owned IDs, retain/retry failures, roll back partial acquisition and avoid replacing a session while cleanup is unresolved. A failed request must not produce a false active label. Display intent only adds a request during an explicit awake session. End requests on Stop, expiry, sleep/session resignation and teardown; do not restart on wake. Always consume the retained CFDictionary before bridging IOPMAssertionCopyProperties.
 
-`python3 scripts/verify-native-energy.py` runs a bounded own-process probe and cross-checks only its own pmset records. Discard unrelated process names and tolerate non-UTF-8 output. Native lifecycle proof is separate from real display/sleep timing, lid behavior, battery transitions and endurance. Update exact artifact hashes after UI rebuilds before attributing runtime evidence to a candidate.
+`node scripts/verify-native-energy.mjs` runs a bounded own-process probe and cross-checks only its own pmset records. Discard unrelated process names and tolerate non-UTF-8 output. Native lifecycle proof is separate from real display/sleep timing, lid behavior, battery transitions and endurance. Update exact artifact hashes after UI rebuilds before attributing runtime evidence to a candidate.
 
 ## Native materials
 
@@ -60,13 +60,13 @@ Use project-local public-registry configuration instead of inherited machine npm
 
 Compose typed metadata per route; canonical origin is meet-still.app. Keep a single native robots/sitemap implementation and server-rendered explanations. Explicit noindex headers/meta apply to preview and development, including custom preview domains. Permit crawlers to read accessible previews' noindex; robots is not access control. Do not fabricate reviews, offers, availability or an AI-ranking protocol.
 
-Vercel root apps/website needs sourceFilesOutsideRootDirectory for canonical tokens and the prebuild generator. CLI uploads use .vercelignore to exclude env files, native builds, binaries and unnecessary private artifacts. Read credentials through CLI authentication, never print tokens or copy local env files. Validate production via scripts/verify-website.py, then inspect actual mobile/desktop and keyboard behavior. CI success, Vercel READY, domain TLS, correct HTML and real search indexing are separate evidence levels.
+Vercel root apps/website needs sourceFilesOutsideRootDirectory for canonical tokens and the prebuild generator. CLI uploads use .vercelignore to exclude env files, native builds, binaries and unnecessary private artifacts. Read credentials through CLI authentication, never print tokens or copy local env files. Validate production via scripts/verify-website.mjs, then inspect actual mobile/desktop and keyboard behavior. CI success, Vercel READY, domain TLS, correct HTML and real search indexing are separate evidence levels.
 
 ## AppKit regression learned in Step 1A
 
 Set `NSPanel.level` after configuring `isFloatingPanel`: the original order reset the level to `.normal`. Verify the getter in the live app, not only the assignment in source. The runtime probe checks panel count, frames, visibility flags, actual window level, font registration and synthetic subprocess progress; these remain structural evidence rather than a desktop coverage test.
 
-Run `python3 scripts/verify-native-runtime.py` after the app build to regenerate local native view exports and receipts. It creates and terminates its own app/workload only, and makes no credential request. Exported PNGs are native SwiftUI view renders, not screenshots of the real desktop. The `--evidence-directory` argument is opt-in; normal launches write no diagnostic files.
+Run `node scripts/verify-native-runtime.mjs` after the app build to regenerate local native view exports and receipts. It creates and terminates its own app/workload only, and makes no credential request. Exported PNGs are native SwiftUI view renders, not screenshots of the real desktop. The `--evidence-directory` argument is opt-in; normal launches write no diagnostic files.
 
 ## Embedded authentication and menu state
 
@@ -76,8 +76,16 @@ Password fallback uses a separate context without an embedded view. The SDK docu
 
 Derive menu state from the session; keep one primary action, disable duplicate system-dialog attempts and preserve Quit. Development metadata belongs in About. Keep first-launch discovery visible without unsolicited notifications or permission requests. Native menus and authentication need human validation even when the domain-state tests pass.
 
-Build a separate candidate with `./scripts/build-macos.sh debug Still-preview` without replacing an app under interactive testing. Binary replacement uses a new file plus rename rather than truncating a potentially mapped executable. Probes must terminate only their own subprocesses. `python3 scripts/verify-native-runtime.py --app Still-preview` stops only its own subprocesses and avoids biometric evaluation. `--render-only` produces source-view exports without presenting a curtain.
+Build a separate candidate with `./scripts/build-macos.sh debug Still-preview` without replacing an app under interactive testing. Binary replacement uses a new file plus rename rather than truncating a potentially mapped executable. Probes must terminate only their own subprocesses. `node scripts/verify-native-runtime.mjs --app Still-preview` stops only its own subprocesses and avoids biometric evaluation. `--render-only` produces source-view exports without presenting a curtain.
 
 ## Focus and embedded-view sizing
 
 Do not force focus onto a secondary password action during biometric-first presentation, and do not stack a custom outline over the native focus effect. Preserve native Buttons, keyboard shortcuts and focus behavior; never change OS accessibility preferences for appearance. Bind both dimensions of an embedded AppKit control to its SwiftUI host, not just its center. Validate live controls separately: native view exports use an illustrative fingerprint and cannot reveal overflow of the system NSView.
+
+## Shared Next.js previews and Node verification
+
+Keep visual prototypes as typed React features in the existing website app, with scoped CSS and canonical tokens. Route groups keep public chrome separate without changing public URLs. `/preview` uses explicit noindex headers/metadata, is omitted from the sitemap and returns 404 on Vercel production. Enable a local production preview only through STILL_DESIGN_PREVIEW. Never substitute sample values for a connected provider's unavailable data.
+
+Node is the sole script runtime. Verification tools use core Node APIs without a Python server or additional parser/test framework. Keep native probes process-owned, output-confined, bounded and credential-free. Historical reports retain their original commands; fresh receipts identify the current executable/tool. Shared font provenance and native resources live in design/fonts; preserve original license bytes.
+
+When moving App Router files, stop the owned dev process and regenerate its .next types before the production build; stale dev validators can reference removed route paths. Next.js agent-rule generation is disabled so generated collaboration files do not enter source control.

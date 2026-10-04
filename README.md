@@ -10,7 +10,7 @@ A calm screen for your Mac, with optional inactivity activation.
 
 [Meet Still](https://meet-still.app) · [Development field notes](https://meet-still.app/changelog)
 
-Still creates a visual privacy curtain over the desktop. It does not replace the macOS security lock or guarantee that every third-party task continues processing. Porcelain is the initial design standard, with warm light/dark appearances and a burgundy identity. Agent awareness and future theme collections are follow-up scope.
+Still creates a visual privacy curtain over the desktop. It does not replace the macOS security lock or guarantee that every third-party task continues processing. Porcelain is the initial design standard, with warm light/dark appearances and a burgundy identity. A widget/plugin foundation and an optional Codex adapter are planned before beta; additional theme collections remain follow-up scope.
 
 ## Try the native preview
 
@@ -26,12 +26,12 @@ The candidate includes optional inactivity activation, disabled initially. Awake
 ## Explore the design
 
 ```sh
-python3 -m http.server 8765 --bind 127.0.0.1 --directory prototypes
+pnpm dev
 ```
 
-Open [Porcelain Light](http://127.0.0.1:8765/?theme=porcelain&view=screen&appearance=light) or [Porcelain Dark](http://127.0.0.1:8765/?theme=porcelain&view=screen&appearance=dark). Switch appearance, inspect settings and preview the website. Other theme directions remain available for future collections.
+Open [Porcelain Light](http://127.0.0.1:3000/preview?theme=porcelain&view=screen&appearance=light) or [Porcelain Dark](http://127.0.0.1:3000/preview?theme=porcelain&view=screen&appearance=dark). Switch appearance, inspect settings and preview the website. Other theme directions remain available for future collections.
 
-This is a disposable browser prototype. Authentication, activity and energy are simulated. It never locks the Mac, changes power settings, or reads agent conversations. The production landing will use Next.js.
+This is a disposable browser prototype. Authentication, activity and energy are simulated. It never locks the Mac, changes power settings, or reads agent conversations. The preview and production landing share the existing Next.js app; no Python server is required. Preview routes are local, noindex and unavailable on production.
 
 ## Product and architecture
 
@@ -41,7 +41,7 @@ This is a disposable browser prototype. Authentication, activity and energy are 
 | Appearance | Porcelain, burgundy, light/dark/system | Interactive design preview with local licensed fonts |
 | Website | Next.js App Router, typed content/SEO, local fonts | Live on [meet-still.app](https://meet-still.app); GitHub-connected Vercel builds |
 | Distribution | Signed/notarized app download; evaluate Homebrew cask | No release, hosted package or usable install command |
-| Agents | Optional status, attention and usage metadata | Post-v1 plan |
+| Plugins and agents | Customizable native widgets, reusable adapter protocol, Codex first | Pre-beta proposal; no integration implemented |
 
 ## Workspace map
 
@@ -51,17 +51,21 @@ This is a disposable browser prototype. Authentication, activity and energy are 
 - [Native feasibility](docs/research/macos-feasibility.md) · [direct distribution](docs/distribution.md)
 - [Next.js website plan](docs/website-plan.md) · [launch strategy](docs/launch-strategy.md)
 - [Website/hosting guide](docs/guides/website-and-hosting.md) · [delivery evidence](docs/verification/phase-04-website-and-hosting.md)
-- [Agent awareness](docs/agent-awareness.md) · [prototype notes](prototypes/NOTES.md)
+- [Widgets and plugins](docs/plugins-and-widgets.md) · [Agent awareness](docs/agent-awareness.md) · [prototype notes](prototypes/NOTES.md)
 
-## Verify the brand
+## Verify the workspace
 
 ```sh
-node scripts/generate-brand-css.mjs
-node scripts/check-contrast.mjs
+pnpm check
+pnpm build
+pnpm typecheck
+pnpm check:brand
 ```
 
-Palette roles are checked from the source tokens. Bundled font files include licenses and [provenance hashes](prototypes/assets/fonts/manifest.json). No system-wide font installation or font CDN is needed.
+Palette roles are checked from the source tokens. Bundled font files include licenses and [provenance hashes](design/fonts/manifest.json). No system-wide font installation or font CDN is needed.
 
 ## Project status
 
 Source is private under [mateonunez/still](https://github.com/mateonunez/still). The public Next.js site is hosted by the personal [Vercel project](https://vercel.com/mmateonunez/still). Native acceptance, Developer ID signing, pricing and public app release remain separate steps. There is no App Store release planned.
+
+Development requires Node 24/pnpm and Xcode/Swift for native builds. Verification tools use Node; Python is not required. See the [preview guide](docs/guides/design-preview.md).

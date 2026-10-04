@@ -50,3 +50,5 @@ Biome identified an invalid label on a generic element; the appearance choices n
 Search Console setup was reported complete on 2026-10-04; account state was not independently inspected. Real indexing/rankings, field Core Web Vitals, complete screen-reader/accessibility testing and design acceptance are not established. No product-market/conversion claim follows from reading modern homepages. Native authentication, Mission Control/desktop gestures, signing/notarization, installability and app compatibility stay open in their respective reports.
 
 See [primary-source research](../research/website-seo-2026.md), [accepted hosting architecture](../adr/0005-personal-website-and-hosting.md) and [user guide](../guides/website-and-hosting.md).
+
+Tooling update: Python invocations above are historical receipts. Current equivalents use Node; see the [preview/tooling guide](../guides/design-preview.md).

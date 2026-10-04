@@ -1,6 +1,6 @@
-# Agent awareness — post-v1 evolution
+# Agent awareness — Codex first
 
-Planned direction, 2026-10-04. Follow-up to the first release, not part of its acceptance scope.
+Planned direction, updated 2026-10-04. The widget/plugin foundation and first Codex integration are now scheduled before beta and distribution. Additional providers remain follow-up scope. No integration is implemented.
 
 ## Product opportunity
 
@@ -25,7 +25,7 @@ Codex       Needs your attention    1 pending request
 Claude      Working                 Updated 12 seconds ago
 
 Usage · sample concept
-Codex       Session used: 64%       Resets in 1h 20m
+Codex       5-hour quota used: 64%  Resets in 1h 20m
 Claude      Weekly used: 38%        Updated 2 minutes ago
 ```
 
@@ -58,10 +58,12 @@ Use event-driven lifecycle updates when available; bounded refresh/backoff for q
 
 ## Delivery order
 
-1. Ship and validate the native curtain, authentication and power controls.
-2. Prove a usage adapter and one session/attention adapter with disposable fixtures and live consented metadata evidence.
+1. Resolve the core curtain/authentication findings and review the proposed widget/template UI and reusable plugin protocol.
+2. Prove the first Codex usage adapter with disposable fixtures and live opted-in metadata evidence. Validate session/attention capabilities separately; unsupported capabilities stay explicitly unavailable.
 3. Review an optional compact card with real field constraints and privacy defaults.
 4. Ship read-only agent awareness behind per-provider opt-in.
 5. Evaluate authenticated navigation and, separately, whether in-app approval belongs in the product.
 
 Acceptance must include multiple simultaneous sessions, stale/disconnected sources, resolved/canceled requests, account selection, malformed events, unavailable quota, correct units, and proof that conversation content never reaches UI or app telemetry. No agent integration is implemented in this workspace.
+
+See [widget/plugin proposal](plugins-and-widgets.md) and [current Codex source research](research/codex-plugin-2026.md) for the proposed integration boundaries.

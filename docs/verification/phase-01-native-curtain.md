@@ -80,3 +80,5 @@ Follow [the native preview guide](../guides/native-preview.md). For each case re
 | Force Quit/crash and restored appearance | Pending visual recovery check |
 
 The app is stopped after the automated probe, leaving the user's desktop available. Open it manually to continue Step 1B. Step 1A is ready for review; the phase is not accepted and Phase 2 remains unstarted.
+
+Tooling update: Python invocations above are historical receipts. Current equivalents use Node; see the [preview/tooling guide](../guides/design-preview.md).

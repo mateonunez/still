@@ -24,14 +24,16 @@ design/                      # owned artwork and shared token definitions
 docs/adr/                    # accepted architecture decisions
 docs/research/               # sourced facts and experimental receipts
 docs/verification/           # hardware/OS coverage and release evidence
-prototypes/                  # disposable UI exploration, delete or absorb
+prototypes/                  # archived design-review notes
+apps/website/src/features/design-preview/ # local React template previews
+design/fonts/                # shared licensed native/prototype font source
 ```
 
 Discovery documents, shared brand tokens, licensed fonts, the visual prototype, the native executable package, SessionKit and the production Next.js website exist now. `malock` remains the workspace path; Still is the working product name. The development bundle ID is `co.mateonunez.still.development`; `co.mateonunez.still` is proposed for release. Source is private under mateonunez/still; the website uses personal Vercel hosting at meet-still.app. Final release identity, license and broader branch protections remain undecided. See [hosting ADR](adr/0005-personal-website-and-hosting.md), [website plan](website-plan.md) and [distribution](distribution.md).
 
 ## Deep boundaries
 
-Post-v1 seam: `Activity` may consume optional `AgentProvider` adapters that normalize session status, attention signals and usage windows. Do not add these integrations to the first app slice; the proposed contract is in [agent awareness](agent-awareness.md).
+Pre-beta proposal: a plugin host renders constrained native widgets from versioned templates and normalized metadata. Data adapters remain separate from presentation, authentication and power policy. The first adapter targets Codex usage; lifecycle and attention require independently verified capabilities. See [widgets and plugins](plugins-and-widgets.md), [agent awareness](agent-awareness.md) and [source research](research/codex-plugin-2026.md). No plugin runtime is implemented yet.
 
 | Module | Responsibility | Public result |
 | --- | --- | --- |

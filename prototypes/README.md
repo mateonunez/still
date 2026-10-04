@@ -1,19 +1,20 @@
-# Disposable design prototype
+# Design preview archive
 
-Question: which visual direction and information hierarchy best express a calm away screen?
-
-Run from the workspace root:
+The HTML prototype has been migrated to the existing Next.js app. This directory retains design-review notes only; there is no standalone server or Python dependency.
 
 ```sh
-python3 -m http.server 8765 --bind 127.0.0.1 --directory prototypes
+pnpm dev
 ```
 
-Open http://127.0.0.1:8765. Theme and page are also URL parameters: `?theme=spectrum&view=screen` or `?theme=meadow&view=landing`.
+Open http://127.0.0.1:3000/preview. Deep links preserve the existing selections:
 
-Compare Porcelain, Spectrum, and Meadow using the bottom concept bar. Use the top controls to inspect the screen, settings, and website. Activity disclosure and settings operate in memory. “Preview return” simulates successful authentication and provides a cover-again action. No biometric request, password collection, real activity observation, persistence, network submission, power assertion, or OS lock occurs.
+- `/preview?theme=porcelain&view=screen&appearance=light`
+- `/preview?theme=porcelain&view=screen&appearance=dark`
+- `/preview?theme=spectrum&view=screen`
+- `/preview?theme=meadow&view=settings`
 
-Porcelain is the selected initial direction. Its Light, Dark, and System controls apply to the screen, settings, website, and simulated return. A direct dark preview is `http://127.0.0.1:8765/?theme=porcelain&view=screen&appearance=dark`. Other directions remain available for future collection exploration.
+Porcelain, Spectrum and Meadow remain available. Screen, settings and illustrative website views use React state. Return/cover, sample app disclosure and inactivity controls are simulations. Awake controls remain hidden pending concept refinement, matching current native availability.
 
-The illustration is original SVG. Approved fonts are bundled locally in `assets/fonts/` with licenses and a provenance/hash manifest. No external fonts, images, or runtime network dependencies are requested. The prototype is browser-rendered and does not establish native performance, window coverage, authentication layering, or macOS accessibility acceptance.
+The route is noindex, excluded from the sitemap and disabled in production. It runs in development; a local production build can expose it with `STILL_DESIGN_PREVIEW=true`. It never performs authentication, reads activities, changes energy preferences or collects passwords. It does not prove native coverage or compatibility.
 
-Decision: Still selected as the working name; Porcelain selected as the initial standard, with a burgundy light/dark direction. Preserve the accepted direction and replace or remove this prototype during native implementation.
+Fonts and licenses now live in [design/fonts](../design/fonts/manifest.json). The original Meadow illustration is preserved as a local SVG asset. See the [preview guide](../docs/guides/design-preview.md).

@@ -16,7 +16,8 @@ Prepared for joint review. Recommendations are not approvals.
 | D10 | Remote repo visibility and workflow? | Private personal mateonunez/still; main bootstrap and CI | Selected private; repository created and pushed; broader branch protections remain undecided |
 | D12 | Website stack? | Next.js App Router with typed metadata | Implemented and hosted on personal mmateonunez/still Vercel project |
 | D13 | Product domain? | meet-still.app canonical; www redirects to apex | Configured; connected and HTTPS-verified |
-| D11 | Agent awareness timing? | Optional metadata-only status, attention and usage view after v1 | Selected post-v1 evolution; providers and integration scope pending |
+| D11 | Agent awareness timing? | Optional metadata-only Codex plugin before beta and distribution | Priority updated 2026-10-04; capabilities and source contract under research |
+| D14 | Widget/plugin extensibility? | Versioned reusable protocol, customizable native templates and community authoring path | Pre-beta priority selected; runtime, permissions and protocol details proposed, not implemented |
 
 Next step: manual review of the Phase 2 candidate using the inactivity/energy guide, including the earlier authentication and display acceptance cases. Native Liquid Glass controls and restrained service-window vibrancy use modern macOS materials; Porcelain coverage stays opaque. The Next.js website and direct app distribution are selected. OS support, pricing and remote ownership remain open.
 

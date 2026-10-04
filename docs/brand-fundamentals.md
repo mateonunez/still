@@ -28,7 +28,7 @@ Light mode leads with porcelain and uses burgundy for actions and the activity s
 The contrast script checks text, primary actions/hover, activity surfaces, focus indicators, and toggle pairs from the canonical values. Minimum measured body-text pair is 4.87:1 in light mode; dark body-text pairs exceed 7:1. This is palette evidence, not a full accessibility audit of every composited pixel.
 
 ```sh
-node scripts/generate-brand-css.mjs
+node scripts/generate-website-tokens.mjs
 node scripts/check-contrast.mjs
 ```
 
@@ -41,7 +41,7 @@ Generated CSS is a prototype artifact. The native app and Next.js site will cons
 - **Inter:** website body, captions, navigation and interactive controls. Use regular/medium weights, comfortable line height and tabular numbers for numeric metadata.
 - **System font:** native macOS controls and settings. Preserve platform sizing, accessibility and conventional behavior; carry brand character through the display face and palette.
 
-Instrument Serif and Inter are distributed under SIL Open Font License terms by their authors. Local unmodified WOFF2 files, their license texts, source URLs and SHA-256 hashes are included in [prototype font assets](../prototypes/assets/fonts/manifest.json). Native packaging will need the appropriate desktop font format and its included license. No system-wide font installation was performed. [Instrument's source](https://github.com/Instrument/instrument-serif), [Inter's source](https://github.com/rsms/inter).
+Instrument Serif and Inter are distributed under SIL Open Font License terms by their authors. Local unmodified WOFF2 files, their license texts, source URLs and SHA-256 hashes are included in [licensed font assets](../design/fonts/manifest.json). Native packaging will need the appropriate desktop font format and its included license. No system-wide font installation was performed. [Instrument's source](https://github.com/Instrument/instrument-serif), [Inter's source](https://github.com/rsms/inter).
 
 ## Language
 

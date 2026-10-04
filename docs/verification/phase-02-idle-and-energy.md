@@ -96,3 +96,5 @@ Follow [the energy guide](../guides/idle-and-energy.md).
 | Large screens, multiple monitors, Spaces/fullscreen and smooth transitions | Still open from Phase 1 |
 
 No app-specific assertion remains after the completed probes. Unrelated applications can legitimately continue preventing sleep. The development candidate is ready for manual review; Phase 2 is not yet marked human-accepted.
+
+Tooling update: Python invocations above are historical receipts. Current equivalents use Node; see the [preview/tooling guide](../guides/design-preview.md).

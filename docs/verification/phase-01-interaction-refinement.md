@@ -63,3 +63,5 @@ Quit the old Still using its menu, then open `out/Still-preview.app` (same devel
 Verify the new welcome window/icon/menu, then Show Still and rest a finger on Touch ID without first clicking Return. Record whether the inline control becomes ready and whether a separate system dialog appears unexpectedly. Test password fallback, cancellation, Escape/retry, fallback while biometric auth is pending, and restoration of the previous app. Repeat on a secondary display and after sleep/system lock/hot-plug.
 
 System timeout, lockout, enrollment and hardware capabilities remain OS-controlled. The app cannot silently sample fingerprints globally, replace the OS lock, hide the system password dialog or disable normal recovery. The computer-use tool's inability to recognize the app still blocks automated native interaction verification. Phase 1 is not accepted yet; Phase 2 is unstarted.
+
+Tooling update: Python invocations above are historical receipts. Current equivalents use Node; see the [preview/tooling guide](../guides/design-preview.md).

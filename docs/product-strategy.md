@@ -50,7 +50,7 @@ The roadmap retains Spectrum, Meadow, and new themes as a possible future market
 
 ## Activity contract
 
-Post-v1 direction: agent status, approval attention, and usage summaries without conversations. Keep it outside MVP; evaluate provider capabilities and an optional CodexBar usage adapter. See [agent awareness](agent-awareness.md).
+Pre-beta direction: a reusable widget/plugin protocol and the first Codex plugin. Start with verified usage windows and resets; session state and approval attention depend on separate supported sources. Templates are customizable but host-rendered, with no conversation disclosure. See [widget/plugin proposal](plugins-and-widgets.md) and [agent awareness](agent-awareness.md).
 
 Running application is not running job. MVP can show selected running apps and events observed by this utility from the time observation starts. It does not reconstruct arbitrary historical activity. A future adapter may report a build or transfer with genuine progress; it must identify its source and freshness. Unknown progress stays unknown.
 
@@ -64,6 +64,7 @@ Before authentication, use counts or user-approved labels only. Never expose doc
 | 1 — Prove | Disposable native API experiments | Hardware/OS matrix establishes coverage, auth, idle, power, exit behavior |
 | 2 — Build | One complete manual-cover slice | Cover → authenticate → return, multiple displays, cleanup and recovery |
 | 3 — Complete | Idle, themes, timed awake sessions, optional activity | Real workflows continue within documented limits; privacy and battery behavior verified |
+| 3A — Extend | Widget/plugin protocol, customizable templates, first opt-in Codex adapter | UI review, locally imported fixture, pinned usage contract, missing/stale/error behavior and explicit source grants |
 | 4 — Beta | Signed distribution candidate and support docs | External testers understand the boundary and reliably complete the primary loop |
 | 5 — Launch | Final name, public site, release assets | Name clearance, truthful claims, distribution and release approval |
 

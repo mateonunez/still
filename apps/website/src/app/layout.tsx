@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import { site } from '@/content/site';
-import { Footer, Header } from '@/features/home/chrome';
 import './globals.css';
 
 const display = localFont({
@@ -25,11 +24,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        <div className="site-shell">
-          <Header />
-          {children}
-          <Footer />
-        </div>
+        {children}
       </body>
     </html>
   );

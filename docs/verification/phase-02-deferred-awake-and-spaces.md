@@ -29,3 +29,5 @@ Quit the previous Still via its menu, open the current preview, and record its h
 5. Return through Touch ID/system authentication and confirm normal Spaces behavior is restored.
 
 Report each case as PASS/EXPOSED/NOT TESTED, with Still hash, OS, display count and gesture. Distinguish a settled-Space recovery improvement from suppression of Mission Control/transition exposure. The issue stays open until the same failing gesture is observed passing. Do not claim OS-equivalent locking.
+
+Tooling update: Python invocations above are historical receipts. Current equivalents use Node; see the [preview/tooling guide](../guides/design-preview.md).

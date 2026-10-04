@@ -2,14 +2,21 @@
   "name": "still-workspace",
   "private": true,
   "packageManager": "pnpm@10.32.1",
-  "engines": { "node": "24.x" },
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "pnpm --filter @still/website dev",
     "build": "pnpm --filter @still/website build",
-    "check": "biome check apps/website scripts/generate-website-tokens.mjs",
-    "check:fix": "biome check --write apps/website scripts/generate-website-tokens.mjs",
+    "check": "biome check apps/website scripts",
+    "check:fix": "biome check --write apps/website scripts",
     "typecheck": "pnpm --filter @still/website typecheck",
-    "check:brand": "node scripts/check-contrast.mjs"
+    "check:brand": "node scripts/check-contrast.mjs",
+    "verify:website": "node scripts/verify-website.mjs",
+    "verify:native": "node scripts/verify-native-runtime.mjs",
+    "verify:energy": "node scripts/verify-native-energy.mjs"
   },
-  "devDependencies": { "@biomejs/biome": "2.5.15" }
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15"
+  }
 }
