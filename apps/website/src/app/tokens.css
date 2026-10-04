@@ -1,0 +1,29 @@
+/* Generated from design/tokens.json. */
+:root {
+  --background: #f4efeb;
+  --surface: #fffaf7;
+  --textPrimary: #2d2024;
+  --textSecondary: #74646a;
+  --accent: #702c43;
+  --accentHover: #582033;
+  --onAccent: #fff7f1;
+  --border: #d9c6cd;
+  --activitySurface: #482934;
+  --activityText: #faf3ed;
+  --activitySecondary: #dac3cb;
+  --focus: #84384f;
+}
+[data-appearance="dark"] {
+  --background: #20171b;
+  --surface: #302229;
+  --textPrimary: #f3e9e6;
+  --textSecondary: #c5b0b8;
+  --accent: #d9a8b8;
+  --accentHover: #e9c1cf;
+  --onAccent: #321e26;
+  --border: #654b56;
+  --activitySurface: #38242c;
+  --activityText: #faf3ed;
+  --activitySecondary: #dac3cb;
+  --focus: #edbed0;
+}

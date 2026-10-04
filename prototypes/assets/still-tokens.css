@@ -1,0 +1,33 @@
+/* Generated from design/tokens.json. Run node scripts/generate-brand-css.mjs. */
+
+:root { --still-burgundy: #702C43; }
+
+.porcelain {
+  --ink: #2D2024;
+  --muted: #74646A;
+  --surface: #FFFAF7;
+  --line: #D9C6CD;
+  --accent: #702C43;
+  --bg: #F4EFEB;
+  --on-accent: #FFF7F1;
+  --accent-hover: #582033;
+  --panel: #482934;
+  --panel-ink: #FAF3ED;
+  --panel-muted: #DAC3CB;
+  --focus: #84384F;
+}
+
+.porcelain.dark {
+  --ink: #F3E9E6;
+  --muted: #C5B0B8;
+  --surface: #302229;
+  --line: #654B56;
+  --accent: #D9A8B8;
+  --bg: #20171B;
+  --on-accent: #321E26;
+  --accent-hover: #E9C1CF;
+  --panel: #38242C;
+  --panel-ink: #FAF3ED;
+  --panel-muted: #DAC3CB;
+  --focus: #EDBED0;
+}

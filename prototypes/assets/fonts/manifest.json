@@ -1,0 +1,38 @@
+[
+  {
+    "file": "InstrumentSerif-Regular.woff2",
+    "source": "https://raw.githubusercontent.com/Instrument/instrument-serif/main/fonts/webfonts/InstrumentSerif-Regular.woff2",
+    "retrieved": "2026-10-04",
+    "sha256": "ca21b99b0d6b88a0dc34cebfe48104611e5c7f8f92746bed26c37aa470174322"
+  },
+  {
+    "file": "InstrumentSerif-Italic.woff2",
+    "source": "https://raw.githubusercontent.com/Instrument/instrument-serif/main/fonts/webfonts/InstrumentSerif-Italic.woff2",
+    "retrieved": "2026-10-04",
+    "sha256": "4f7aacc18d491dea8778bbc591db87b9455625899ed5f913957e7fd82604c294"
+  },
+  {
+    "file": "InstrumentSerif-OFL.txt",
+    "source": "https://raw.githubusercontent.com/Instrument/instrument-serif/main/OFL.txt",
+    "retrieved": "2026-10-04",
+    "sha256": "129ed7618959716959f2941fdd5b49e0ad6e6c1d78726761786a00253d865521"
+  },
+  {
+    "file": "InterVariable.woff2",
+    "source": "https://raw.githubusercontent.com/rsms/inter/master/docs/font-files/InterVariable.woff2",
+    "retrieved": "2026-10-04",
+    "sha256": "693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3"
+  },
+  {
+    "file": "Inter-LICENSE.txt",
+    "source": "https://raw.githubusercontent.com/rsms/inter/master/LICENSE.txt",
+    "retrieved": "2026-10-04",
+    "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a"
+  },
+  {
+    "file": "InstrumentSerif-Regular.ttf",
+    "source": "https://raw.githubusercontent.com/Instrument/instrument-serif/main/fonts/ttf/InstrumentSerif-Regular.ttf",
+    "retrieved": "2026-10-04",
+    "sha256": "498efd461f6ddfcb7a111bf9a565709d2085d48201d501ead960d93e84ffbb88"
+  }
+]

@@ -1,0 +1,17 @@
+name: Bug report
+description: A reproducible product or workflow issue
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: What happened?
+      description: Give the steps, expected behavior and actual behavior. Redact private activity.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment and evidence
+      description: App version/hash, OS, display setup or browser. Keep credentials and private screenshots out.
+    validations:
+      required: true
