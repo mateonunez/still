@@ -27,7 +27,7 @@ docs/verification/           # hardware/OS coverage and release evidence
 prototypes/                  # disposable UI exploration, delete or absorb
 ```
 
-Discovery documents, shared brand tokens, licensed fonts, the visual prototype, the native executable package and the SessionKit package exist now. The production Next.js target is not scaffolded yet. `malock` remains the workspace path; Still is the working product name. The development bundle ID is `co.mateonunez.still.development`; `co.mateonunez.still` is proposed for release. No remote visibility, confirmed release identity, license, or Git branching policy is assumed. See [website plan](website-plan.md) and [distribution](distribution.md).
+Discovery documents, shared brand tokens, licensed fonts, the visual prototype, the native executable package, SessionKit and the production Next.js website exist now. `malock` remains the workspace path; Still is the working product name. The development bundle ID is `co.mateonunez.still.development`; `co.mateonunez.still` is proposed for release. Source is private under mateonunez/still; the website uses personal Vercel hosting at meet-still.app. Final release identity, license and broader branch protections remain undecided. See [hosting ADR](adr/0005-personal-website-and-hosting.md), [website plan](website-plan.md) and [distribution](distribution.md).
 
 ## Deep boundaries
 

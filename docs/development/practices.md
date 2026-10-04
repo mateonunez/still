@@ -54,6 +54,14 @@ Keep retained functionality behind an explicit product-availability flag when it
 
 Record live collectionBehavior getters, not only assignments. Mission Control and trackpad animation exposure need a native red-capable reproduction; flags, isVisible and frame equality are not evidence of compositor coverage. Native app handles should use the full app path when development bundles share an identifier. App-window screenshots are not whole-desktop-transition evidence. Never use `.transient` as a coverage fix: it hides the window in Mission Control. Keep private desktop captures out of the repository.
 
+## Website and hosting
+
+Use project-local public-registry configuration instead of inherited machine npm settings. Pin the package manager and commit the lockfile. Biome is the sole formatter/linter; do not copy a reference site's broad rule disables. Generated CSS must match formatter output: normalize color case in the generator rather than repeatedly rewriting generated files after builds. Preserve original font licenses and their provenance, including original license whitespace.
+
+Compose typed metadata per route; canonical origin is meet-still.app. Keep a single native robots/sitemap implementation and server-rendered explanations. Explicit noindex headers/meta apply to preview and development, including custom preview domains. Permit crawlers to read accessible previews' noindex; robots is not access control. Do not fabricate reviews, offers, availability or an AI-ranking protocol.
+
+Vercel root apps/website needs sourceFilesOutsideRootDirectory for canonical tokens and the prebuild generator. CLI uploads use .vercelignore to exclude env files, native builds, binaries and unnecessary private artifacts. Read credentials through CLI authentication, never print tokens or copy local env files. Validate production via scripts/verify-website.py, then inspect actual mobile/desktop and keyboard behavior. CI success, Vercel READY, domain TLS, correct HTML and real search indexing are separate evidence levels.
+
 ## AppKit regression learned in Step 1A
 
 Set `NSPanel.level` after configuring `isFloatingPanel`: the original order reset the level to `.normal`. Verify the getter in the live app, not only the assignment in source. The runtime probe checks panel count, frames, visibility flags, actual window level, font registration and synthetic subprocess progress; these remain structural evidence rather than a desktop coverage test.

@@ -13,10 +13,11 @@ Prepared for joint review. Recommendations are not approvals.
 | D07 | Distribution? | Native `.app`, direct signed/notarized distribution; evaluate Homebrew and terminal download | Selected direct distribution; App Store excluded |
 | D08 | Pricing/license? | Test willingness to pay; evaluate one-time license | Decision pending |
 | D09 | OS/hardware support? | Choose based on native experiment matrix | macOS 14 provisional deployment floor; only macOS 26.5.2 arm64 structurally verified |
-| D10 | Remote repo visibility and workflow? | Modern branded repo with native app and Next.js website | Repository style requested; remote visibility and workflow not selected |
-| D12 | Website stack? | Next.js App Router with typed metadata | Selected Next.js; implementation pending |
+| D10 | Remote repo visibility and workflow? | Private personal mateonunez/still; main bootstrap and CI | Selected private; repository created and pushed; broader branch protections remain undecided |
+| D12 | Website stack? | Next.js App Router with typed metadata | Implemented and hosted on personal mmateonunez/still Vercel project |
+| D13 | Product domain? | meet-still.app canonical; www redirects to apex | Configured; connected and HTTPS-verified |
 | D11 | Agent awareness timing? | Optional metadata-only status, attention and usage view after v1 | Selected post-v1 evolution; providers and integration scope pending |
 
 Next step: manual review of the Phase 2 candidate using the inactivity/energy guide, including the earlier authentication and display acceptance cases. Native Liquid Glass controls and restrained service-window vibrancy use modern macOS materials; Porcelain coverage stays opaque. The Next.js website and direct app distribution are selected. OS support, pricing and remote ownership remain open.
 
-Local development uses `co.mateonunez.still.development`; `co.mateonunez.still` is the proposed release identity, to confirm before distribution. A product website domain is not selected.
+Local development uses `co.mateonunez.still.development`; `co.mateonunez.still` is the proposed release identity, to confirm before distribution. The website uses `meet-still.app`; this does not automatically change the app's identity.

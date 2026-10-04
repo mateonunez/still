@@ -8,6 +8,8 @@ A calm screen for your Mac, with optional inactivity activation.
 
 **In development · Native macOS · Direct distribution · Next.js website**
 
+[Meet Still](https://meet-still.app) · [Development field notes](https://meet-still.app/changelog)
+
 Still creates a visual privacy curtain over the desktop. It does not replace the macOS security lock or guarantee that every third-party task continues processing. Porcelain is the initial design standard, with warm light/dark appearances and a burgundy identity. Agent awareness and future theme collections are follow-up scope.
 
 ## Try the native preview
@@ -37,7 +39,7 @@ This is a disposable browser prototype. Authentication, activity and energy are 
 | --- | --- | --- |
 | Mac app | SwiftUI + AppKit, OS-owned authentication, scoped power controls | Local `.app` built; structural checks pass; native interaction acceptance pending |
 | Appearance | Porcelain, burgundy, light/dark/system | Interactive design preview with local licensed fonts |
-| Website | Next.js App Router, typed content/SEO, local fonts | Design concept and implementation plan |
+| Website | Next.js App Router, typed content/SEO, local fonts | Live on [meet-still.app](https://meet-still.app); GitHub-connected Vercel builds |
 | Distribution | Signed/notarized app download; evaluate Homebrew cask | No release, hosted package or usable install command |
 | Agents | Optional status, attention and usage metadata | Post-v1 plan |
 
@@ -48,6 +50,7 @@ This is a disposable browser prototype. Authentication, activity and energy are 
 - [Brand fundamentals](docs/brand-fundamentals.md) · [design contract](DESIGN.md) · [canonical tokens](design/tokens.json)
 - [Native feasibility](docs/research/macos-feasibility.md) · [direct distribution](docs/distribution.md)
 - [Next.js website plan](docs/website-plan.md) · [launch strategy](docs/launch-strategy.md)
+- [Website/hosting guide](docs/guides/website-and-hosting.md) · [delivery evidence](docs/verification/phase-04-website-and-hosting.md)
 - [Agent awareness](docs/agent-awareness.md) · [prototype notes](prototypes/NOTES.md)
 
 ## Verify the brand
@@ -61,4 +64,4 @@ Palette roles are checked from the source tokens. Bundled font files include lic
 
 ## Project status
 
-This workspace contains product preparation, a design prototype and the first native development app. Native acceptance, Next.js implementation, remote repository ownership, the product domain, Developer ID signing, pricing and public release remain separate steps. There is no App Store release planned.
+Source is private under [mateonunez/still](https://github.com/mateonunez/still). The public Next.js site is hosted by the personal [Vercel project](https://vercel.com/mmateonunez/still). Native acceptance, Developer ID signing, pricing and public app release remain separate steps. There is no App Store release planned.

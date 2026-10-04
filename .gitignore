@@ -17,6 +17,9 @@ node_modules/
 .firecrawl/
 *.tsbuildinfo
 coverage/
+__pycache__/
+*.py[cod]
+**/next-env.d.ts
 AGENTS.md
 docs/development/memories/
 .local/
