@@ -1,0 +1,15 @@
+.env*
+.git/
+node_modules/
+**/node_modules/
+**/.next/
+**/.build/
+out/
+.firecrawl/
+apps/macos/
+packages/SessionKit/
+prototypes/
+docs/
+AGENTS.md
+docs/development/memories/
+.local/
