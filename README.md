@@ -45,8 +45,8 @@ This is a disposable browser prototype. Authentication, activity and energy are 
 
 ## Workspace map
 
-- [Development ledger](docs/development/README.md) · [developer practices](docs/development/practices.md)
-- [Product strategy](docs/product-strategy.md) · [decisions](docs/decisions.md) · [architecture](docs/architecture.md)
+- [Development status](docs/development/README.md) · [developer practices](docs/development/practices.md)
+- [Roadmap](docs/roadmap.md) · [Product strategy](docs/product-strategy.md) · [decisions](docs/decisions.md) · [architecture](docs/architecture.md)
 - [Brand fundamentals](docs/brand-fundamentals.md) · [design contract](DESIGN.md) · [canonical tokens](design/tokens.json)
 - [Native feasibility](docs/research/macos-feasibility.md) · [direct distribution](docs/distribution.md)
 - [Next.js website plan](docs/website-plan.md) · [launch strategy](docs/launch-strategy.md)

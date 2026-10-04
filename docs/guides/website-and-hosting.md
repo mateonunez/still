@@ -26,4 +26,4 @@ The home preview is an interactive illustration, not a screenshot or a security 
 
 Pushes to main should create production builds after the Git integration is verified; pull requests create previews. Check Vercel/CI status and live HTTP before calling delivery successful. Domain/TLS, www redirect, canonical tags, social card, robots and sitemap require actual checks.
 
-Google Search Console verification, sitemap submission and search-performance observation require Search Console access. The sitemap is ready for submission after production HTTP verification. Indexing and ranking can take time and are not established by a passing build. Public native downloads remain unavailable until signing/notarization, compatibility and installation are verified.
+Search Console setup was reported complete on 2026-10-04. Inspect sitemap processing and page indexing in Search Console; production HTTP checks alone do not prove search inclusion. Indexing and ranking can take time and are not established by a passing build. Public native downloads remain unavailable until signing/notarization, compatibility and installation are verified.
