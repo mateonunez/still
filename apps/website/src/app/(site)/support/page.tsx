@@ -14,7 +14,7 @@ const content: ArticleContent = {
     },
     {
       title: 'Will every task keep running?',
-      text: 'Still does not suspend applications itself. Whether a task continues depends on the app, network and macOS energy behavior. The current product UI does not expose keep-awake controls.',
+      text: 'Still prevents idle system sleep while its curtain is active. Your display can still sleep, and manual Sleep and lid closure remain available. Task progress also depends on the application and network.',
     },
     {
       title: 'What if Touch ID isn’t available?',

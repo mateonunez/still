@@ -4,10 +4,11 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { Mark } from '@/features/home/mark';
 import './preview.css';
+import { WidgetPrototype } from './widget-prototype';
 
 type Theme = 'porcelain' | 'spectrum' | 'meadow';
 type Appearance = 'light' | 'dark' | 'system';
-type View = 'screen' | 'settings' | 'landing';
+type View = 'screen' | 'settings' | 'landing' | 'widgets';
 const themes: Record<Theme, { name: string; greeting: string; description: string }> = {
   porcelain: {
     name: 'Porcelain',
@@ -46,7 +47,14 @@ export function DesignPreview() {
       setTheme(selectedTheme);
     if (selectedAppearance === 'light' || selectedAppearance === 'dark' || selectedAppearance === 'system')
       setAppearance(selectedAppearance);
-    if (selectedView === 'screen' || selectedView === 'settings' || selectedView === 'landing') setView(selectedView);
+    if (
+      selectedView === 'screen' ||
+      selectedView === 'settings' ||
+      selectedView === 'landing' ||
+      selectedView === 'widgets'
+    )
+      setView(selectedView);
+    if (selectedView === 'widgets') setTheme('porcelain');
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     const update = () => setSystemDark(media.matches);
     update();
@@ -88,14 +96,29 @@ export function DesignPreview() {
           <small>Template design preview</small>
         </div>
         <nav aria-label="Preview pages">
-          {(['screen', 'settings', 'landing'] as const).map((item) => (
-            <button key={item} type="button" aria-pressed={view === item} onClick={() => setView(item)}>
-              {item === 'landing' ? 'Website' : item === 'screen' ? 'Screen' : 'Settings'}
+          {(['screen', 'widgets', 'settings', 'landing'] as const).map((item) => (
+            <button
+              key={item}
+              type="button"
+              aria-pressed={view === item}
+              onClick={() => {
+                setView(item);
+                if (item === 'widgets') setTheme('porcelain');
+              }}
+            >
+              {item === 'landing'
+                ? 'Website'
+                : item === 'screen'
+                  ? 'Screen'
+                  : item === 'widgets'
+                    ? 'Customize'
+                    : 'Settings'}
             </button>
           ))}
         </nav>
       </header>
       <main id="main" tabIndex={-1}>
+        {view === 'widgets' && <WidgetPrototype />}
         {view === 'screen' && (
           <section className="preview-stage" aria-label="Ambient screen concept">
             {theme === 'spectrum' && <div className="preview-orb" aria-hidden="true" />}
@@ -202,7 +225,7 @@ export function DesignPreview() {
                 <input type="checkbox" checked={sharing} onChange={(event) => setSharing(event.target.checked)} />
               </label>
             </div>
-            <p>Awake controls are hidden while the inactivity concept is refined.</p>
+            <p>Still keeps your Mac awake while covered. Your display follows macOS settings.</p>
             <p>Return uses macOS-owned authentication in the native app. No password is collected here.</p>
           </section>
         )}
@@ -248,7 +271,7 @@ export function DesignPreview() {
         )}
       </main>
       <div className="preview-selector">
-        <nav aria-label="Visual directions">
+        <nav aria-label="Visual directions" hidden={view === 'widgets'}>
           {(Object.keys(themes) as Theme[]).map((item) => (
             <button key={item} type="button" aria-pressed={theme === item} onClick={() => setTheme(item)}>
               {themes[item].name}

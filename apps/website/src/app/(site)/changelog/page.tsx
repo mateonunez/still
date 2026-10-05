@@ -5,7 +5,7 @@ const content: ArticleContent = {
   title: 'Small steps. Thoughtful details.',
   description:
     'Still development field notes: Porcelain, native authentication, inactivity and current desktop coverage work.',
-  eyebrow: 'FIELD NOTES · OCTOBER 4, 2026',
+  eyebrow: 'FIELD NOTES · OCTOBER 5, 2026',
   lead: 'A public notebook for an app taking shape. Development progress is not a release announcement.',
   sections: [
     {
@@ -18,7 +18,7 @@ const content: ArticleContent = {
     },
     {
       title: 'A simpler product surface.',
-      text: 'Keep-awake and display-on controls are hidden while their relationship with inactivity is reconsidered. Their implementation is retained; a combined product concept has not been selected.',
+      text: 'The local app now keeps the Mac awake automatically while its curtain is active, releasing that request when you return. Display sleep remains under macOS control. Independent timed awake controls remain retained and hidden.',
     },
     {
       title: 'The desktop edge cases.',

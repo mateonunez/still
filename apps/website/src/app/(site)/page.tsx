@@ -17,7 +17,7 @@ const benefits = [
   [
     '03',
     'Step away on your terms.',
-    'Show Still when you choose, or after a period of inactivity. Your Mac’s own sleep and security settings stay yours.',
+    'Show Still when you choose, or after inactivity. Your Mac stays awake while covered; display sleep and security settings stay yours.',
   ],
 ] as const;
 

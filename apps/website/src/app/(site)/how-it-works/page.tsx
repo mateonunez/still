@@ -18,7 +18,7 @@ const content: ArticleContent = {
     },
     {
       title: 'Your Mac stays your Mac.',
-      text: 'Still does not pause apps itself or change the Mac’s security-lock policy. Actual processing still depends on macOS sleep behavior and each application. Awake controls are currently hidden while their product concept is reconsidered.',
+      text: 'Still keeps your Mac awake while its curtain is active and releases that request when you return. Your display can still sleep. Still does not change the security-lock policy, prevent manual Sleep or guarantee progress in every application.',
     },
     {
       title: 'Visual privacy has a boundary.',
