@@ -171,3 +171,7 @@ Keep the original presentation restore point while reasserting covered options a
 ## Continuous canvas interactions
 
 Persist optional width in points, with explicit null for automatic sizing. Missing width migrates legacy saved size categories; legacy clock width remains automatic. Validate finite values and bounds before loading. Do not quantize free placement. During resize gestures, retain original centers and defer collision fitting until release; keep pointer tracking unanimated and respect Reduce Motion for settling. Provide a native slider and named movement controls as alternatives to pointer handles. Exported SwiftUI images cannot establish native-control rendering or interaction smoothness.
+
+## Structured native layout
+
+Keep Grid and Free as explicit, persisted modes. Old records without a mode remain Free; new scenes/reset use Grid. Grid owns track widths, row starts, wrapping and gaps; it does not use the Free collision-search algorithm. Measure native children before planning rows and keep overflow distinct from overlap. Preserve free placements and widths when changing modes. Drag and resize gestures use the named canvas coordinate space; freeze module centers during grid drag and require a real target hit before reordering. Whole-row keyboard steps must insert at the actual destination, not swap only a distant neighbor. Keep complex SwiftUI toolbars in small computed subviews to avoid compiler failures from oversized view types.

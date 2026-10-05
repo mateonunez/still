@@ -21,3 +21,6 @@ The public website origin is https://meet-still.app. The code repository is priv
 - Attention requested: expiring advisory event, not an authoritative pending approval.
 - Sample: explicitly marked fixture, never live fallback.
 - Revocation: clear host data/connection and reject the old identity.
+
+- Grid: host-owned adaptive columns and content-sized rows; native visible order determines placement, with a dedicated clock region.
+- Free: continuous user placements/widths, with measured collision fitting. Saved Free positions survive switching to Grid.

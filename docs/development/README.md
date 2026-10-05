@@ -29,3 +29,5 @@ The next native candidate adds display-local measured canvas geometry, three pre
 Continuous resizing now replaces named canvas sizes in the editor. The separately built `Still-canvas` candidate adds automatic widths, content-driven height and free placement. See [verification and remaining interaction checks](../verification/continuous-native-canvas.md).
 
 The latest candidate removes the global four-card limit and includes every selected native module in presets. It passes the fifth/all-ten regressions and large-display geometry checks; actual display crowding remains an interactive acceptance item. See [capacity evidence](../verification/display-aware-plugin-capacity.md).
+
+The latest native canvas supports adaptive Grid and preserved Free scenes. Grid aligns tracks/content rows and supports native insertion reorder; it passes 37 targeted Swift tests and 19 source checks. Dense small-display overflow and interactive smoothness remain acceptance items. See [grid verification](../verification/adaptive-native-grid.md).

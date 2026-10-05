@@ -82,14 +82,22 @@ One main scene follows the macOS main display ID. Secondary displays remain opaq
 
 ## Responsive canvas presets
 
-The editor uses the same macOS main display as the active scene, independently of where Settings has focus. In the editor choose **Layout → Balanced**, **Focus** or **Dashboard**. Each preset replaces saved positions only when selected. The host measures card heights, keeps the return region reserved, and may use a Balanced rendering fallback without rewriting saved positions. Dragging starts from the rendered position; named directional buttons remain available. Built-in canvas task cards show one task with an explicit count for remaining tasks. The desktop source preview retains the fuller list.
+The editor uses the same macOS main display as the active scene, independently of where Settings has focus. For manual scenes, choose **Arrangement → Free**, then **Presets → Balanced**, **Focus** or **Dashboard**. Each preset replaces saved positions only when selected. The host measures card heights, keeps the return region reserved, and may use a Balanced rendering fallback without rewriting saved positions. Dragging starts from the rendered position; named directional buttons remain available. Built-in canvas task cards show one task with an explicit count for remaining tasks. The desktop source preview retains the fuller list.
 
 ### Continuous sizing
 
-The latest development candidate is `out/Still-preview.app`. Quit other Still instances before opening it with `open out/Still-preview.app --args --editor`.
+The latest development candidate is `out/Still-canvas.app`. Quit other Still instances before opening it with `open out/Still-canvas.app --args --editor`.
 
 Select a module and pull its bottom-right handle horizontally to resize it continuously. Height always follows the content; the clock type scales with its width. The native **Module width** slider provides the keyboard alternative. Widths have readability and display bounds, rather than named size categories. **Automatic** adapts width to the current display; presets and reset use this mode. Existing saved size categories migrate to equivalent widths, retaining centers. Enable Automatic on a migrated module to opt into display adaptation.
 
 Placement is continuous within the protected area; there is no mandatory grid snap. Directional buttons move by one percent of the viewport. While a resize handle is held, modules retain their centers; overlap can temporarily occur. On release, collision fitting resumes. Reduce Motion disables the settling animation. The editor toolbar uses native glass on macOS 26, with opaque accessibility fallbacks. Live gesture smoothness and keyboard/VoiceOver acceptance still require an interactive trial. See [verification](../verification/continuous-native-canvas.md).
 
 There is no global four-plugin visibility limit. Presets include every selected native module. On a large display, all ten can share the canvas; on a small display, reduce widths or remove modules when crowding is reported. Source consent is unchanged. See [capacity verification](../verification/display-aware-plugin-capacity.md).
+
+### Adaptive Grid
+
+Choose **Arrangement → Grid** for equal-width columns, aligned row starts and consistent gaps. Rows take their height from the tallest content in that row, while each card keeps its content-driven height. The final partial row is centered. The clock has a dedicated centered region; return controls remain protected.
+
+Leave **Automatic columns** on to adapt to the current main display. Turn it off to use the continuous **Preferred column width** slider; this is a grid-wide preference, not a fixed size category. Resize handles and per-module widths belong to Free mode. Drag a module onto another highlighted module to reorder; release in empty space to keep the order. Directional buttons move within the visible grid order, including a whole-row step vertically. The clock stays in its dedicated region in Grid.
+
+New scenes/reset use Grid. Existing saved scenes remain Free; switching modes retains free positions and widths. No source or visibility is enabled by switching modes. A dense scene may exceed a small display's content area: the editor reports crowding instead of overlapping grid cells. Review [grid evidence](../verification/adaptive-native-grid.md) before treating interaction smoothness as accepted.
