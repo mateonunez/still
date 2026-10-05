@@ -50,6 +50,8 @@ Test first on AC, then battery: system-only/display-on, early Stop, actual expir
 
 ## Review native appearance
 
+Settings and Customize share the native transparent title-bar treatment in the next build. Check that the material reaches the top edge and content remains below the title and window controls. See [alignment evidence](../verification/settings-titlebar-alignment.md).
+
 On macOS 26, primary/secondary buttons use native Liquid Glass; welcome/preferences use restrained material surfaces. Porcelain remains opaque over the desktop in light and dark mode. Try both appearances from the menu. Check keyboard navigation and the system-owned Touch ID/password flow without forcing focus onto a secondary action.
 
 In System Settings → Accessibility → Display, review Reduce Transparency and Increase Contrast using your preferred settings. Service surfaces become solid with either; Reduce Transparency also uses standard button styles. Older systems use standard buttons. No setting is changed by Still. ImageRenderer exports cannot establish how live native controls or glass look; review the actual app.

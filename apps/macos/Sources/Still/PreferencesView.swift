@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PreferencesView: View {
     @ObservedObject var controls: SessionControls
+    var titlebarInset: CGFloat = 0
     @Environment(\.colorScheme) private var colorScheme
     private var palette: PorcelainPalette { colorScheme == .dark ? .dark : .light }
 
@@ -16,6 +17,7 @@ struct PreferencesView: View {
         }
         .foregroundStyle(palette.primary)
         .padding(32).frame(width: 520)
+        .padding(.top, titlebarInset)
         .stillServiceSurface()
     }
 

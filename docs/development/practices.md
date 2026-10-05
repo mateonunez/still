@@ -133,3 +133,5 @@ Separate fresh-process Touch-ID-only trials from system-dialog trials and valida
 ## Curtain power ownership
 
 Use one indefinite display-idle assertion while covered; it also prevents idle system sleep. Do not confuse a system-only assertion with display or screen-saver suppression. Check the real assertion type, owned ID, timeout and cleanup with IOKit and PID-scoped pmset output. Preserve independent timed requests and system overrides. Do not synthesize input or change global screen-saver/security preferences. Short probes establish ownership, not an hour of unattended visual behavior; record that acceptance separately against the exact executable hash.
+
+Use the same full-size content/title-bar geometry for service windows. Measure the native title-bar inset instead of hard-coding a traffic-light offset; reserve that space while extending the material through the entire window. Keep native window controls and visible keyboard focus. See [Settings alignment](../verification/settings-titlebar-alignment.md).

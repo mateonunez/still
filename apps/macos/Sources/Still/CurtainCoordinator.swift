@@ -218,13 +218,13 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
             return
         }
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 520, height: 420),
-                              styleMask: [.titled, .closable], backing: .buffered, defer: false)
+                              styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
         window.title = "Still Preferences"
         window.titlebarAppearsTransparent = true
         window.isOpaque = false
         window.backgroundColor = .clear
         window.isReleasedWhenClosed = false
-        let content = NSHostingView(rootView: PreferencesView(controls: controls))
+        let content = NSHostingView(rootView: PreferencesView(controls: controls, titlebarInset: window.frame.height - window.contentLayoutRect.height))
         window.contentView = content
         window.setContentSize(content.fittingSize)
         window.center()
