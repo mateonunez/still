@@ -75,23 +75,27 @@ struct ExtensionCardView: View {
 }
 
 struct WidgetsHubView: View {
+    @ObservedObject var controls: SessionControls
     @ObservedObject var widgets: WidgetCenter
     @ObservedObject var plugins: PluginCenter
     @ObservedObject var nativePlugins: NativePluginCenter
     @ObservedObject var presentation: CurtainPresentation
     let titlebarInset: CGFloat
+    var editScreen: () -> Void = {}
     @Environment(\.colorScheme) private var colorScheme
     private var palette: PorcelainPalette { colorScheme == .dark ? .dark : .light }
-    @State private var section = "appearance"
+    @State private var section = "general"
     private var cardCount: Int { nativePlugins.visibleCards.count + (nativePlugins.agentsEnabled ? 0 : widgets.cards.count + widgets.activityCards.count) + plugins.cards.count }
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
                 Text("Your kind of quiet.").font(.custom("InstrumentSerif-Regular", size: 36))
                 Text("A calm screen. Only what matters to you.").font(.system(size: 13)).foregroundStyle(palette.secondary)
-                Picker("Customize section", selection: $section) {
-                    Text("Appearance").tag("appearance"); Text("Agents").tag("sources"); Text("Plugins").tag("library")
+                Picker("Settings section", selection: $section) {
+                    Text("General").tag("general"); Text("Appearance").tag("appearance"); Text("Agents").tag("sources"); Text("Plugins").tag("library")
                 }.pickerStyle(.segmented).labelsHidden()
+                Button("Edit screen…", action: editScreen).stillControl(prominent: true)
+                if section == "general" { GeneralSettingsView(controls: controls) }
                 if section == "appearance" { appearanceSection }
                 if section == "sources" { sourcesSection }
                 if section == "library" { librarySection }
@@ -115,7 +119,7 @@ struct WidgetsHubView: View {
             }
             Picker("Appearance", selection: $presentation.appearance) { ForEach(StillAppearance.allCases, id: \.self) { Text($0.title).tag($0) } }.pickerStyle(.segmented)
                 .onChange(of: presentation.appearance) { _, value in UserDefaults.standard.set(value.rawValue, forKey: "StillAppearance") }
-            Picker("Composition", selection: $widgets.layout) { Text("Quiet corner").tag("corner"); Text("Side rail").tag("rail") }.disabled(plugins.template != nil)
+            Picker("Composition", selection: $widgets.layout) { Text("Quiet corner").tag("corner"); Text("Side rail").tag("rail"); Text("Custom canvas").tag("canvas") }.disabled(plugins.template != nil)
             Picker("Widget position", selection: $widgets.side) { Text("Left").tag("left"); Text("Right").tag("right") }.pickerStyle(.segmented)
             if let template = plugins.template { Text("Composition from \(template.name)").font(.system(size: 11)).foregroundStyle(palette.secondary) }
             Text("Up to four optional cards. Your clock and return controls always stay visible.").font(.system(size: 12)).foregroundStyle(palette.secondary)

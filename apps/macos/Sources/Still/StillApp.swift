@@ -51,7 +51,9 @@ final class StillDelegate: NSObject, NSApplicationDelegate {
         coordinator = CurtainCoordinator()
         coordinator?.installMenu()
         if arguments.contains("--configure-native-plugins") { coordinator?.configureNativePlugins() }
-        if ProcessInfo.processInfo.arguments.contains("--cover") {
+        if arguments.contains("--editor") {
+            coordinator?.showScreenEditor()
+        } else if ProcessInfo.processInfo.arguments.contains("--cover") {
             coordinator?.cover()
         } else if arguments.contains("--widgets") || arguments.contains("--plugins") {
             coordinator?.showWidgets()

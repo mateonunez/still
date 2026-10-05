@@ -12,17 +12,17 @@ func property(_ name: String, container: NSAppleEventDescriptor = .null()) -> NS
     record.setDescriptor(container, forKeyword: AEKeyword(keyAEContainer))
     return record.coerce(toDescriptorType: DescType(typeObjectSpecifier))
 }
-func get(_ object: NSAppleEventDescriptor) throws -> NSAppleEventDescriptor? {
+func get(_ object: NSAppleEventDescriptor, authorize: Bool = false) throws -> NSAppleEventDescriptor? {
     let event = NSAppleEventDescriptor(eventClass: AEEventClass(kAECoreSuite), eventID: AEEventID(kAEGetData), targetDescriptor: NSAppleEventDescriptor(bundleIdentifier: "com.spotify.client"), returnID: AEReturnID(kAutoGenerateReturnID), transactionID: AETransactionID(kAnyTransactionID))
     event.setParam(object, forKeyword: AEKeyword(keyDirectObject))
-    let reply = try event.sendEvent(options: [.waitForReply, .neverInteract, .dontRecord], timeout: 2)
+    let reply = try event.sendEvent(options: authorize ? [.waitForReply, .canInteract, .dontRecord] : [.waitForReply, .neverInteract, .dontRecord], timeout: authorize ? 25 : 2)
     if let number = reply.paramDescriptor(forKeyword: AEKeyword(keyErrorNumber)), number.int32Value != 0 { throw NSError(domain: NSOSStatusErrorDomain, code: Int(number.int32Value)) }
     return reply.paramDescriptor(forKeyword: AEKeyword(keyDirectObject))
 }
 func read() -> [String: Any] {
-    guard CommandLine.arguments.count == 2, ["--show-titles", "--hide-titles"].contains(CommandLine.arguments[1]), !NSRunningApplication.runningApplications(withBundleIdentifier: "com.spotify.client").isEmpty, let player = property("pPlS") else { return ["state": "unavailable"] }
+    guard CommandLine.arguments.count == 2, ["--show-titles", "--hide-titles", "--authorize"].contains(CommandLine.arguments[1]), !NSRunningApplication.runningApplications(withBundleIdentifier: "com.spotify.client").isEmpty, let player = property("pPlS") else { return ["state": "unavailable"] }
     do {
-        guard let value = try get(player) else { return ["state": "unavailable"] }
+        guard let value = try get(player, authorize: CommandLine.arguments[1] == "--authorize") else { return ["state": "unavailable"] }
         let state = value.enumCodeValue
         guard [code("kPSP"), code("kPSp"), code("kPSS")].contains(state) else { return ["state": "unavailable"] }
         var title = "Spotify", artist = "Track details hidden"

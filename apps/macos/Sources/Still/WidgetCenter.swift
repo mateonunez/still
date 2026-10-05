@@ -39,7 +39,7 @@ final class WidgetCenter: ObservableObject {
             enabled = Set((UserDefaults.standard.stringArray(forKey: "StillWidgets") ?? []).compactMap(UsageProvider.init(rawValue:)))
             activityEnabled = Set((UserDefaults.standard.stringArray(forKey: "StillActivitySources") ?? []).compactMap(UsageProvider.init(rawValue:)))
             let saved = UserDefaults.standard.string(forKey: "StillWidgetLayout")
-            layout = saved == "rail" ? "rail" : "corner"
+            layout = saved == "canvas" ? "canvas" : saved == "rail" ? "rail" : "corner"
             side = UserDefaults.standard.string(forKey: "StillWidgetSide") == "left" ? "left" : "right"
             if let path = UserDefaults.standard.string(forKey: "StillCodexExecutable") { codexURL = URL(fileURLWithPath: path) }
         }

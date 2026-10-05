@@ -54,7 +54,7 @@ enum NativeEvidence {
                     to: directory.appendingPathComponent("porcelain-\(appearance.rawValue).png")
                 )
             }
-            try save(PreferencesView(controls: SessionControls(persist: false)), to: directory.appendingPathComponent("preferences.png"))
+            try save(GeneralSettingsView(controls: SessionControls(persist: false)).padding(32).frame(width: 560).stillServiceSurface(), to: directory.appendingPathComponent("preferences.png"))
             try save(WelcomeView(showStill: {}), to: directory.appendingPathComponent("welcome.png"))
             if let tiff = StillMark.menuImage(covered: false).tiffRepresentation,
                let bitmap = NSBitmapImageRep(data: tiff),

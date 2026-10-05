@@ -53,3 +53,17 @@ In **Plugins → Arrange your curtain**, drag a handle onto another row to place
 In **Appearance**, choose **Side rail** for a centered vertical group or **Quiet corner** for a horizontal group above return controls, then select **Left** or **Right**. On constrained displays the group can scroll. Reset an applied template before changing its composition. Arrangement happens in the desktop Hub; curtain modules do not bypass authentication to enter an editor.
 
 Spotify needs **Configure Spotify → Allow Spotify Automation…** while the desktop is visible. Keep Spotify open. If macOS declines, check Privacy & Security → Automation. Background reads never open a consent dialog; an unresponsive Spotify reports unavailable rather than remaining indefinitely on Connecting. Permission setup alone does not establish successful playback access.
+
+## Edit the whole screen
+
+Choose **Edit screen…** in **Settings…**, or launch with `--editor`. The native editor uses the full screen. Select/drag the clock or a visible native module; release to snap its center to the grid. The toolbar selects modules, moves them one grid step, changes native widget size (Compact/Regular/Wide), adds enabled widgets and removes selected widgets. Clock remains available. Four optional visible widgets remain the current limit.
+
+**Done** or Escape returns to the Hub. The **Custom canvas** composition is applied immediately and saved locally; reopening preserves positions and sizes. Reset layout restores defaults. Position is proportional to display geometry, with bounds protecting the header and return-control region. Arbitrary overlapping placements are currently possible; collision resolution and separate per-display scenes are not implemented. The editor currently arranges compiled native modules; declarative template/import editing remains separate. Applying another template replaces the canvas composition, while saved canvas positions remain available.
+
+The editor is an ordinary native service window, not an active privacy curtain. It never starts authentication or changes source consent. Inactivity cannot activate the curtain while this editor is visible. The active curtain displays the saved scene without editing gestures.
+
+Spotify authorization is now a bounded owned helper operation, started only by **Allow Spotify Automation…**. **Cancel connection** ends the owned request; it does not revoke an existing OS grant. An unresolved request ends after at most 30 seconds with a visible message. Still only marks Spotify connected after an actual property read succeeds. macOS controls any permission dialog; background reads remain noninteractive. An ad-hoc rebuild may require another consent check. Actual consent and playback are distinct from successful timeout handling.
+
+## Unified settings
+
+**Settings…** (Command-comma from the Still menu) is the single window for General, Appearance, Agents and Plugins. General contains inactivity settings; Appearance chooses the composition and theme; Agents connects local clients; Plugins configures sources. **Edit screen…** opens the full-screen editor. Done returns to Settings. Independent awake-session controls remain implemented but hidden.

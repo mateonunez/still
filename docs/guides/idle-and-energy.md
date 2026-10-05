@@ -12,7 +12,7 @@ open out/Still-preview.app
 
 ## Configure inactivity
 
-Open the Still menu → **After inactivity: Never**. Select **After 1 minute** or a longer interval. Choose **Never** to disable it. You can also open **Preferences…** and use **Show Still after**.
+Open the Still menu → **After inactivity: Never**. Select **After 1 minute** or a longer interval. Choose **Never** to disable it. You can also open **Settings… → General** and use **Show Still after**.
 
 A fresh interval begins when the choice changes, after returning to the desktop, and after resume. Mouse/keyboard input also keeps the elapsed-input age below the threshold. Still reads only elapsed time, not what you type. It does not change the Mac's lock policy. Default on first use is Never; your explicit idle choice persists.
 
@@ -30,13 +30,13 @@ For acceptance: show Still, check its process's **PreventUserIdleDisplaySleep ·
 
 Menu → **Keep Mac awake → For 15 minutes**, or another duration. The available durations are 15, 30, 60 and 120 minutes. The menu title changes to **Awake session · …m left** when the request is active. Open its submenu and choose **Stop awake session** to finish early.
 
-Alternatively: **Preferences… → Session duration → Start session**. The status reports the remaining time; **Stop session** ends it. A request that fails to start or release produces a message instead of silently claiming success.
+Alternatively: **Settings… → General → Session duration → Start session**. The status reports the remaining time; **Stop session** ends it. A request that fails to start or release produces a message instead of silently claiming success.
 
 An awake session is independent of the curtain. You can start it without showing Still, and returning from Still does not end it. Expiry ends the energy requests, not the curtain. Active sessions do not restart automatically after quitting/relaunching, explicit sleep or user-session changes.
 
 ## Retained implementation — displays (hidden)
 
-In the awake submenu enable **Keep displays on**, or use **Keep displays on during awake sessions** in Preferences. When an awake session is already running, this adds the display request; disabling it removes that request while the system request remains.
+In the awake submenu enable **Keep displays on**, or use **Keep displays on during awake sessions** in Settings → General. When an awake session is already running, this adds the display request; disabling it removes that request while the system request remains.
 
 When there is no awake session, the toggle is only a saved preference. It does not hold the displays on by itself. With displays off, an active system-awake session lets normal display-sleep policy operate. A display-on request inherently also prevents idle system sleep; it is not a display-only sleep guarantee.
 
@@ -50,7 +50,7 @@ Test first on AC, then battery: system-only/display-on, early Stop, actual expir
 
 ## Review native appearance
 
-Settings and Customize share the native transparent title-bar treatment in the next build. Check that the material reaches the top edge and content remains below the title and window controls. See [alignment evidence](../verification/settings-titlebar-alignment.md).
+General, Appearance, Agents and Plugins now share one Settings window and its native transparent title-bar treatment. Check that the material reaches the top edge and content remains below the title and window controls. See [alignment evidence](../verification/settings-titlebar-alignment.md).
 
 On macOS 26, primary/secondary buttons use native Liquid Glass; welcome/preferences use restrained material surfaces. Porcelain remains opaque over the desktop in light and dark mode. Try both appearances from the menu. Check keyboard navigation and the system-owned Touch ID/password flow without forcing focus onto a secondary action.
 

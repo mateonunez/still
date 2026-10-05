@@ -15,6 +15,7 @@ final class CurtainPresentation: ObservableObject {
     @Published var nativeCards: [NativePluginCard] = []
     @Published var widgetLayout = "corner"
     @Published var widgetSide = "right"
+    @Published var composition = ScreenComposition()
     @Published var appearance: StillAppearance = .system
 }
 
@@ -52,7 +53,7 @@ struct CurtainView: View {
                     Text("PORCELAIN").font(.system(size: 11, weight: .semibold))
                         .tracking(3).foregroundStyle(palette.secondary)
                 }
-                if geometry.size.width < 1250 || geometry.size.height < 700 {
+                if presentation.widgetLayout != "canvas", geometry.size.width < 1250 || geometry.size.height < 700 {
                     ScrollView(.horizontal, showsIndicators: false) { HStack(spacing: 12) {
                         ForEach(presentation.nativeCards) { card in NativePluginCardView(card: card, palette: palette) }
                         ForEach(presentation.widgetCards) { card in
@@ -73,6 +74,7 @@ struct CurtainView: View {
                     } }.frame(height: 250).padding(.top, 20)
                 }
                 Spacer()
+                if presentation.widgetLayout != "canvas" {
                 TimelineView(.periodic(from: .now, by: 1)) { timeline in
                     VStack(spacing: 18) {
                         Text(timeline.date.formatted(.dateTime.weekday(.wide).month(.wide).day()).uppercased())
@@ -89,6 +91,7 @@ struct CurtainView: View {
                     }
                     .padding(.leading, presentation.widgetLayout == "rail" && presentation.widgetSide == "left" && geometry.size.width >= 1250 ? 340 : 0)
                     .padding(.trailing, presentation.widgetLayout == "rail" && presentation.widgetSide == "right" && geometry.size.width >= 1250 ? 340 : 0)
+                }
                 }
                 Spacer()
                 if geometry.size.width >= 1250, geometry.size.height >= 700, presentation.widgetLayout == "corner", hasModules {
@@ -153,6 +156,12 @@ struct CurtainView: View {
             .padding(.vertical, 40)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(palette.background)
+            .overlay {
+                if presentation.widgetLayout == "canvas" {
+                    ScreenCanvasView(cards: presentation.nativeCards, composition: presentation.composition, palette: palette, selection: .constant(""))
+                        .allowsHitTesting(false)
+                }
+            }
             .overlay(alignment: presentation.widgetSide == "left" ? .leading : .trailing) {
                 if geometry.size.width >= 1250, geometry.size.height >= 700, presentation.widgetLayout == "rail", hasModules {
                     ViewThatFits(in: .vertical) {

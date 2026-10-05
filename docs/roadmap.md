@@ -23,3 +23,7 @@ Independent timed awake/display controls remain hidden pending a unified product
 Still is visual privacy, not the macOS security lock. Trackpad/desktop transitions remain a known limitation; green builds do not establish native hardware acceptance.
 
 Native module arrangement now supports persistent order, drag handles/keyboard alternatives and left/right composition. [Arrangement and Spotify evidence](verification/module-arrangement-and-spotify.md) records inspected native-view exports and the remaining playback consent check.
+
+A [full-screen native canvas editor](verification/full-screen-canvas-and-spotify-authorization.md) now supports clock/module positioning, size choices and saved compositions. Pointer/keyboard/accessibility and Spotify real-consent acceptance remain open; collision resolution and per-display scenes follow this initial canvas.
+
+Customize and Preferences are consolidated into one Settings window. Next canvas work: collision handling, responsive geometry, per-display scene behavior and native keyboard/VoiceOver acceptance.

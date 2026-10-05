@@ -21,10 +21,6 @@ final class CalendarPluginSource {
 }
 
 enum SpotifyPluginSource {
-    static func permission(ask: Bool) -> OSStatus {
-        let target = NSAppleEventDescriptor(bundleIdentifier: "com.spotify.client")
-        return AEDeterminePermissionToAutomateTarget(target.aeDesc, AEEventClass(kAECoreSuite), AEEventID(kAEGetData), ask)
-    }
     static func read(showTitles: Bool) async -> NativePluginCard {
         guard let helper = Bundle.main.executableURL?.deletingLastPathComponent().appendingPathComponent("StillSpotifyBridge") else { return NativePluginCard(.spotify, state: .setupRequired, detail: "Spotify helper is missing. Rebuild the development app.") }
         switch await NativeReadCommand.fetch(executable: helper, arguments: [showTitles ? "--show-titles" : "--hide-titles"], timeoutSeconds: 7) {

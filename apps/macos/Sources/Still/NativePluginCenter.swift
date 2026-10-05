@@ -18,12 +18,15 @@ final class NativePluginCenter: ObservableObject {
     @Published private(set) var issue = ""
     @Published private(set) var calendarChoices: [EKCalendar] = []
     @Published private(set) var requestingSpotify = false
+    @Published private(set) var spotifyConnectionStatus = ""
     @Published private(set) var order: [NativePluginID] = NativePluginID.allCases
+    @Published private(set) var composition = ScreenComposition()
     private let store: NativePluginStore
     private let widgets: WidgetCenter
     private let calendar = CalendarPluginSource()
     private let pulse = MacPulseSource()
     private var fetching: [NativePluginID: Task<Void, Never>] = [:]
+    private var spotifyAuthorization: Task<Void, Never>?
     private var generations: [NativePluginID: UUID] = [:]
     private var lastFetch: [NativePluginID: Date] = [:]
     private var timerDeadline: TimeInterval?
@@ -41,6 +44,7 @@ final class NativePluginCenter: ObservableObject {
         self.widgets = widgets; self.persist = persist
         persistArrangement = persist && root == nil
         if persistArrangement {
+            if let data = UserDefaults.standard.data(forKey: "StillScreenComposition"), let saved = ScreenComposition.decode(data) { composition = saved }
             let saved = (UserDefaults.standard.stringArray(forKey: "StillNativePluginOrder") ?? []).compactMap(NativePluginID.init(rawValue:))
             order = saved.reduce(into: []) { if !$0.contains($1) { $0.append($1) } } + NativePluginID.allCases.filter { !saved.contains($0) }
         }
@@ -51,6 +55,13 @@ final class NativePluginCenter: ObservableObject {
     }
     var installed: [NativePluginID] { order.filter { configurations[$0] != nil } }
     var visibleIDs: [NativePluginID] { installed.filter { configurations[$0]?.enabled == true && configurations[$0]?.visible == true } }
+    func place(_ id: String, _ placement: CanvasPlacement) {
+        guard id == "clock" || NativePluginID(rawValue: id) != nil, placement.x.isFinite, placement.y.isFinite else { return }
+        composition.placements[id] = placement.snapped()
+        saveComposition()
+    }
+    func resetComposition() { composition = ScreenComposition(); saveComposition() }
+    private func saveComposition() { if persistArrangement, let data = try? JSONEncoder().encode(composition) { UserDefaults.standard.set(data, forKey: "StillScreenComposition") } }
     func move(_ id: NativePluginID, before target: NativePluginID) {
         guard id != target, order.contains(id), let destination = order.filter({ $0 != id }).firstIndex(of: target) else { return }
         var updated = order.filter { $0 != id }; updated.insert(id, at: destination); order = updated
@@ -78,6 +89,7 @@ final class NativePluginCenter: ObservableObject {
         config.enabled = enabled
         guard save(config) else { return }
         cancel(id); cards[id] = nil; deadlines[id] = nil; lastFetch[id] = nil
+        if id == .spotify, !enabled { cancelSpotifyAuthorization() }
         if id == .taskWatch { taskReceipt = nil; taskRevision = 0; rotateTasks() }
         if id == .quietTimer, !enabled { timerDeadline = nil }
         if id == .agents, !enabled {
@@ -119,16 +131,23 @@ final class NativePluginCenter: ObservableObject {
     }
     func requestSpotify() {
         guard !requestingSpotify else { return }
+        guard NSRunningApplication.runningApplications(withBundleIdentifier: "com.spotify.client").contains(where: { !$0.isTerminated }), let helper = Bundle.main.executableURL?.deletingLastPathComponent().appendingPathComponent("StillSpotifyBridge") else { issue = "Open Spotify before connecting it."; spotifyConnectionStatus = issue; return }
         requestingSpotify = true
-        Task { [weak self] in
-            let permission = await Task.detached { SpotifyPluginSource.permission(ask: true) }.value
-            guard let self else { return }
+        spotifyConnectionStatus = "Waiting up to 30 seconds for Spotify or macOS."
+        spotifyAuthorization = Task { [weak self] in
+            let result = await NativeReadCommand.fetch(executable: helper, arguments: ["--authorize"], timeoutSeconds: 30)
+            guard let self, !Task.isCancelled else { return }
             self.requestingSpotify = false
-            if permission == noErr, var settings = self.configurations[.spotify]?.settings { settings.spotifyAuthorized = true; self.update(.spotify, settings: settings) }
-            self.issue = permission == noErr ? "Spotify connected. Playback is read-only." : "Spotify Automation was not granted. Review Privacy & Security → Automation."
+            self.spotifyAuthorization = nil
+            let connected: Bool
+            if case .success(let data) = result, let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] { connected = object["state"] as? String == "ready" } else { connected = false }
+            if connected, var settings = self.configurations[.spotify]?.settings { settings.spotifyAuthorized = true; self.update(.spotify, settings: settings) }
+            self.issue = connected ? "Spotify connected. Playback is read-only." : "Spotify did not connect. Check Privacy & Security → Automation, keep Spotify open, then retry. No permission was inferred."
+            self.spotifyConnectionStatus = self.issue
             self.refresh(.spotify)
         }
     }
+    func cancelSpotifyAuthorization() { spotifyAuthorization?.cancel(); spotifyAuthorization = nil; requestingSpotify = false; spotifyConnectionStatus = "Spotify connection canceled." }
     func tick(available: Bool) {
         if !available {
             if !suspended { for id in installed { cancel(id) }; taskReceipt = nil; taskRevision = 0; rotateTasks() }
@@ -163,7 +182,7 @@ final class NativePluginCenter: ObservableObject {
             }
         }
     }
-    func stop() { for id in installed { cancel(id) }; cards = [:]; timerDeadline = nil; taskReceipt = nil; rotateTasks() }
+    func stop() { cancelSpotifyAuthorization(); for id in installed { cancel(id) }; cards = [:]; timerDeadline = nil; taskReceipt = nil; rotateTasks() }
     private func cancel(_ id: NativePluginID) { generations[id] = UUID(); fetching[id]?.cancel(); fetching[id] = nil }
     private func rotateTasks() { guard persist, configurations[.taskWatch] != nil else { return }; do { taskConnection = try store.rotateTaskConnection(); taskRevision = 0 } catch { taskConnection = nil; issue = "Task Watch could not create its local connection." } }
     private func taskCard() -> NativePluginCard {

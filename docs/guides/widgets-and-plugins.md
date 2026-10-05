@@ -7,7 +7,7 @@ The development app includes native quota/activity sources and a local declarati
 open out/Still-preview.app --args --widgets
 ```
 
-**Customize…** opens the Hub after returning to the desktop. Appearance offers Porcelain Light/Dark/System, Quiet corner and Side rail. An applied library template owns composition until **Reset composition**. The clock and system return controls remain host-owned.
+**Settings…** opens the Hub after returning to the desktop. Appearance offers Porcelain Light/Dark/System, Quiet corner, Side rail and Custom canvas. An applied library template owns composition until **Reset composition**. The clock and system return controls remain host-owned.
 
 ## Native collection
 

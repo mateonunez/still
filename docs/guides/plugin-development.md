@@ -21,7 +21,7 @@ swift run --package-path packages/StillPluginKit still-plugin validate examples/
 swift test --package-path packages/StillPluginKit
 ```
 
-The CLI validates in a private scratch directory and removes it afterwards; it does not enable a source or run the package. Import through **Customize → Library → Import package…**. Installation and connection are separate actions.
+The CLI validates in a private scratch directory and removes it afterwards; it does not enable a source or run the package. Import through **Settings → Plugins → Import package…**. Installation and connection are separate actions.
 
 ## Manifest contract
 

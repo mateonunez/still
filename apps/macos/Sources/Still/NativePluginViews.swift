@@ -5,6 +5,8 @@ import SwiftUI
 struct NativePluginCardView: View {
     let card: NativePluginCard
     let palette: PorcelainPalette
+    var width: CGFloat = 280
+    var showDetails = true
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
@@ -14,9 +16,9 @@ struct NativePluginCardView: View {
             }
             if let payload = card.payload { payloadView(payload) }
             else { Text(stateTitle).font(.custom("InstrumentSerif-Regular", size: 24)) }
-            Text(card.detail).font(.system(size: 10)).foregroundStyle(palette.secondary).fixedSize(horizontal: false, vertical: true)
-            if let observed = card.observedAt, ![.worldClock, .quietTimer, .agents].contains(card.plugin) { Text("Observed \(observed.formatted(.relative(presentation: .numeric)))").font(.system(size: 9)).foregroundStyle(palette.secondary) }
-        }.padding(16).frame(width: 280, alignment: .leading).foregroundStyle(palette.primary)
+            if showDetails { Text(card.detail).font(.system(size: 10)).foregroundStyle(palette.secondary).fixedSize(horizontal: false, vertical: true) }
+            if showDetails, let observed = card.observedAt, ![.worldClock, .quietTimer, .agents].contains(card.plugin) { Text("Observed \(observed.formatted(.relative(presentation: .numeric)))").font(.system(size: 9)).foregroundStyle(palette.secondary) }
+        }.padding(16).frame(width: width, alignment: .leading).foregroundStyle(palette.primary)
             .background(palette.surface.opacity(0.96), in: RoundedRectangle(cornerRadius: 18))
             .overlay(RoundedRectangle(cornerRadius: 18).stroke(palette.secondary.opacity(0.18), lineWidth: 1)).accessibilityElement(children: .combine)
     }
@@ -156,6 +158,8 @@ struct NativePluginSettingsView: View {
             Link("Weather data attribution", destination: URL(string: "https://open-meteo.com/")!)
         case .spotify:
             Button(center.requestingSpotify ? "Waiting for macOS…" : "Allow Spotify Automation…") { center.requestSpotify() }.stillControl().disabled(center.requestingSpotify)
+            if !center.spotifyConnectionStatus.isEmpty { Text(center.spotifyConnectionStatus).fixedSize(horizontal: false, vertical: true) }
+            if center.requestingSpotify { Button("Cancel connection") { center.cancelSpotifyAuthorization() }.stillControl() }
             Toggle("Show track and artist", isOn: $settings.showTitles)
             Text("Reads only the local Spotify app. No Spotify web login, listening history or playback controls.")
         }

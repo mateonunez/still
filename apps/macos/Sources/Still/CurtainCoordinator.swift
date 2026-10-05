@@ -17,8 +17,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     private var panels: [NSPanel] = []
     private var statusItem: NSStatusItem?
     private var welcomeWindow: NSWindow?
-    private var preferencesWindow: NSWindow?
     private var widgetsWindow: NSWindow?
+    private var editorWindow: NSWindow?
     private let widgets = WidgetCenter(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
     private let plugins = PluginCenter(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
     private lazy var nativePlugins = NativePluginCenter(widgets: widgets, persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
@@ -142,10 +142,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         }
         idleItem.submenu = idleChoices
         menu.addItem(idleItem)
-        let preferences = addItem("Preferences…", action: #selector(showPreferences), key: ",", to: menu)
-        preferences.isEnabled = !session.isRequested
-        let customize = addItem("Customize…", action: #selector(showWidgets), to: menu)
-        customize.isEnabled = !session.isRequested
+        let settings = addItem("Settings…", action: #selector(showWidgets), key: ",", to: menu)
+        settings.isEnabled = !session.isRequested
         menu.addItem(.separator())
         let appearanceItem = NSMenuItem(title: "Appearance", action: nil, keyEquivalent: "")
         let appearances = NSMenu()
@@ -186,9 +184,10 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         if let template, widgets.layout != template.template.layout.rawValue { widgets.layout = template.template.layout.rawValue }
         presentation.widgetLayout = widgets.layout
         presentation.widgetSide = widgets.side
+        presentation.composition = nativePlugins.composition
         let activate = controls.tick(alreadyCovered: session.isRequested, sessionAvailable: !sleeping && userSessionActive)
         energyMenuItem?.title = controls.running ? controls.energyStatus : "Keep Mac awake"
-        if activate { cover() }
+        if activate, editorWindow?.isVisible != true { cover() }
         updateStatus()
     }
 
@@ -210,35 +209,23 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         if let widgetsWindow { NSApp.activate(ignoringOtherApps: true); widgetsWindow.makeKeyAndOrderFront(nil); return }
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 590, height: 740), styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
         window.minSize = NSSize(width: 560, height: 600)
-        window.title = "Customize Still"; window.titlebarAppearsTransparent = true
+        window.title = "Still Settings"; window.titlebarAppearsTransparent = true
         window.isReleasedWhenClosed = false; window.isOpaque = false; window.backgroundColor = .clear
-        window.contentView = NSHostingView(rootView: WidgetsHubView(widgets: widgets, plugins: plugins, nativePlugins: nativePlugins, presentation: presentation, titlebarInset: window.frame.height - window.contentLayoutRect.height)); window.center()
+        window.contentView = NSHostingView(rootView: WidgetsHubView(controls: controls, widgets: widgets, plugins: plugins, nativePlugins: nativePlugins, presentation: presentation, titlebarInset: window.frame.height - window.contentLayoutRect.height, editScreen: { [weak self] in self?.showScreenEditor() })); window.center()
         widgetsWindow = window; NSApp.activate(ignoringOtherApps: true); window.makeKeyAndOrderFront(nil)
     }
 
     func configureNativePlugins() { nativePlugins.configureDiscoveredAgents() }
-
-    @objc private func showPreferences() {
+    func showScreenEditor() {
         guard !session.isRequested else { return }
-        if let preferencesWindow {
-            NSApp.activate(ignoringOtherApps: true)
-            preferencesWindow.makeKeyAndOrderFront(nil)
-            return
-        }
-        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 520, height: 420),
-                              styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
-        window.title = "Still Preferences"
-        window.titlebarAppearsTransparent = true
-        window.isOpaque = false
-        window.backgroundColor = .clear
-        window.isReleasedWhenClosed = false
-        let content = NSHostingView(rootView: PreferencesView(controls: controls, titlebarInset: window.frame.height - window.contentLayoutRect.height))
-        window.contentView = content
-        window.setContentSize(content.fittingSize)
-        window.center()
-        preferencesWindow = window
-        NSApp.activate(ignoringOtherApps: true)
-        window.makeKeyAndOrderFront(nil)
+        if let window = editorWindow, window.isVisible { NSApp.activate(ignoringOtherApps: true); window.makeKeyAndOrderFront(nil); return }
+        plugins.apply(nil); widgets.layout = "canvas"
+        let screen = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1440, height: 900)
+        let window = NSWindow(contentRect: screen, styleMask: [.titled, .closable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
+        window.title = "Edit Still screen"; window.titlebarAppearsTransparent = true; window.isReleasedWhenClosed = false
+        window.collectionBehavior = [.fullScreenPrimary]
+        window.contentView = NSHostingView(rootView: ScreenEditorView(center: nativePlugins, presentation: presentation, finish: { [weak self, weak window] in window?.close(); self?.showWidgets() }))
+        editorWindow = window; widgetsWindow?.close(); NSApp.activate(ignoringOtherApps: true); window.makeKeyAndOrderFront(nil); window.toggleFullScreen(nil)
     }
 
     @objc private func primaryAction() {
@@ -285,8 +272,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         controls.setCovered(true)
         rememberPreviousApplication()
         welcomeWindow?.close()
-        preferencesWindow?.close()
         widgetsWindow?.close()
+        editorWindow?.close()
         presentation.message = ""
         rebuildPanels()
         trace("cover")
@@ -523,7 +510,6 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         presentation.touchIDView = nil
         closePanels()
         welcomeWindow?.close()
-        preferencesWindow?.close()
         NotificationCenter.default.removeObserver(self)
         NSWorkspace.shared.notificationCenter.removeObserver(self)
         if let statusItem { NSStatusBar.system.removeStatusItem(statusItem) }
