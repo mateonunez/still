@@ -24,12 +24,16 @@ Still is visual privacy, not the macOS security lock. Trackpad/desktop transitio
 
 Native module arrangement now supports persistent order, drag handles/keyboard alternatives and left/right composition. [Arrangement and Spotify evidence](verification/module-arrangement-and-spotify.md) records inspected native-view exports and the remaining playback consent check.
 
-A [full-screen native canvas editor](verification/full-screen-canvas-and-spotify-authorization.md) now supports clock/module positioning, size choices and saved compositions. Pointer/keyboard/accessibility and Spotify real-consent acceptance remain open; collision resolution and per-display scenes follow this initial canvas.
+A [full-screen native canvas editor](verification/full-screen-canvas-and-spotify-authorization.md) now supports clock/module positioning, size choices and saved compositions. Pointer/keyboard/accessibility and Spotify real-consent acceptance remain open; measured collision resolution and responsive presets are implemented; separate per-display scenes remain deferred.
 
-Customize and Preferences are consolidated into one Settings window. Next canvas work: collision handling, responsive geometry, per-display scene behavior and native keyboard/VoiceOver acceptance.
+Customize and Preferences are consolidated into one Settings window. Measured canvas geometry, collision fallback and responsive presets are implemented. Native pointer/keyboard/VoiceOver and physical main-display acceptance remain open.
 
 Settings sidebar/header and Spotify process-target correction are built; [transport evidence and remaining native acceptance](verification/spotify-process-target-and-settings.md).
 
 ## Pre-beta catalog and SDK
 
 The ten-plugin public catalog, detail pages, canonical schema downloads, starters, JSON catalog and human/agent developer guides are implemented and locally verified. Community publishing, accounts and payments follow beta. See the [current audit](verification/pre-beta-product-audit.md) and [acceptance guide](guides/beta-readiness.md). Spotify connection was reported working interactively; Calendar remains pending. Main scene duplication is corrected in source and awaits physical multi-monitor acceptance. Manual update policy is documented; no automatic update engine is implemented.
+
+## Responsive canvas and native hardening
+
+Balanced, Focus and Dashboard presets use measured module sizes in a viewport owned by each panel. The editor follows the same macOS main display as the curtain. Slot reservations include imported metadata before payload arrival; disabled native sources consume no visible slots. Password cancel/retry returns to the main display; presentation requests remain owned through the system dialog. An owned fifteen-second local activity renewal candidate complements display-awake assertions. Activation/password gesture exposure and one-hour screensaver prevention are not yet physically verified. See [phase evidence](verification/main-display-canvas-and-native-hardening.md).

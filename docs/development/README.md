@@ -23,3 +23,5 @@ Build artifacts, screenshots and private logs are excluded from source control. 
 The first-activation biometric/gesture regression now has [native red/green lifecycle evidence](../verification/activation-readiness-regression.md). The corrected candidate still requires the original physical trial; automated passes do not establish gesture privacy or successful authentication.
 
 The pre-beta catalog and SDK are locally verified across 18 web routes. Fresh profiles expose all ten native configurations disabled. One main scene replaces duplicated monitor content; physical acceptance remains open. See the [pre-beta audit](../verification/pre-beta-product-audit.md).
+
+The next native candidate adds display-local measured canvas geometry, three presets, global widget-slot reservations and session hardening. It passes 65 Swift tests, 17 native collection checks and 17 isolated energy checks. Calendar consent, physical gestures/authentication and elapsed screensaver prevention remain open. See the [candidate report](../verification/main-display-canvas-and-native-hardening.md).

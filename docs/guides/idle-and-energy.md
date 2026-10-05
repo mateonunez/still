@@ -2,7 +2,7 @@
 
 Status: local preview. Quit the older running Still, then from the workspace root:
 
-For the display-on refinement use `open out/Still.app`; its [acceptance record](../verification/curtain-display-awake.md) identifies the exact build. `Still-preview` remains the prior frozen interaction candidate until rebuilt explicitly.
+For the current responsive-canvas candidate use `open out/Still-preview.app`. Quit the running candidate yourself first. The previous Still.app is preserved; see the [current phase evidence](../verification/main-display-canvas-and-native-hardening.md).
 
 Still automatically keeps the Mac awake while its curtain is active, including curtains triggered by inactivity. Returning to the desktop ends that request. Simply running the menu-bar app does not keep the Mac awake. Independent timed awake and display-on controls remain retained and hidden.
 
@@ -22,7 +22,7 @@ For the first acceptance run choose one minute, stop input, then observe whether
 
 There is no switch or duration to configure. Still creates one display-idle-sleep request (which also prevents idle system sleep) for the active curtain, shared across every display. Authentication cancellation and display changes keep that request; successful return releases it. Explicit Sleep, user-session changes and Quit release it. When macOS resumes a covered session, Still requests it again.
 
-Still requests that the display stay on while covered. Automatic screen-saver suppression requires the prolonged native acceptance check below. Manual Sleep, lid closure, low battery and other system overrides remain available. This is an idle-sleep request, not a guarantee that every application makes progress. If the request cannot be acquired, the curtain shows **Mac may sleep** and retries while covered.
+Still requests that the display stay on while covered. Automatic screen-saver suppression requires the prolonged native acceptance check below. Manual Sleep, lid closure, low battery and other system overrides remain available. This is an idle-sleep request, not a guarantee that every application makes progress. If the request cannot be acquired, the curtain shows **Idle prevention needs attention** and retries while covered.
 
 For acceptance: show Still, check its process's **PreventUserIdleDisplaySleep · Still — curtain awake session** in `pmset -g assertions`, return using Touch ID or Mac password, and verify that request disappears. Check manual Sleep/wake and Quit. Do not change your sleep preferences for this test.
 
@@ -55,3 +55,7 @@ General, Appearance, Agents and Plugins now share one Settings window and its na
 On macOS 26, primary/secondary buttons use native Liquid Glass; welcome/preferences use restrained material surfaces. Porcelain remains opaque over the desktop in light and dark mode. Try both appearances from the menu. Check keyboard navigation and the system-owned Touch ID/password flow without forcing focus onto a secondary action.
 
 In System Settings → Accessibility → Display, review Reduce Transparency and Increase Contrast using your preferred settings. Service surfaces become solid with either; Reduce Transparency also uses standard button styles. Older systems use standard buttons. No setting is changed by Still. ImageRenderer exports cannot establish how live native controls or glass look; review the actual app.
+
+## Local activity renewal candidate
+
+While covered, Still now also renews an owned local activity declaration at fifteen-second intervals using the public IOKit API. It tracks the returned ID, releases it on authenticated return/suspension/quit, retries cleanup, and starts a fresh declaration on covered resume. It does not post mouse/keyboard events or change system preferences. This is a screensaver-prevention candidate, not a verified one-hour fix; actual AC/battery endurance and system-lock behavior remain required.

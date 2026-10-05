@@ -10,7 +10,7 @@ A calm screen for your Mac, with optional inactivity activation.
 
 [Meet Still](https://meet-still.app) · [Development field notes](https://meet-still.app/changelog)
 
-Still creates a visual privacy curtain over the desktop. It does not replace the macOS security lock or guarantee that every third-party task continues processing. Porcelain is the initial design standard, with warm light/dark appearances and a burgundy identity. The configurable [mateonunez native collection](docs/guides/native-plugins.md) includes ten plugins: Agents (Codex/Claude), Build Watch, Deploy Watch, Task Watch, Mac Pulse, Next Up, World Clock, Quiet Timer, Weather and Spotify. A local declarative plugin SDK/importer and optional advisory agent activity hooks are implemented; additional themes and a marketplace remain future scope.
+Still creates a visual privacy curtain over the desktop. It does not replace the macOS security lock or guarantee that every third-party task continues processing. Porcelain is the initial design standard, with warm light/dark appearances and a burgundy identity. The configurable [mateonunez native collection](docs/guides/native-plugins.md) includes ten plugins: Agents (Codex/Claude), Build Watch, Deploy Watch, Task Watch, Mac Pulse, Next Up, World Clock, Quiet Timer, Weather and Spotify. A local declarative plugin SDK/importer and optional advisory agent activity hooks are implemented; a [public catalog](https://meet-still.app/plugins) and [developer SDK](https://meet-still.app/developers) are available; community submissions and additional themes remain future scope.
 
 ## Try the native preview
 
@@ -41,7 +41,7 @@ This is a disposable browser prototype. Authentication, activity and energy are 
 | Appearance | Porcelain, burgundy, light/dark/system | Interactive design preview with local licensed fonts |
 | Website | Next.js App Router, typed content/SEO, local fonts | Live on [meet-still.app](https://meet-still.app); GitHub-connected Vercel builds |
 | Distribution | Signed/notarized app download; evaluate Homebrew cask | No release, hosted package or usable install command |
-| Plugins and agents | Ten configurable native plugins; separate declarative SDK | Live sources exercised locally; Calendar/Spotify consent and physical acceptance pending; no approval actions |
+| Plugins and agents | Ten configurable native plugins; separate declarative SDK | Live sources exercised locally; Calendar consent, fresh-install source revocation and physical acceptance pending; no approval actions |
 
 ## Workspace map
 

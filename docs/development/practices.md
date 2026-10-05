@@ -159,3 +159,11 @@ Spotify transport regression checks must distinguish the caller identity from St
 Generate public manifest metadata and SDK downloads with `node scripts/generate-public-sdk.mjs`; do not edit generated copies. Keep provider setup/privacy descriptions typed and separate from canonical manifests. Verify schema-ID URLs and asset bytes as well as HTML metadata. Agent text resources are documentation, not a ranking protocol.
 
 Prepare missing built-in configurations disabled and hidden, preserve existing bounded regular files, and reject symlink roots. Installation must not connect providers or request permissions. Main content uses the macOS main display ID; topology reconciliation also tracks main-display changes. Never replace a running candidate: the builder checks the exact bundle executable path before mutation.
+
+## Display-local canvas geometry
+
+Use the same CGMainDisplayID selection for editor and curtain; NSScreen.main follows keyboard focus. Fixed-frame hosting views must disable content-derived sizing options and use the owning panel viewport. Measure SwiftUI subviews before resolving collisions; cache on measured items and the content area. Fall back to Balanced without rewriting saved positions. Clip optional modules outside the header and measured return region. Surface unresolved crowding in the editor rather than silently claiming a universal collision guarantee. Keep drag origin tied to rendered frames and retain named keyboard alternatives.
+
+Reserve slots from enabled visible native IDs and declared connected metadata, independent of asynchronous payload readiness. Remembering visibility on a disabled source must not consume capacity; re-enabling cannot exceed it. Diagnostic reads of configured agent quota must not install status lines/hooks or write provider preferences.
+
+Keep the original presentation restore point while reasserting covered options after activation. Credential dialogs stay system-owned and visible; retained restrictions are not a Spaces veto. Local activity renewal owns and reuses the returned IOKit identifier, uses a monotonic fifteen-second cadence and stops on return/suspension/quit. Simulated-hour tests are scheduling proof, not screensaver endurance proof.

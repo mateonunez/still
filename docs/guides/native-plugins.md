@@ -58,7 +58,7 @@ Spotify needs **Configure Spotify → Allow Spotify Automation…** while the de
 
 Choose **Edit screen…** in **Settings…**, or launch with `--editor`. The native editor uses the full screen. Select/drag the clock or a visible native module; release to snap its center to the grid. The toolbar selects modules, moves them one grid step, changes native widget size (Compact/Regular/Wide), adds enabled widgets and removes selected widgets. Clock remains available. Four optional visible widgets remain the current limit.
 
-**Done** or Escape returns to the Hub. The **Custom canvas** composition is applied immediately and saved locally; reopening preserves positions and sizes. Reset layout restores defaults. Position is proportional to display geometry, with bounds protecting the header and return-control region. Arbitrary overlapping placements are currently possible; collision resolution and separate per-display scenes are not implemented. The editor currently arranges compiled native modules; declarative template/import editing remains separate. Applying another template replaces the canvas composition, while saved canvas positions remain available.
+**Done** or Escape returns to the Hub. The **Custom canvas** composition is applied immediately and saved locally; reopening preserves positions and sizes. Reset layout restores defaults. Position is proportional to display geometry, with bounds protecting the header and return-control region. The host measures actual module bounds, seeks nearby free space and falls back to Balanced when the chosen geometry cannot fit. Very constrained screens or unusually tall cards can still require Compact or fewer widgets; the editor reports crowding. Separate per-display scenes are not implemented. The editor currently arranges compiled native modules; declarative template/import editing remains separate. Applying another template replaces the canvas composition, while saved canvas positions remain available.
 
 The editor is an ordinary native service window, not an active privacy curtain. It never starts authentication or changes source consent. Inactivity cannot activate the curtain while this editor is visible. The active curtain displays the saved scene without editing gestures.
 
@@ -79,3 +79,7 @@ The helper targets the running Spotify process, using fixed read-only Apple Even
 ## Multiple displays
 
 One main scene follows the macOS main display ID. Secondary displays remain opaque with a Go to main display control; they do not duplicate clock, widgets or authentication. Physical topology and authentication acceptance remain required.
+
+## Responsive canvas presets
+
+The editor uses the same macOS main display as the active scene, independently of where Settings has focus. In the editor choose **Layout → Balanced**, **Focus** or **Dashboard**. Each preset replaces saved positions only when selected. The host adapts card widths and compact details for smaller viewports, keeps the return region reserved, and may use a Balanced rendering fallback without rewriting saved positions. Dragging starts from the rendered position; named directional buttons remain available. Built-in canvas task cards show one task, or two in Wide, with an explicit count for remaining tasks. The desktop source preview retains the fuller list.
