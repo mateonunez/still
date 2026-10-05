@@ -89,3 +89,19 @@ Keep visual prototypes as typed React features in the existing website app, with
 Node is the sole script runtime. Verification tools use core Node APIs without a Python server or additional parser/test framework. Keep native probes process-owned, output-confined, bounded and credential-free. Historical reports retain their original commands; fresh receipts identify the current executable/tool. Shared font provenance and native resources live in design/fonts; preserve original license bytes.
 
 When moving App Router files, stop the owned dev process and regenerate its .next types before the production build; stale dev validators can reference removed route paths. Next.js agent-rule generation is disabled so generated collaboration files do not enter source control.
+
+## Curtain-owned power lifetime
+
+Keep the automatic system assertion separate from retained finite sessions. Start it when coverage is requested; release it on authenticated return, suspension and teardown. Rebuilding panels must not end the power lifetime. Never acquire on welcome/preferences alone. Retry acquisition or failed release without stacking IDs, and expose a failure instead of claiming the Mac is awake. Use timeout 0 only for this process-owned curtain lifetime; retain OS timeouts for independent finite sessions. Native probes must own and clean their assertions and record the exact executable hash.
+
+## Customization prototypes
+
+Keep disposable UI under the existing Next.js preview route, with explicit fictional data, no provider access and in-memory widget/source/disclosure state. Preserve noindex and production unavailability. Use canonical semantic palette roles; native glass, authentication and multi-display behavior cannot be proven by browser screenshots. Demonstrate unavailable/stale states without substituting healthy quota values. Browser interactions, typed builds and palette checks are evidence at their respective boundaries, not proof of a plugin contract or live integration.
+
+## Native quota adapters
+
+Project provider input into `StillWidgets.UsageSnapshot` before rendering; never retain vendor payloads, transcripts or credentials in evidence. Validate observation age, actual window duration, finite percentage and reset expiry. Absence is unavailable. Keep built-in protocol evidence distinct from the unimplemented community contract.
+
+Use dedicated owned subprocesses with bounded output, timeout, cancellation and cadence. Source changes invalidate callbacks. Claude settings changes must preserve existing command/options and unrelated settings, retain private backups and refuse restoration over external edits. Test wrapper forwarding and stale-data removal in owned scratch directories.
+
+Open interactive app bundles through Launch Services. For transparent title bars, extend the background through full-size content while reserving measured native title-bar space for scroll content. Verify a real control action and scroll screenshot; build success alone does not prove interaction or materials.

@@ -1,8 +1,12 @@
 # Widgets, plugins and templates
 
-Status: **PROPOSED architecture and protocol — customization and the first Codex integration are selected for work before beta or native distribution.** This ordering supersedes the earlier post-v1 activity timing. No plugin runtime, community protocol, import flow or marketplace is implemented; runtime, schema and detailed acceptance scope remain proposals.
+Status: **First-party native Codex and Claude quota widgets are implemented locally. The community architecture and protocol below remain proposed.** This ordering supersedes the earlier post-v1 activity timing. No plugin runtime, community protocol, import flow or marketplace is implemented; runtime, schema and detailed acceptance scope remain proposals.
 
 Still remains a quiet native Mac curtain. Customization should make a small amount of selected information useful while preserving system-owned authentication, recovery and an opaque curtain. The default remains clock/date with optional information hidden. The essential hub manages customization after returning to the app; it does not turn the covered screen into a dashboard.
+
+A disposable [Next.js Hub and curtain prototype](guides/widgets-and-plugins.md) is now available for Porcelain layout review. The browser implements visual interactions only. A separate native renderer and real first-party quota adapters now exist; a validated community package importer remains absent. See [native evidence](verification/native-live-widgets.md) and [ADR 0007](adr/0007-native-account-quota-widgets.md).
+
+The [developer guide](guides/plugin-development.md) documents the real first-party contribution path and separates it from the proposed community SDK.
 
 ## Four separate concepts
 

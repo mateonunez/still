@@ -1,23 +1,29 @@
-# Widgets and plugins — preview guide
+# Widgets and plugins
 
-Status: design proposal. The app does not yet offer plugin installation, a widget hub or a Codex connection. No install command or marketplace is available.
+Status: first-party native Codex and Claude quota widgets are available in the local development app. Community plugin installation and marketplace are not available.
 
-## Proposed experience
+## Native app
 
-1. Open the native customization hub after returning to Still.
-2. Select a Porcelain light/dark/system template and preview its layout.
-3. Add a compact Codex widget to an approved slot; other widgets remain optional.
-4. Enable its source explicitly and choose disclosure. Counts are the proposed default; account/project labels require a separate choice.
-5. Preview healthy, unavailable, disconnected, stale and attention states before covering the screen. Example data is always labeled.
+Build with `scripts/build-macos.sh debug Still-preview`, then install with `scripts/install-macos-local.sh`. Quit any older preview yourself before ordinary use. Launch the app through macOS:
 
-A template changes layout and appearance; it does not connect a source or grant permissions. A plugin supplies typed data; Still renders the widget and owns authentication. Approvals remain in the original agent client. Unavailable data must appear unavailable rather than showing fictional progress or healthy zero counts.
+```sh
+open ~/Applications/Still.app --args --widgets
+```
 
-## Review before implementation
+The menu's **Customize…** opens the Hub after returning to the desktop. Choose **Quiet corner** or **Side rail**. Connect sources individually; connection does not expose conversations or agent approvals. The native app never substitutes demonstration data.
 
-- Is the clock-only default still calm, with widgets clearly optional?
-- Does the light/dark Codex card remain readable at a glance on large and secondary displays?
-- Can source settings, disclosure and reset be understood without reading technical documentation?
-- Can usage percentages be distinguished from task progress, with their time window and freshness visible?
-- Does adding a template preserve the return controls and accessibility behavior?
+**Connect Codex** uses your already-installed, already-authenticated Codex CLI. **Choose Codex executable…** selects it if automatic discovery fails. Account quota is distinct from task progress; the source's actual time window and reset are shown. Refresh is limited to once per minute. Sign in through Codex itself when needed.
 
-See [design and protocol proposal](../plugins-and-widgets.md), [Codex source research](../research/codex-plugin-2026.md) and [roadmap](../roadmap.md).
+**Connect Claude** installs a bundled native status-line bridge in Claude Code settings. It preserves your existing command and options and retains a private backup in `~/Library/Application Support/Still`. Continue normal Claude work; the next supported quota update supplies the card. Claude Code 2.1.80+ and account quota support are required. **Disconnect Claude** restores the previous status line only if it still belongs to Still; if another tool edited it, resolve the conflict rather than overwriting that change.
+
+Missing or stale data is shown as unavailable. Refreshing retained, unchanged Claude status-line data does not prove a fresh account fetch. No Mac password is collected by widgets; return remains system-owned authentication.
+
+## Design preview
+
+Run `pnpm dev` and open `/preview?view=widgets&theme=porcelain&appearance=light`. The prepared loopback preview uses [port 3018](http://127.0.0.1:3018/preview?view=widgets&theme=porcelain&appearance=light).
+
+Add Codex and Claude independently, compare layouts and Light/Dark/System, and select each provider's sample state. Browser values and identities are fictional and labelled Demo. Return is simulated. Choices live in memory; no source access or credentials are stored. The preview remains noindex and unavailable in production.
+
+Developers: start with the [plugin authoring guide](plugin-development.md).
+
+See [native evidence](../verification/native-live-widgets.md), [extension proposal](../plugins-and-widgets.md) and [roadmap](../roadmap.md).

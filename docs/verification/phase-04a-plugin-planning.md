@@ -18,3 +18,7 @@ Review actual Porcelain light/dark UI prototypes for the curtain card and compac
 Then agree on a minimal versioned metadata envelope and validate one fixture-to-card path. A live opt-in usage spike must demonstrate units, identity, missing/stale/error states and bounded cleanup before reporting Codex connected. Lifecycle and approval awareness must prove the intended original client independently. In-app execution of approvals is outside the first integration scope.
 
 See [proposal](../plugins-and-widgets.md), [source research](../research/codex-plugin-2026.md), [preview guide](../guides/widgets-and-plugins.md) and [roadmap](../roadmap.md).
+
+## Follow-up — 2026-10-05
+
+The Porcelain Hub/card examples are now interactive Next.js prototypes. See [browser evidence](widget-hub-prototype.md). Native runtime, protocol validation and live Codex connection remain unimplemented; the design direction is not yet accepted.

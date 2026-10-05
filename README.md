@@ -10,7 +10,7 @@ A calm screen for your Mac, with optional inactivity activation.
 
 [Meet Still](https://meet-still.app) · [Development field notes](https://meet-still.app/changelog)
 
-Still creates a visual privacy curtain over the desktop. It does not replace the macOS security lock or guarantee that every third-party task continues processing. Porcelain is the initial design standard, with warm light/dark appearances and a burgundy identity. A widget/plugin foundation and an optional Codex adapter are planned before beta; additional theme collections remain follow-up scope.
+Still creates a visual privacy curtain over the desktop. It does not replace the macOS security lock or guarantee that every third-party task continues processing. Porcelain is the initial design standard, with warm light/dark appearances and a burgundy identity. Optional native Codex and Claude quota widgets are available in the local development app. A community plugin contract/importer and additional theme collections remain follow-up scope.
 
 ## Try the native preview
 
@@ -21,7 +21,7 @@ open out/Still.app
 
 Manual curtain, Porcelain light/dark/system, a contextual menu and embedded Touch ID with system-password fallback are implemented. This is an ad-hoc signed development app; the authentication and desktop-mode acceptance checks remain open. See the [user guide](docs/guides/native-preview.md), [Phase 1 evidence](docs/verification/phase-01-native-curtain.md) and [interaction refinement](docs/verification/phase-01-interaction-refinement.md). The currently prepared candidate is `out/Still-preview.app`; quit the old running app before opening it.
 
-The candidate includes optional inactivity activation, disabled initially. Awake/display controls are hidden while their product concept is reconsidered; the implementation and tests are retained. macOS 26 uses native Liquid Glass controls with a solid privacy curtain and accessibility fallbacks. Read the [inactivity guide](docs/guides/idle-and-energy.md) and [latest refinement](docs/verification/phase-02-deferred-awake-and-spaces.md). Mission Control and trackpad desktop transitions remain known coverage limitations.
+The candidate includes optional inactivity activation, disabled initially. The Mac stays awake automatically while the curtain is active; normal display sleep remains available. Independent timed awake/display controls remain hidden, with their implementation retained. macOS 26 uses native Liquid Glass controls with a solid privacy curtain and accessibility fallbacks. Read the [inactivity guide](docs/guides/idle-and-energy.md) and [latest refinement](docs/verification/phase-02-deferred-awake-and-spaces.md). Mission Control and trackpad desktop transitions remain known coverage limitations.
 
 ## Explore the design
 
@@ -41,7 +41,7 @@ This is a disposable browser prototype. Authentication, activity and energy are 
 | Appearance | Porcelain, burgundy, light/dark/system | Interactive design preview with local licensed fonts |
 | Website | Next.js App Router, typed content/SEO, local fonts | Live on [meet-still.app](https://meet-still.app); GitHub-connected Vercel builds |
 | Distribution | Signed/notarized app download; evaluate Homebrew cask | No release, hosted package or usable install command |
-| Plugins and agents | Customizable native widgets, reusable adapter protocol, Codex first | Pre-beta proposal; no integration implemented |
+| Plugins and agents | Native Hub, Codex and Claude quota widgets | Real local sources exercised; community SDK/import and approvals remain future scope |
 
 ## Workspace map
 
@@ -51,7 +51,7 @@ This is a disposable browser prototype. Authentication, activity and energy are 
 - [Native feasibility](docs/research/macos-feasibility.md) · [direct distribution](docs/distribution.md)
 - [Next.js website plan](docs/website-plan.md) · [launch strategy](docs/launch-strategy.md)
 - [Website/hosting guide](docs/guides/website-and-hosting.md) · [delivery evidence](docs/verification/phase-04-website-and-hosting.md)
-- [Widgets and plugins](docs/plugins-and-widgets.md) · [Agent awareness](docs/agent-awareness.md) · [prototype notes](prototypes/NOTES.md)
+- [Widgets and plugins](docs/plugins-and-widgets.md) · [Plugin developer guide](docs/guides/plugin-development.md) · [Agent awareness](docs/agent-awareness.md) · [prototype notes](prototypes/NOTES.md)
 
 ## Verify the workspace
 
