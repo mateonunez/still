@@ -167,3 +167,7 @@ Use the same CGMainDisplayID selection for editor and curtain; NSScreen.main fol
 Reserve slots from enabled visible native IDs and declared connected metadata, independent of asynchronous payload readiness. Remembering visibility on a disabled source must not consume capacity; re-enabling cannot exceed it. Diagnostic reads of configured agent quota must not install status lines/hooks or write provider preferences.
 
 Keep the original presentation restore point while reasserting covered options after activation. Credential dialogs stay system-owned and visible; retained restrictions are not a Spaces veto. Local activity renewal owns and reuses the returned IOKit identifier, uses a monotonic fifteen-second cadence and stops on return/suspension/quit. Simulated-hour tests are scheduling proof, not screensaver endurance proof.
+
+## Continuous canvas interactions
+
+Persist optional width in points, with explicit null for automatic sizing. Missing width migrates legacy saved size categories; legacy clock width remains automatic. Validate finite values and bounds before loading. Do not quantize free placement. During resize gestures, retain original centers and defer collision fitting until release; keep pointer tracking unanimated and respect Reduce Motion for settling. Provide a native slider and named movement controls as alternatives to pointer handles. Exported SwiftUI images cannot establish native-control rendering or interaction smoothness.

@@ -82,4 +82,12 @@ One main scene follows the macOS main display ID. Secondary displays remain opaq
 
 ## Responsive canvas presets
 
-The editor uses the same macOS main display as the active scene, independently of where Settings has focus. In the editor choose **Layout → Balanced**, **Focus** or **Dashboard**. Each preset replaces saved positions only when selected. The host adapts card widths and compact details for smaller viewports, keeps the return region reserved, and may use a Balanced rendering fallback without rewriting saved positions. Dragging starts from the rendered position; named directional buttons remain available. Built-in canvas task cards show one task, or two in Wide, with an explicit count for remaining tasks. The desktop source preview retains the fuller list.
+The editor uses the same macOS main display as the active scene, independently of where Settings has focus. In the editor choose **Layout → Balanced**, **Focus** or **Dashboard**. Each preset replaces saved positions only when selected. The host measures card heights, keeps the return region reserved, and may use a Balanced rendering fallback without rewriting saved positions. Dragging starts from the rendered position; named directional buttons remain available. Built-in canvas task cards show one task with an explicit count for remaining tasks. The desktop source preview retains the fuller list.
+
+### Continuous sizing
+
+The latest development candidate is `out/Still-canvas.app`. Quit other Still instances before opening it with `open out/Still-canvas.app --args --editor`.
+
+Select a module and pull its bottom-right handle horizontally to resize it continuously. Height always follows the content; the clock type scales with its width. The native **Module width** slider provides the keyboard alternative. Widths have readability and display bounds, rather than named size categories. **Automatic** adapts width to the current display; presets and reset use this mode. Existing saved size categories migrate to equivalent widths, retaining centers. Enable Automatic on a migrated module to opt into display adaptation.
+
+Placement is continuous within the protected area; there is no mandatory grid snap. Directional buttons move by one percent of the viewport. While a resize handle is held, modules retain their centers; overlap can temporarily occur. On release, collision fitting resumes. Reduce Motion disables the settling animation. The editor toolbar uses native glass on macOS 26, with opaque accessibility fallbacks. Live gesture smoothness and keyboard/VoiceOver acceptance still require an interactive trial. See [verification](../verification/continuous-native-canvas.md).

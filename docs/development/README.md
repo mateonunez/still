@@ -25,3 +25,5 @@ The first-activation biometric/gesture regression now has [native red/green life
 The pre-beta catalog and SDK are locally verified across 18 web routes. Fresh profiles expose all ten native configurations disabled. One main scene replaces duplicated monitor content; physical acceptance remains open. See the [pre-beta audit](../verification/pre-beta-product-audit.md).
 
 The next native candidate adds display-local measured canvas geometry, three presets, global widget-slot reservations and session hardening. It passes 65 Swift tests, 17 native collection checks and 17 isolated energy checks. Calendar consent, physical gestures/authentication and elapsed screensaver prevention remain open. See the [candidate report](../verification/main-display-canvas-and-native-hardening.md).
+
+Continuous resizing now replaces named canvas sizes in the editor. The separately built `Still-canvas` candidate adds automatic widths, content-driven height and free placement. See [verification and remaining interaction checks](../verification/continuous-native-canvas.md).

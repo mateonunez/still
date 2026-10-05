@@ -59,3 +59,7 @@ In System Settings → Accessibility → Display, review Reduce Transparency and
 ## Local activity renewal candidate
 
 While covered, Still now also renews an owned local activity declaration at fifteen-second intervals using the public IOKit API. It tracks the returned ID, releases it on authenticated return/suspension/quit, retries cleanup, and starts a fresh declaration on covered resume. It does not post mouse/keyboard events or change system preferences. This is a screensaver-prevention candidate, not a verified one-hour fix; actual AC/battery endurance and system-lock behavior remain required.
+
+## Closing the laptop lid
+
+Still does not guarantee operation with a closed lid and no external display. Its idle assertions do not establish lid-close prevention. Apple's supported closed-display setup uses an external display, power, keyboard and mouse; see [Apple's requirements](https://support.apple.com/en-us/102501). Still coverage, display reassignment and authentication in that arrangement remain physical acceptance checks. No closed-lid override is implemented.
