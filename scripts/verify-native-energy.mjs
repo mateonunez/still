@@ -6,11 +6,17 @@ import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { commandOutput, delay, outputDirectory, ownedProcess, root, stop } from './probe-support.mjs';
 
-const executable = join(root, 'out/Still-preview.app/Contents/MacOS/Still');
+const { values } = parseArgs({
+  options: {
+    app: { type: 'string', default: 'Still-preview' },
+    output: { type: 'string', default: 'out/verification/phase02' },
+  },
+});
+if (!['Still', 'Still-preview'].includes(values.app)) throw new Error('Unsupported app name');
+const executable = join(root, `out/${values.app}.app/Contents/MacOS/Still`);
 const executableSHA256 = createHash('sha256')
   .update(await readFile(executable))
   .digest('hex');
-const { values } = parseArgs({ options: { output: { type: 'string', default: 'out/verification/phase02' } } });
 const output = await outputDirectory(values.output);
 for (const name of ['progress.json', 'energy.json']) await rm(join(output, name), { force: true });
 const pmset = {};

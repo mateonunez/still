@@ -1,5 +1,5 @@
-/// One system-idle-sleep assertion for the lifetime of an active curtain.
-/// Display sleep and explicit system sleep remain under macOS control.
+/// One display-idle-sleep assertion for the lifetime of an active curtain.
+/// Keeping the display on also prevents idle system sleep; explicit sleep remains available.
 @MainActor
 public final class CurtainAwakeSession {
     private let driver: AwakeAssertionDriver
@@ -18,7 +18,7 @@ public final class CurtainAwakeSession {
     public func tick() {
         if requested {
             guard owned == nil else { failure = nil; return }
-            switch driver.acquire(.system, timeout: 0) {
+            switch driver.acquire(.display, timeout: 0) {
             case .success(let id): owned = id; failure = nil
             case .failure(let error): failure = error
             }

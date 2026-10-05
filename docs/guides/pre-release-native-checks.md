@@ -24,7 +24,7 @@ Public presentation restrictions are not a documented Spaces/trackpad block. Mis
 
 ## Power and failure
 
-Keep a controlled background task running during coverage. Confirm normal input inactivity does not suspend the system while covered; display sleep remains allowed. Return releases the curtain-owned assertion. Verify on battery/AC and after sleep/wake. Force invalid/expired metadata and a missing source: curtain/authentication must remain usable and missing data must never become healthy zero/sample quota.
+Keep a controlled background task running during coverage. Confirm normal input inactivity does not suspend the system while covered; the display must remain on and the automatic screen saver must not replace Still. Leave the curtain unattended beyond the configured screen-saver interval (including a one-hour trial), then verify Touch ID and system-password return. Return releases the curtain-owned assertion. Verify on battery/AC and after sleep/wake. Force invalid/expired metadata and a missing source: curtain/authentication must remain usable and missing data must never become healthy zero/sample quota.
 
 Source/contract tests and a controlled workload do not prove universal task continuity, live credentials, physical gestures or release readiness. Record each case as pass/fail/not tested.
 

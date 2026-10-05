@@ -2,6 +2,8 @@
 
 Status: local preview. Quit the older running Still, then from the workspace root:
 
+For the display-on refinement use `open out/Still.app`; its [acceptance record](../verification/curtain-display-awake.md) identifies the exact build. `Still-preview` remains the prior frozen interaction candidate until rebuilt explicitly.
+
 Still automatically keeps the Mac awake while its curtain is active, including curtains triggered by inactivity. Returning to the desktop ends that request. Simply running the menu-bar app does not keep the Mac awake. Independent timed awake and display-on controls remain retained and hidden.
 
 ```sh
@@ -18,11 +20,11 @@ For the first acceptance run choose one minute, stop input, then observe whether
 
 ## Automatic awake behavior
 
-There is no switch or duration to configure. Still creates one system-idle-sleep request for the active curtain, shared across every display. Authentication cancellation and display changes keep that request; successful return releases it. Explicit Sleep, user-session changes and Quit release it. When macOS resumes a covered session, Still requests it again.
+There is no switch or duration to configure. Still creates one display-idle-sleep request (which also prevents idle system sleep) for the active curtain, shared across every display. Authentication cancellation and display changes keep that request; successful return releases it. Explicit Sleep, user-session changes and Quit release it. When macOS resumes a covered session, Still requests it again.
 
-The screen may dim or turn off according to macOS settings while the Mac keeps processing. Manual Sleep, lid closure, low battery and other system overrides remain available. This is an idle-sleep request, not a guarantee that every application makes progress. If the request cannot be acquired, the curtain shows **Mac may sleep** and retries while covered.
+Still requests that the display stay on while covered. Automatic screen-saver suppression requires the prolonged native acceptance check below. Manual Sleep, lid closure, low battery and other system overrides remain available. This is an idle-sleep request, not a guarantee that every application makes progress. If the request cannot be acquired, the curtain shows **Mac may sleep** and retries while covered.
 
-For acceptance: show Still, check its process's **Still — curtain awake session** in `pmset -g assertions`, return using Touch ID or Mac password, and verify that request disappears. Check manual Sleep/wake and Quit. Do not change your sleep preferences for this test.
+For acceptance: show Still, check its process's **PreventUserIdleDisplaySleep · Still — curtain awake session** in `pmset -g assertions`, return using Touch ID or Mac password, and verify that request disappears. Check manual Sleep/wake and Quit. Do not change your sleep preferences for this test.
 
 ## Retained implementation — awake sessions (hidden)
 

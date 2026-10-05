@@ -8,7 +8,7 @@ Prepared for joint review. Recommendations are not approvals.
 | D02 | Default visual direction? | Porcelain as the initial standard, with light and dark appearances | Selected on 2026-10-04; other themes retained for future collections |
 | D03 | First release activity scope? | Hidden by default; selected app names/counts, session-local recent events | Decision pending |
 | D04 | Authentication scope? | Embedded system Touch ID + Mac password in the system dialog; no app PIN/custom password | Selected this combination on 2026-10-04; implemented refinement, hardware acceptance pending |
-| D05 | Energy concept? | Automatic system-awake request while covered; retain hidden timed/display controls | Curtain default selected on 2026-10-05; display sleep remains under macOS control |
+| D05 | Energy concept? | Automatic display/system-awake request while covered; retain hidden timed/display controls | Curtain default selected on 2026-10-05; display stays on while covered; prolonged screen-saver acceptance pending |
 | D06 | Name and identity? | Still as the working product name; Porcelain with burgundy direction | Selected name and color direction; font/brand implementation prepared; name clearance not performed |
 | D07 | Distribution? | Native `.app`, direct signed/notarized distribution; evaluate Homebrew and terminal download | Selected direct distribution; App Store excluded |
 | D08 | Pricing/license? | Test willingness to pay; evaluate one-time license | Decision pending |

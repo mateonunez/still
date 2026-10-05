@@ -129,3 +129,7 @@ The native runtime probe now asserts one panel generation for unchanged topology
 ## Physical authentication comparisons
 
 Separate fresh-process Touch-ID-only trials from system-dialog trials and validate the actual method in the state trace. Ask for observations after returning so Terminal focus does not contaminate a covered trial. Test dialog-open, immediate cancel recovery and settled cancel recovery separately. Presentation flags with an inactive app do not prove effective restrictions. Treat a fallback change as a separate product decision and never infer complete gesture privacy from removing a dialog.
+
+## Curtain power ownership
+
+Use one indefinite display-idle assertion while covered; it also prevents idle system sleep. Do not confuse a system-only assertion with display or screen-saver suppression. Check the real assertion type, owned ID, timeout and cleanup with IOKit and PID-scoped pmset output. Preserve independent timed requests and system overrides. Do not synthesize input or change global screen-saver/security preferences. Short probes establish ownership, not an hour of unattended visual behavior; record that acceptance separately against the exact executable hash.

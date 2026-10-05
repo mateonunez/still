@@ -2,6 +2,8 @@
 
 Date: 2026-10-05. Scope: local development candidate, not a release or production website delivery.
 
+Historical system-only candidate. Its display-sleep behavior is superseded by the [display-on refinement](curtain-display-awake.md); the results and hash below remain evidence for the original candidate only.
+
 ## Result
 
 Still automatically owns one system-idle-sleep assertion while covered. Return, suspend and teardown release the request; display changes preserve it. Resume restores it only for a requested curtain. No duration or user-facing toggle is needed. Display sleep remains normal. Independent finite controls remain hidden.

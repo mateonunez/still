@@ -14,7 +14,7 @@ Updated 2026-10-05. Native development preview; no signed/notarized beta or publ
 
 ## Completed local foundations
 
-Porcelain light/dark/system, native glass service controls, system authentication, inactivity, automatic system-awake ownership while covered, real opt-in Codex/Claude quota, local declarative plugin importer/validator/starters, explicit enable/revoke, and native advisory hook bridge. [Current evidence](verification/phase-05-plugin-sdk-and-agent-signals.md) qualifies which portions were observed vs synthetic.
+Porcelain light/dark/system, native glass service controls, system authentication, inactivity, automatic display/system-awake ownership while covered, real opt-in Codex/Claude quota, local declarative plugin importer/validator/starters, explicit enable/revoke, and native advisory hook bridge. [Current evidence](verification/phase-05-plugin-sdk-and-agent-signals.md) qualifies which portions were observed vs synthetic.
 
 Independent timed awake/display controls remain hidden pending a unified product concept. Homebrew follows a signed artifact; no usable public install command is advertised. No App Store release is planned. Additional theme assets, catalog, automatic plugin updates, payments, isolated runners and in-app approvals remain separate future contracts.
 

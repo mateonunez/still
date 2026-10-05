@@ -45,7 +45,8 @@ enum EnergyRuntimeProbe {
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
             curtain.setCovered(true)
             guard let curtainID = curtain.owned else { throw EnergyFailure(code: "PROBE_CURTAIN_MISSING", message: "No curtain assertion returned") }
-            checks["curtainSystemRequestHasNoTimeout"] = driver.isActive(curtainID) && ((driver.properties(curtainID)?[kIOPMAssertionTimeoutKey] as? NSNumber)?.doubleValue ?? 0) == 0
+            checks["curtainDisplayRequestHasNoTimeout"] = driver.isActive(curtainID) && ((driver.properties(curtainID)?[kIOPMAssertionTimeoutKey] as? NSNumber)?.doubleValue ?? 0) == 0
+            checks["curtainUsesDisplayAssertion"] = (driver.properties(curtainID)?[kIOPMAssertionTypeKey] as? String) == (kIOPMAssertionTypePreventUserIdleDisplaySleep as String)
             curtain.setCovered(true)
             checks["curtainRebuildPreservesID"] = curtain.owned == curtainID
             curtain.setCovered(false)

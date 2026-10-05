@@ -5,12 +5,13 @@ import Testing
 private final class CurtainAssertions: AwakeAssertionDriver {
     var acquisitions = 0
     var timeouts: [Double] = []
+    var kinds: [AwakeAssertion] = []
     var held: Set<UInt32> = []
     var failAcquire = false
     var failRelease = false
     func acquire(_ kind: AwakeAssertion, timeout: Double) -> Result<UInt32, EnergyFailure> {
-        #expect(kind == .system)
         if failAcquire { return .failure(EnergyFailure(code: "TEST", message: "Unavailable")) }
+        kinds.append(kind)
         timeouts.append(timeout)
         acquisitions += 1
         let id = UInt32(acquisitions)
@@ -44,6 +45,7 @@ private final class CurtainAssertions: AwakeAssertionDriver {
     session.tick()
     #expect(driver.held.isEmpty)
     session.setCovered(true)
+    #expect(driver.kinds == [.display])
     for _ in 0..<100 { session.tick(); session.setCovered(true) }
     #expect(driver.acquisitions == 1 && driver.held.count == 1 && driver.timeouts == [0])
     session.setCovered(false)

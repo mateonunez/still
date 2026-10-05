@@ -85,8 +85,8 @@ async function verify(appName, directory) {
       displayFontRegistered: receipt.displayFontRegistered,
       syntheticProcessMadeProgress: before < during && during < after,
       curtainReportsActiveAwakeRequest: receipt.curtainAwakeActive && receipt.curtainAwakeID > 0,
-      oneOwnedSystemAwakeRequestWhileCovered:
-        awakeBefore.length === 1 && awakeBefore[0].includes('PreventUserIdleSystemSleep'),
+      oneOwnedDisplayAwakeRequestWhileCovered:
+        awakeBefore.length === 1 && awakeBefore[0].includes('PreventUserIdleDisplaySleep'),
       curtainRequestRemovedAfterOwnedAppTerminates: awakeAfter.length === 0,
       ownedAppTerminated: !app.running(),
     };
