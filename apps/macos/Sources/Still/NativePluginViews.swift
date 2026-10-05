@@ -74,7 +74,7 @@ struct NativePluginLibraryView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             HStack { VStack(alignment: .leading, spacing: 5) { Text("Made for Still.").font(.custom("InstrumentSerif-Regular", size: 28)); Text("mateonunez · Native collection · v0.1.0").font(.system(size: 11)).foregroundStyle(palette.secondary) }; Spacer(); Button("Discover sources") { center.discover() }.stillControl() }
-            Text("Connect any plugin. Choose up to four to show on your curtain.").font(.system(size: 12)).foregroundStyle(palette.secondary)
+            Text("Connect any plugin. Choose what to show and arrange it across your screen.").font(.system(size: 12)).foregroundStyle(palette.secondary)
             if !center.visibleIDs.isEmpty {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Arrange your curtain").font(.system(size: 14, weight: .semibold))

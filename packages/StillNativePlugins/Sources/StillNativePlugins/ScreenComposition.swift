@@ -54,7 +54,7 @@ extension ScreenComposition {
     public static func preset(_ preset: CanvasPreset, ids: [NativePluginID]) -> Self {
         var scene = Self()
         scene.placements["clock"] = CanvasPlacement(x: preset == .focus ? 0.4 : 0.5, y: preset == .dashboard ? 0.27 : 0.4)
-        for (index, id) in ids.prefix(4).enumerated() {
+        for (index, id) in ids.enumerated() {
             let x: Double
             let y: Double
             switch preset {
@@ -62,7 +62,13 @@ extension ScreenComposition {
             case .focus: x = 0.82; y = 0.22 + Double(index) * 0.14
             case .dashboard: x = index % 2 == 0 ? 0.3 : 0.7; y = index < 2 ? 0.48 : 0.7
             }
-            scene.placements[id.rawValue] = CanvasPlacement(x: x, y: y, size: .compact)
+            if ids.count > 4 {
+                let columns = preset == .focus ? 3 : 4
+                let rows = Int(ceil(Double(ids.count) / Double(columns)))
+                let column = index % columns
+                let row = index / columns
+                scene.placements[id.rawValue] = CanvasPlacement(x: 0.12 + Double(column) * 0.76 / Double(columns - 1), y: 0.22 + Double(row) * 0.48 / Double(max(1, rows - 1)))
+            } else { scene.placements[id.rawValue] = CanvasPlacement(x: x, y: y) }
         }
         return scene
     }

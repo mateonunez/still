@@ -66,3 +66,19 @@ import Testing
     #expect(scene.placement("spotify").x == 0.347)
     #expect(ScreenComposition.decode(try JSONEncoder().encode(scene)) == scene)
 }
+
+@Test func everyPresetIncludesAllTenNativeModulesAndLargeCanvasFitsThem() {
+    let ids = NativePluginID.allCases
+    for preset in CanvasPreset.allCases {
+        let scene = ScreenComposition.preset(preset, ids: ids)
+        #expect(scene.placements.count == 11)
+        for viewport in [CGSize(width: 2560, height: 1440), CGSize(width: 1920, height: 1080)] {
+            let items = [CanvasItem(id: "clock", size: CGSize(width: 490, height: 270), placement: scene.placement("clock"))] + ids.enumerated().map { index, id in CanvasItem(id: id.rawValue, size: CGSize(width: 340, height: 130 + Double(index % 3) * 30), placement: scene.placement(id.rawValue, index: index)) }
+            let geometry = CanvasGeometry(viewport: viewport)
+            let frames = geometry.frames(for: items)
+            #expect(frames.count == 11)
+            #expect(!CanvasGeometry.hasOverlap(frames))
+            #expect(frames.values.allSatisfy { geometry.contentBounds.contains($0) })
+        }
+    }
+}

@@ -48,7 +48,7 @@ import Testing
     #expect(center.issue.isEmpty)
 }
 
-@MainActor @Test func reenablingRememberedVisibilityCannotHideAnotherModule() throws {
+@MainActor @Test func reenablingRememberedVisibilityRetainsAllFiveModules() throws {
     let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
     defer { try? FileManager.default.removeItem(at: root) }
     let store = NativePluginStore(root: root)
@@ -61,19 +61,26 @@ import Testing
     let center = NativePluginCenter(widgets: WidgetCenter(persist: false), root: root)
     defer { center.stop() }
     center.setEnabled(.spotify, true)
-    #expect(center.configurations[.spotify]?.enabled == false)
-    #expect(center.visibleIDs.count == 4)
-    #expect(!center.issue.isEmpty)
+    #expect(center.configurations[.spotify]?.enabled == true)
+    #expect(center.visibleIDs.count == 5)
+    #expect(center.issue.isEmpty)
 }
 
-@MainActor @Test func externalMetadataReservationsApplyBeforePayloadsArrive() throws {
+@MainActor @Test func allTenNativePluginsCanBeVisibleWithoutTruncation() throws {
     let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
     defer { try? FileManager.default.removeItem(at: root) }
-    let center = NativePluginCenter(widgets: WidgetCenter(persist: false), root: root, externalSlots: { _ in 4 })
+    let store = NativePluginStore(root: root)
+    try store.prepareMissingConfigurations()
+    for id in NativePluginID.allCases {
+        var config = NativePluginConfiguration(plugin: id)
+        config.enabled = true; config.visible = false
+        try store.write(config)
+    }
+    let center = NativePluginCenter(widgets: WidgetCenter(persist: false), root: root)
     defer { center.stop() }
-    center.setEnabled(.worldClock, true)
-    center.setVisible(.worldClock, true)
-    #expect(center.visibleIDs.isEmpty)
-    #expect(center.configurations[.worldClock]?.enabled == true)
-    #expect(!center.issue.isEmpty)
+    center.tick(available: false)
+    for id in NativePluginID.allCases { center.setVisible(id, true) }
+    #expect(center.visibleIDs.count == 10)
+    #expect(center.visibleCards.count == 10)
+    #expect(center.issue.isEmpty)
 }

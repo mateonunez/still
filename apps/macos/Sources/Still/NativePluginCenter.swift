@@ -38,12 +38,10 @@ final class NativePluginCenter: ObservableObject {
     private var suspended = false
     private let persist: Bool
     private let persistArrangement: Bool
-    private let externalSlots: (Bool) -> Int
     private let logger = Logger(subsystem: "co.mateonunez.still.development", category: "native-plugins")
 
-    init(widgets: WidgetCenter, persist: Bool = true, root: URL? = nil, externalSlots: @escaping (Bool) -> Int = { _ in 0 }) {
+    init(widgets: WidgetCenter, persist: Bool = true, root: URL? = nil) {
         self.widgets = widgets; self.persist = persist
-        self.externalSlots = externalSlots
         persistArrangement = persist && root == nil
         if persistArrangement {
             if let data = UserDefaults.standard.data(forKey: "StillScreenComposition"), let saved = ScreenComposition.decode(data) { composition = saved }
@@ -79,7 +77,7 @@ final class NativePluginCenter: ObservableObject {
         let neighbor = visibleIDs[index + delta]
         if delta < 0 { move(id, before: neighbor) } else { move(neighbor, before: id) }
     }
-    var visibleCards: [NativePluginCard] { installed.filter { configurations[$0]?.enabled == true && configurations[$0]?.visible == true }.prefix(4).compactMap { cards[$0]?.current(now: Date()) } }
+    var visibleCards: [NativePluginCard] { installed.filter { configurations[$0]?.enabled == true && configurations[$0]?.visible == true }.compactMap { cards[$0]?.current(now: Date()) } }
     var agentsEnabled: Bool { configurations[.agents]?.enabled == true }
     var taskInbox: URL { store.directory(.taskWatch) }
 
@@ -93,7 +91,6 @@ final class NativePluginCenter: ObservableObject {
     }
     func setEnabled(_ id: NativePluginID, _ enabled: Bool) {
         guard var config = configurations[id] else { return }
-        guard !enabled || !config.visible || visibleIDs.filter({ $0 != id }).count + externalSlots(id == .agents ? enabled : agentsEnabled) < 4 else { issue = "The curtain has four widget slots. Hide or disconnect another widget."; return }
         config.enabled = enabled
         guard save(config) else { return }
         cancel(id); cards[id] = nil; deadlines[id] = nil; lastFetch[id] = nil
@@ -110,7 +107,6 @@ final class NativePluginCenter: ObservableObject {
     }
     func setVisible(_ id: NativePluginID, _ visible: Bool) {
         guard var config = configurations[id] else { return }
-        guard !visible || !config.enabled || config.visible || visibleIDs.count + externalSlots(agentsEnabled) < 4 else { issue = "The curtain has four widget slots. Hide or disconnect another widget."; return }
         config.visible = visible; _ = save(config)
     }
     func update(_ id: NativePluginID, settings: NativePluginSettings) {

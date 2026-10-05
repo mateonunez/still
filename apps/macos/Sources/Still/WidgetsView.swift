@@ -149,7 +149,7 @@ struct WidgetsHubView: View {
             if widgets.layout != "canvas" { Picker("Widget position", selection: $widgets.side) { Text("Left").tag("left"); Text("Right").tag("right") }.pickerStyle(.segmented) }
             else { Text("Move and resize modules in the full-screen editor.").font(.system(size: 12)).foregroundStyle(palette.secondary) }
             if let template = plugins.template { Text("Composition from \(template.name)").font(.system(size: 11)).foregroundStyle(palette.secondary) }
-            Text("Up to four optional cards. Your clock and return controls always stay visible.").font(.system(size: 12)).foregroundStyle(palette.secondary)
+            Text("Choose the modules that fit your screen. Your clock and return controls keep their own space.").font(.system(size: 12)).foregroundStyle(palette.secondary)
             Button("Reset composition") { plugins.apply(nil); widgets.layout = "corner" }.stillControl()
         }
     }
@@ -171,11 +171,11 @@ struct WidgetsHubView: View {
                 Text("Account quota").font(.system(size: 13)); Spacer()
                 Button(widgets.enabled.contains(provider) ? "Disconnect \(provider.title) quota" : "Connect \(provider.title) quota") {
                     if widgets.enabled.contains(provider) { widgets.disconnect(provider) } else { widgets.connect(provider) }
-                }.stillControl(prominent: !widgets.enabled.contains(provider)).disabled(!nativePlugins.agentsEnabled && !widgets.enabled.contains(provider) && cardCount >= 4)
+                }.stillControl(prominent: !widgets.enabled.contains(provider))
             }
             HStack {
                 Text("Activity signals").font(.system(size: 13)); Spacer()
-                Button(widgets.activityEnabled.contains(provider) ? "Disable \(provider.title) activity" : "Enable \(provider.title) activity") { widgets.toggleActivity(provider) }.stillControl().disabled(!nativePlugins.agentsEnabled && !widgets.activityEnabled.contains(provider) && cardCount >= 4)
+                Button(widgets.activityEnabled.contains(provider) ? "Disable \(provider.title) activity" : "Enable \(provider.title) activity") { widgets.toggleActivity(provider) }.stillControl()
             }
             Text("Local hooks receive client input. Only anonymous states are saved; prompts and tool inputs are discarded.").font(.system(size: 11)).foregroundStyle(palette.secondary)
             DisclosureGroup("How it connects") {
@@ -197,8 +197,7 @@ struct WidgetsHubView: View {
             Divider()
             HStack { Text("Make it yours.").font(.custom("InstrumentSerif-Regular", size: 28)); Spacer(); Button("Import package…") { plugins.importPackage() }.stillControl(prominent: true) }
             Text("Local templates and metadata. Still renders every card and runs no package code.").font(.system(size: 12)).foregroundStyle(palette.secondary)
-            Text("\(cardCount) of 4 card slots connected").font(.system(size: 11)).foregroundStyle(palette.secondary)
-            if cardCount > 4 { Text("More than four slots are reserved. Hide a native widget or disconnect a local source to see every selected card.").font(.system(size: 12)).foregroundStyle(palette.secondary) }
+            Text("\(cardCount) selected cards").font(.system(size: 11)).foregroundStyle(palette.secondary)
             if widgets.layout == "canvas" { Text("Imported metadata cards use Quiet corner or Side rail. The screen editor currently arranges native widgets.").font(.system(size: 12)).foregroundStyle(palette.secondary) }
             if plugins.manifests.isEmpty { Text("Your library is ready for its first .stillplugin package.").font(.system(size: 13)).padding(.vertical, 24) }
             ForEach(plugins.manifests) { manifest in
@@ -209,7 +208,7 @@ struct WidgetsHubView: View {
                     else {
                         Text("Requested facts: " + manifest.capabilities.map(\.rawValue).joined(separator: ", ")).font(.system(size: 11)).foregroundStyle(palette.secondary)
                         HStack {
-                            Button(plugins.enabled.contains(manifest.id) ? "Disable local source" : "Enable local source") { if plugins.enabled.contains(manifest.id) { plugins.disconnect(manifest) } else { plugins.connect(manifest) } }.stillControl().disabled(!plugins.enabled.contains(manifest.id) && cardCount + manifest.widgets.count > 4)
+                            Button(plugins.enabled.contains(manifest.id) ? "Disable local source" : "Enable local source") { if plugins.enabled.contains(manifest.id) { plugins.disconnect(manifest) } else { plugins.connect(manifest) } }.stillControl()
                             if plugins.enabled.contains(manifest.id) { Button("Show inbox") { plugins.showInbox(manifest) }.stillControl() }
                         }
                     }

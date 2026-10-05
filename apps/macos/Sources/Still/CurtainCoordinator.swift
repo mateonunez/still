@@ -21,11 +21,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     private var editorWindow: NSWindow?
     private let widgets = WidgetCenter(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
     private let plugins = PluginCenter(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
-    private lazy var nativePlugins = NativePluginCenter(widgets: widgets, persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"), externalSlots: { [weak self] agentsEnabled in
-        guard let self else { return 0 }
-        let local = self.plugins.manifests.filter { self.plugins.enabled.contains($0.id) }.reduce(0) { $0 + $1.widgets.count }
-        return local + (agentsEnabled ? 0 : self.widgets.enabled.count + self.widgets.activityEnabled.count)
-    })
+    private lazy var nativePlugins = NativePluginCenter(widgets: widgets, persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
     private let desktopPolicy = DesktopPresentationPolicy()
     private let interactionTrace = InteractionTrace()
     private var rebuildGate = CurtainRebuildGate()
@@ -172,9 +168,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         let template = plugins.template
         presentation.widgetCards = widgets.cards.filter { card in template == nil || template!.widgets.contains { $0.kind == .quota && $0.provider.rawValue == card.provider.rawValue } }
         if nativePlugins.agentsEnabled { presentation.widgetCards = [] }
-        presentation.widgetCards = Array(presentation.widgetCards.prefix(max(0, 4 - presentation.nativeCards.count)))
         let activity = widgets.activityCards.filter { card in template == nil || template!.widgets.contains { $0.kind == .agentActivity && card.id == $0.provider.rawValue + "-activity" } }
-        presentation.extensionCards = Array(((nativePlugins.agentsEnabled ? [] : activity) + plugins.cards).prefix(max(0, 4 - presentation.widgetCards.count - presentation.nativeCards.count)))
+        presentation.extensionCards = (nativePlugins.agentsEnabled ? [] : activity) + plugins.cards
         if let template, widgets.layout != template.template.layout.rawValue { widgets.layout = template.template.layout.rawValue }
         presentation.widgetLayout = widgets.layout
         presentation.widgetSide = widgets.side

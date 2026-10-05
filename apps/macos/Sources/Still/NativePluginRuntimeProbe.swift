@@ -31,16 +31,17 @@ enum NativePluginRuntimeProbe {
             center.tick(available: true)
             let limit = ContinuousClock.now.advanced(by: .seconds(20))
             while ContinuousClock.now < limit && center.cards.values.contains(where: { $0.state == .refreshing }) { try await Task.sleep(for: .milliseconds(200)); center.tick(available: true) }
-            var checks: [String: Bool] = ["tenPluginsLoaded": center.installed.count == 10, "fourVisibleCards": center.visibleCards.count == 4, "codexAndClaudeDiscovery": center.discovered.count == 2]
+            var checks: [String: Bool] = ["tenPluginsLoaded": center.installed.count == 10, "allSelectedCardsRendered": center.visibleCards.count == center.visibleIDs.count, "codexAndClaudeDiscovery": center.discovered.count == 2]
             for id in [NativePluginID.buildWatch, .deployWatch, .macPulse, .worldClock, .quietTimer, .weather] { checks[id.rawValue + "LivePayload"] = center.cards[id]?.payload != nil && center.cards[id]?.state == .ready }
             checks["spotifyDoesNotFakePlayback"] = center.cards[.spotify]?.state == .ready || center.cards[.spotify]?.state == .permissionRequired || center.cards[.spotify]?.state == .unavailable
             checks["calendarNeedsExplicitSelectionOrPermission"] = [.setupRequired, .permissionRequired].contains(center.cards[.nextUp]?.state ?? .ready) || (center.cards[.nextUp]?.state == .ready && !(center.configurations[.nextUp]?.settings.calendarID ?? "").isEmpty)
             if case .work(let tasks) = center.cards[.taskWatch]?.payload { checks["realTaskReportedCompleted"] = tasks.contains { $0.label == "Verification task" && $0.state == .completed } } else { checks["realTaskReportedCompleted"] = false }
             center.startTimer(); checks["timerStarted"] = center.cards[.quietTimer]?.payload != .timer(deadline: nil)
             center.stopTimer(); checks["timerStopped"] = center.cards[.quietTimer]?.payload == .timer(deadline: nil)
-            let before = center.visibleCards
             center.setVisible(.weather, true)
-            checks["fifthVisiblePluginRejected"] = center.visibleCards == before && !center.issue.isEmpty
+            checks["fifthVisiblePluginAccepted"] = center.visibleIDs.contains(.weather) && center.visibleCards.count == center.visibleIDs.count && center.issue.isEmpty
+            for id in center.installed { center.setVisible(id, true) }
+            checks["allEnabledPluginsVisible"] = center.visibleCards.count == center.installed.filter { center.configurations[$0]?.enabled == true }.count
             var exports = 0
             for appearance in [StillAppearance.light, .dark] {
                 let palette: PorcelainPalette = appearance == .light ? .light : .dark
