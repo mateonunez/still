@@ -10,7 +10,7 @@ const content: ArticleContent = {
   sections: [
     {
       title: 'A screen with a little of your world.',
-      text: 'Settings brings General, Appearance, Agents and Plugins together. Choose up to four optional native widgets, configure their sources, then move and resize them in the full-screen editor. The host clock and system return controls keep their own place. A composition never enables a source.',
+      text: 'Settings brings General, Appearance, Agents and Plugins together. Choose optional native widgets, configure their sources, then move and resize them in the full-screen editor. The host clock and system return controls keep their own place. A composition never enables a source.',
     },
     {
       title: 'A curtain, when you choose.',

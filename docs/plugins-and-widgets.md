@@ -4,7 +4,7 @@ Protocol v1 is implemented in the local development app: a declarative package i
 
 | Concept | Responsibility | Implemented v1 |
 | --- | --- | --- |
-| Widget | Host-owned rendering of typed facts | Quota and advisory agent activity; four optional cards globally |
+| Widget | Host-owned rendering of typed facts | Quota and advisory agent activity; display-aware composition without a four-card visibility cap |
 | Plugin | Declares compatible facts and supplies validated snapshots | Local metadata, externally started producer, explicit connection/revocation |
 | Template | Constrained composition of existing slots | Porcelain, corner/rail, built-in Codex/Claude slots; never connects sources |
 | Marketplace | Discovery and distribution | Future scope; no accounts, payments or automatic updates |

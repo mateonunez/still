@@ -12,10 +12,10 @@ The public website origin is https://meet-still.app. The code repository is priv
 - Agents: one plugin grouping discovered supported clients and their independently configured quota/activity sources.
 - Installed: a known native module has local catalog/configuration metadata; no source access is implied.
 - Enabled: Still may read configured sources; OS grants and external client authentication remain separate.
-- Visible: a plugin occupies one of at most four curtain cards; hidden enabled sources remain previewable in the Hub.
+- Visible: a visible plugin has a curtain card; available display space governs fit; hidden enabled sources remain previewable in the Hub.
 - Task Watch: status of commands explicitly registered by the caller, without command output or automatic process discovery.
 
-- Widget: host-rendered typed fact card; at most four optional cards globally.
+- Widget: host-rendered typed fact card; no global four-card visibility limit.
 - Template: approved Porcelain composition, never a source grant.
 - Local metadata connection: host-issued UUID granting consumption of declared snapshot facts; not external-process permissions.
 - Attention requested: expiring advisory event, not an authoritative pending approval.

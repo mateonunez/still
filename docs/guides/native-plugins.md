@@ -17,7 +17,7 @@ open out/Still-preview.app --args --plugins --configure-native-plugins
 
 The configure flag explicitly connects quota for discovered Codex/Claude clients. Claude's existing status-line command is preserved. Activity hooks are configured separately in **Agents**; review/trust Codex commands in the original client. Claude can retain older quota as **Last reported** with the original observation age, for at most 24 hours and only until its known reset. A refresh never advances the source timestamp. Still does not decide approvals. **Plugins** shows the ten native plugins and the separate declarative package library.
 
-Each plugin has **Enabled**, **Show on curtain**, **Configure**, **Save settings** where applicable, **Refresh** and a source preview. Disabled plugins stop reads; configuration persists. Connection and visibility are independent, with four total optional cards rendered on the curtain. A source needing access says so; it never shows sample data as live data.
+Each plugin has **Enabled**, **Show on curtain**, **Configure**, **Save settings** where applicable, **Refresh** and a source preview. Disabled plugins stop reads; configuration persists. Connection and visibility are independent, without a global four-card visibility cap; canvas fit depends on display size. A source needing access says so; it never shows sample data as live data.
 
 | Plugin | Configuration |
 | --- | --- |
@@ -56,7 +56,7 @@ Spotify needs **Configure Spotify → Allow Spotify Automation…** while the de
 
 ## Edit the whole screen
 
-Choose **Edit screen…** in **Settings…**, or launch with `--editor`. The native editor uses the full screen. Select/drag the clock or a visible native module; release to snap its center to the grid. The toolbar selects modules, moves them one grid step, changes native widget size (Compact/Regular/Wide), adds enabled widgets and removes selected widgets. Clock remains available. Four optional visible widgets remain the current limit.
+Choose **Edit screen…** in **Settings…**, or launch with `--editor`. The native editor uses the full screen. Select/drag the clock or a visible native module for continuous placement. The toolbar selects modules, provides directional movement and continuous sizing, adds enabled widgets and removes selected widgets. Clock remains available. All ten built-in plugins can be visible; the editor reports crowding based on actual geometry instead of blocking the fifth module.
 
 **Done** or Escape returns to the Hub. The **Custom canvas** composition is applied immediately and saved locally; reopening preserves positions and sizes. Reset layout restores defaults. Position is proportional to display geometry, with bounds protecting the header and return-control region. The host measures actual module bounds, seeks nearby free space and falls back to Balanced when the chosen geometry cannot fit. Very constrained screens or unusually tall cards can still require Compact or fewer widgets; the editor reports crowding. Separate per-display scenes are not implemented. The editor currently arranges compiled native modules; declarative template/import editing remains separate. Applying another template replaces the canvas composition, while saved canvas positions remain available.
 
@@ -86,8 +86,10 @@ The editor uses the same macOS main display as the active scene, independently o
 
 ### Continuous sizing
 
-The latest development candidate is `out/Still-canvas.app`. Quit other Still instances before opening it with `open out/Still-canvas.app --args --editor`.
+The latest development candidate is `out/Still-preview.app`. Quit other Still instances before opening it with `open out/Still-preview.app --args --editor`.
 
 Select a module and pull its bottom-right handle horizontally to resize it continuously. Height always follows the content; the clock type scales with its width. The native **Module width** slider provides the keyboard alternative. Widths have readability and display bounds, rather than named size categories. **Automatic** adapts width to the current display; presets and reset use this mode. Existing saved size categories migrate to equivalent widths, retaining centers. Enable Automatic on a migrated module to opt into display adaptation.
 
 Placement is continuous within the protected area; there is no mandatory grid snap. Directional buttons move by one percent of the viewport. While a resize handle is held, modules retain their centers; overlap can temporarily occur. On release, collision fitting resumes. Reduce Motion disables the settling animation. The editor toolbar uses native glass on macOS 26, with opaque accessibility fallbacks. Live gesture smoothness and keyboard/VoiceOver acceptance still require an interactive trial. See [verification](../verification/continuous-native-canvas.md).
+
+There is no global four-plugin visibility limit. Presets include every selected native module. On a large display, all ten can share the canvas; on a small display, reduce widths or remove modules when crowding is reported. Source consent is unchanged. See [capacity verification](../verification/display-aware-plugin-capacity.md).

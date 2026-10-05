@@ -31,8 +31,8 @@ export default function PluginsPage() {
       </p>
       <div className="catalog-notice">
         <p>
-          Built into the development app. Every plugin starts disabled; access and visibility are your choices. Show up
-          to four widgets alongside your clock.
+          Built into the development app. Every plugin starts disabled; access and visibility are your choices. Arrange
+          your selected native widgets across the available canvas alongside your clock.
         </p>
         <Link href="/download">Availability ↗</Link>
       </div>

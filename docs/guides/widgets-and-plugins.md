@@ -15,7 +15,7 @@ The **Plugins** tab also contains the ten configurable mateonunez native modules
 
 ## Sources
 
-Enable quota and activity separately. The four optional card slots are shared across built-in and imported sources.
+Enable quota and activity separately. There is no global four-card visibility cap. Canvas fit depends on display space; imported protocol-v1 snapshots still contain at most four declared facts per snapshot. This wire-format bound is not a curtain plugin limit.
 
 **Connect Codex quota** uses the installed, already-authenticated Codex CLI. **How it connects → Choose Codex executable…** handles failed discovery. Sign in in Codex itself. Refresh is at most once per minute. Windows report account quota, never task progress.
 

@@ -138,7 +138,7 @@ Use the same full-size content/title-bar geometry for service windows. Measure t
 
 ## Native plugin sources
 
-Keep compiled first-party adapters separate from declarative community imports. Installation, discovery, enablement, source consent and visibility are distinct states. Native configuration is validated and persists locally; reserve at most four visible cards across all source kinds. Fold supported agent providers into one Agents card without turning expiring attention into authoritative approvals.
+Keep compiled first-party adapters separate from declarative community imports. Installation, discovery, enablement, source consent and visibility are distinct states. Native configuration is validated and persists locally; retain all selected cards without a global count cap; report geometric crowding separately. Fold supported agent providers into one Agents card without turning expiring attention into authoritative approvals.
 
 Read only selected GitHub/Vercel resources with fixed GET arguments and separately authenticated CLIs. Bound each owned subprocess by time and output size; cancellation stops only that process. Test excessive output and cancellation. Spotify Automation runs only after an explicit consent action; isolate blocking property/permission reads in the bounded helper. No command, transcript, environment or raw error enters a task receipt. Revisions/UUIDs and monotonic deadlines protect reconnection/freshness; suspension clears facts. Keep weather attribution and commercial-provider readiness separate from local evaluation. See [native authoring](native-plugin-authoring.md).
 
@@ -164,7 +164,7 @@ Prepare missing built-in configurations disabled and hidden, preserve existing b
 
 Use the same CGMainDisplayID selection for editor and curtain; NSScreen.main follows keyboard focus. Fixed-frame hosting views must disable content-derived sizing options and use the owning panel viewport. Measure SwiftUI subviews before resolving collisions; cache on measured items and the content area. Fall back to Balanced without rewriting saved positions. Clip optional modules outside the header and measured return region. Surface unresolved crowding in the editor rather than silently claiming a universal collision guarantee. Keep drag origin tied to rendered frames and retain named keyboard alternatives.
 
-Reserve slots from enabled visible native IDs and declared connected metadata, independent of asynchronous payload readiness. Remembering visibility on a disabled source must not consume capacity; re-enabling cannot exceed it. Diagnostic reads of configured agent quota must not install status lines/hooks or write provider preferences.
+Track enabled visible native IDs independently of asynchronous payload readiness. Visibility has no global count cap: return every selected card and diagnose actual geometric crowding. Disabled sources stay hidden without losing remembered visibility. Diagnostic reads of configured agent quota must not install status lines/hooks or write provider preferences.
 
 Keep the original presentation restore point while reasserting covered options after activation. Credential dialogs stay system-owned and visible; retained restrictions are not a Spaces veto. Local activity renewal owns and reuses the returned IOKit identifier, uses a monotonic fifteen-second cadence and stops on return/suspension/quit. Simulated-hour tests are scheduling proof, not screensaver endurance proof.
 

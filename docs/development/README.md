@@ -27,3 +27,5 @@ The pre-beta catalog and SDK are locally verified across 18 web routes. Fresh pr
 The next native candidate adds display-local measured canvas geometry, three presets, global widget-slot reservations and session hardening. It passes 65 Swift tests, 17 native collection checks and 17 isolated energy checks. Calendar consent, physical gestures/authentication and elapsed screensaver prevention remain open. See the [candidate report](../verification/main-display-canvas-and-native-hardening.md).
 
 Continuous resizing now replaces named canvas sizes in the editor. The separately built `Still-canvas` candidate adds automatic widths, content-driven height and free placement. See [verification and remaining interaction checks](../verification/continuous-native-canvas.md).
+
+The latest candidate removes the global four-card limit and includes every selected native module in presets. It passes the fifth/all-ten regressions and large-display geometry checks; actual display crowding remains an interactive acceptance item. See [capacity evidence](../verification/display-aware-plugin-capacity.md).

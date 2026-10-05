@@ -4,7 +4,7 @@ Status: proposed shortlist, not an approved implementation plan.
 
 Superseded by the implemented [mateonunez native collection](../guides/native-plugins.md): Codex/Claude became one Agents plugin, with Spotify added as the tenth. The original proposals below remain design history.
 
-Still should offer ten optional plugins while keeping each composition limited to four cards. Nothing is connected automatically. Native host rendering, Porcelain light/dark, explicit source freshness and privacy controls apply throughout.
+Still should offer ten optional plugins with display-aware composition instead of a four-card visibility limit. Nothing is connected automatically. Native host rendering, Porcelain light/dark, explicit source freshness and privacy controls apply throughout.
 
 | Plugin | Essential view | Source / scope |
 | --- | --- | --- |
