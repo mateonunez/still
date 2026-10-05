@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 1,
+  "id": "app.meet-still.porcelain-rail",
+  "version": "1.0.0",
+  "name": "Porcelain Side Rail",
+  "publisher": "Still",
+  "license": "MIT",
+  "kind": "template",
+  "capabilities": ["quota", "agentActivity"],
+  "widgets": [
+    { "id": "codex-quota", "kind": "quota", "provider": "codex" },
+    { "id": "claude-quota", "kind": "quota", "provider": "claude" },
+    { "id": "codex-activity", "kind": "agentActivity", "provider": "codex" },
+    { "id": "claude-activity", "kind": "agentActivity", "provider": "claude" }
+  ],
+  "template": { "theme": "porcelain", "layout": "rail" }
+}
