@@ -18,6 +18,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     private var statusItem: NSStatusItem?
     private var welcomeWindow: NSWindow?
     private var preferencesWindow: NSWindow?
+    private var widgetsWindow: NSWindow?
+    private let widgets = WidgetCenter(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
     private let controls = SessionControls(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
     private var policyTimer: Timer?
     private var energyMenuItem: NSMenuItem?
@@ -117,6 +119,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         menu.addItem(idleItem)
         let preferences = addItem("Preferences…", action: #selector(showPreferences), key: ",", to: menu)
         preferences.isEnabled = !session.isRequested
+        let customize = addItem("Customize…", action: #selector(showWidgets), to: menu)
+        customize.isEnabled = !session.isRequested
         menu.addItem(.separator())
         let appearanceItem = NSMenuItem(title: "Appearance", action: nil, keyEquivalent: "")
         let appearances = NSMenu()
@@ -143,6 +147,9 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     }
 
     private func policyTick() {
+        widgets.tick(available: !sleeping && userSessionActive)
+        presentation.widgetCards = widgets.cards
+        presentation.widgetLayout = widgets.layout
         let activate = controls.tick(alreadyCovered: session.isRequested, sessionAvailable: !sleeping && userSessionActive)
         energyMenuItem?.title = controls.running ? controls.energyStatus : "Keep Mac awake"
         if activate { cover() }
@@ -160,6 +167,17 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     @objc private func changeIdle(_ item: NSMenuItem) {
         guard let minutes = item.representedObject as? Int else { return }
         controls.setIdleMinutes(minutes)
+    }
+
+    @objc func showWidgets() {
+        guard !session.isRequested else { return }
+        if let widgetsWindow { NSApp.activate(ignoringOtherApps: true); widgetsWindow.makeKeyAndOrderFront(nil); return }
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 590, height: 740), styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
+        window.minSize = NSSize(width: 560, height: 600)
+        window.title = "Customize Still"; window.titlebarAppearsTransparent = true
+        window.isReleasedWhenClosed = false; window.isOpaque = false; window.backgroundColor = .clear
+        window.contentView = NSHostingView(rootView: WidgetsHubView(widgets: widgets, presentation: presentation, titlebarInset: window.frame.height - window.contentLayoutRect.height)); window.center()
+        widgetsWindow = window; NSApp.activate(ignoringOtherApps: true); window.makeKeyAndOrderFront(nil)
     }
 
     @objc private func showPreferences() {
@@ -226,9 +244,11 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
 
     @objc func cover() {
         guard !sleeping, userSessionActive, session.cover() else { return }
+        controls.setCovered(true)
         rememberPreviousApplication()
         welcomeWindow?.close()
         preferencesWindow?.close()
+        widgetsWindow?.close()
         presentation.message = ""
         rebuildPanels()
     }
@@ -289,6 +309,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         presentation.touchIDView = nil
         presentation.authenticationMode = .none
         if result == .authenticated {
+            controls.setCovered(false)
             controls.resetIdleInterval()
             closePanels()
             previousApplication?.activate(options: [])
@@ -319,8 +340,9 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     }
 
     private func updateStatus() {
+        presentation.energyWarning = controls.curtainAwakeIssue.isEmpty ? "" : "Mac may sleep. " + controls.curtainAwakeIssue
         statusItem?.button?.image = StillMark.menuImage(covered: session.isRequested)
-        statusItem?.button?.toolTip = "Still — " + (session.isRequested ? "your desktop is covered" : "ready when you are") + (ProductFeatures.awakeControlsVisible && controls.running ? " · " + controls.energyStatus : "")
+        statusItem?.button?.toolTip = "Still — " + (session.isRequested ? "your desktop is covered" : "ready when you are") + (session.isRequested && controls.curtainAwakeID != nil ? " · Mac stays awake" : "")
     }
 
     private func rebuildPanels() {
@@ -360,7 +382,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         let active = panels.first(where: { $0.frame.contains(cursor) }) ?? panels.first
         active?.makeKeyAndOrderFront(nil)
         updateStatus()
-        NativeEvidence.exportIfRequested(panels: panels)
+        NativeEvidence.exportIfRequested(panels: panels, awakeID: controls.curtainAwakeID)
     }
 
     private func closePanels() {
@@ -377,7 +399,9 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     }
 
     private func suspend() {
+        widgets.tick(available: false)
         session.suspend()
+        controls.setCovered(false)
         controls.stop()
         authentication.invalidate()
         presentation.touchIDView = nil
@@ -391,6 +415,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         session.resume()
         controls.resetIdleInterval()
         guard session.isRequested else { return }
+        controls.setCovered(true)
         presentation.message = "Welcome back. Authenticate to return to your desktop."
         rebuildPanels()
     }
@@ -426,9 +451,11 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     @objc private func quit() { NSApp.terminate(nil) }
 
     func tearDown() {
+        widgets.stop()
         session.stop()
         policyTimer?.invalidate()
         policyTimer = nil
+        controls.setCovered(false)
         controls.stop()
         authentication.invalidate()
         presentation.touchIDView = nil

@@ -30,11 +30,12 @@ private struct StillServiceSurface: ViewModifier {
 
     @ViewBuilder func body(content: Content) -> some View {
         if reduceTransparency || contrast == .increased {
-            content.background(palette.surface)
+            content.background { palette.surface.ignoresSafeArea() }
         } else {
             content.background {
                 Rectangle().fill(.regularMaterial)
                     .overlay(palette.surface.opacity(0.72))
+                    .ignoresSafeArea()
             }
         }
     }

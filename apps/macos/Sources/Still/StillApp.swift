@@ -21,6 +21,11 @@ final class StillDelegate: NSObject, NSApplicationDelegate {
         }
         NSApp.setActivationPolicy(.accessory)
         let arguments = ProcessInfo.processInfo.arguments
+        if let flag = arguments.firstIndex(of: "--widget-probe"), arguments.indices.contains(flag + 1) {
+            let directory = URL(fileURLWithPath: arguments[flag + 1], isDirectory: true)
+            Task { @MainActor in await WidgetRuntimeProbe.run(directory: directory); NSApp.terminate(nil) }
+            return
+        }
         if let flag = arguments.firstIndex(of: "--energy-probe"), arguments.indices.contains(flag + 1) {
             let directory = URL(fileURLWithPath: arguments[flag + 1], isDirectory: true)
             Task { @MainActor in
@@ -38,6 +43,8 @@ final class StillDelegate: NSObject, NSApplicationDelegate {
         coordinator?.installMenu()
         if ProcessInfo.processInfo.arguments.contains("--cover") {
             coordinator?.cover()
+        } else if arguments.contains("--widgets") {
+            coordinator?.showWidgets()
         } else {
             coordinator?.showWelcomeIfNeeded()
         }

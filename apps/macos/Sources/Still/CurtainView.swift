@@ -8,6 +8,9 @@ final class CurtainPresentation: ObservableObject {
     @Published var touchIDView: LAAuthenticationView?
     var authenticating: Bool { authenticationMode != .none }
     @Published var message = ""
+    @Published var energyWarning = ""
+    @Published var widgetCards: [NativeWidgetCard] = []
+    @Published var widgetLayout = "corner"
     @Published var appearance: StillAppearance = .system
 }
 
@@ -44,6 +47,18 @@ struct CurtainView: View {
                     Spacer()
                     Text("PORCELAIN").font(.system(size: 11, weight: .semibold))
                         .tracking(3).foregroundStyle(palette.secondary)
+                }
+                if geometry.size.width < 1050, !presentation.widgetCards.isEmpty {
+                    HStack(spacing: 20) {
+                        ForEach(presentation.widgetCards) { card in
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(card.provider.title).font(.system(size: 12, weight: .semibold))
+                                if let window = card.snapshot?.windows.first {
+                                    Text("\(window.title) · \(Int(window.usedPercent))% used").font(.system(size: 11))
+                                } else { Text(card.status).font(.system(size: 10)).lineLimit(3) }
+                            }.foregroundStyle(palette.secondary)
+                        }
+                    }.padding(.top, 20)
                 }
                 Spacer()
                 TimelineView(.periodic(from: .now, by: 1)) { timeline in
@@ -102,6 +117,12 @@ struct CurtainView: View {
                         .font(.system(size: 12)).foregroundStyle(palette.secondary)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: 500)
+                    if !presentation.energyWarning.isEmpty {
+                        Text(presentation.energyWarning)
+                            .font(.system(size: 12)).foregroundStyle(palette.secondary)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: 500)
+                    }
                     Text("Visual privacy · Not the macOS security lock")
                         .font(.system(size: 11)).foregroundStyle(palette.secondary)
                 }
@@ -111,6 +132,15 @@ struct CurtainView: View {
             .padding(.vertical, 40)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(palette.background)
+            .overlay(alignment: presentation.widgetLayout == "rail" ? .trailing : .bottomTrailing) {
+                if geometry.size.width >= 1050 {
+                    VStack(spacing: 12) {
+                        ForEach(presentation.widgetCards) { card in UsageCardView(card: card, palette: palette) }
+                    }
+                    .padding(.trailing, max(32, geometry.size.width * 0.055))
+                    .padding(.bottom, 40)
+                }
+            }
         }
         .onExitCommand(perform: cancelAuthentication)
     }

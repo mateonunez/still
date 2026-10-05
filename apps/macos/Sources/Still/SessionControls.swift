@@ -17,6 +17,9 @@ final class SessionControls: ObservableObject {
     private let clock = SessionClock()
     private let driver = IOKitAssertionDriver()
     private lazy var energy = EnergySession(driver: driver, now: { [weak self] in self?.clock.now ?? 0 })
+    private lazy var curtainAwake = CurtainAwakeSession(driver: driver)
+    var curtainAwakeID: UInt32? { curtainAwake.owned }
+    var curtainAwakeIssue: String { curtainAwake.failure?.message ?? "" }
     private var idle = IdlePolicy()
     private let persist: Bool
     private var platformIssue = ""
@@ -55,9 +58,12 @@ final class SessionControls: ObservableObject {
     }
 
     func stop() { platformIssue = ""; energy.stop(); refresh() }
+    func setCovered(_ covered: Bool) { curtainAwake.setCovered(covered) }
     func resetIdleInterval() { idle.resetAfterReturn(now: clock.now) }
 
     func tick(alreadyCovered: Bool, sessionAvailable: Bool) -> Bool {
+        if let id = curtainAwake.owned, !driver.isActive(id) { curtainAwake.assertionEnded() }
+        curtainAwake.tick()
         energy.tick()
         if energy.isRunning, energy.owned.values.contains(where: { !driver.isActive($0) }) {
             energy.stop()

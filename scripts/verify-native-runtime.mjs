@@ -5,7 +5,7 @@ import { open, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { delay, outputDirectory, ownedProcess, root, stop, waitForFile } from './probe-support.mjs';
+import { commandOutput, delay, outputDirectory, ownedProcess, root, stop, waitForFile } from './probe-support.mjs';
 
 async function worker(path) {
   let completed = 0;
@@ -49,8 +49,19 @@ async function verify(appName, directory) {
     const during = await progress();
     const alive = app.running();
     const receipt = JSON.parse(await readFile(receiptPath, 'utf8'));
+    const ownCurtainAssertions = async () =>
+      (await commandOutput('pmset', ['-g', 'assertions']))
+        .split('\n')
+        .filter(
+          (line) =>
+            new RegExp(`\\bpid\\s+${app.child.pid}\\(`).test(line) &&
+            line.includes('Still ') &&
+            line.includes('curtain awake session'),
+        );
+    const awakeBefore = await ownCurtainAssertions();
     await stop(app);
     await delay(250);
+    const awakeAfter = await ownCurtainAssertions();
     const after = await progress();
     const checks = {
       appAliveWhilePanelsReportedVisible: alive,
@@ -60,6 +71,10 @@ async function verify(appName, directory) {
       allPanelsAtExpectedCurtainLevel: receipt.windows.every((window) => window.level === receipt.expectedCurtainLevel),
       displayFontRegistered: receipt.displayFontRegistered,
       syntheticProcessMadeProgress: before < during && during < after,
+      curtainReportsActiveAwakeRequest: receipt.curtainAwakeActive && receipt.curtainAwakeID > 0,
+      oneOwnedSystemAwakeRequestWhileCovered:
+        awakeBefore.length === 1 && awakeBefore[0].includes('PreventUserIdleSystemSleep'),
+      curtainRequestRemovedAfterOwnedAppTerminates: awakeAfter.length === 0,
       ownedAppTerminated: !app.running(),
     };
     const result = {

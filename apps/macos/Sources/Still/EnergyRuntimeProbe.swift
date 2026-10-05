@@ -3,7 +3,7 @@ import CoreGraphics
 import IOKit.pwr_mgt
 import SessionKit
 
-/// Short, opt-in native probe; creates only finite assertions owned by this process.
+/// Short, opt-in native probe; creates and cleans only this process's assertions.
 /// No curtain, credentials, preference writes, forced sleep or user-activity synthesis.
 @MainActor
 enum EnergyRuntimeProbe {
@@ -11,10 +11,12 @@ enum EnergyRuntimeProbe {
         let driver = IOKitAssertionDriver()
         let clock = SessionClock()
         let energy = EnergySession(driver: driver, now: { clock.now })
+        let curtain = CurtainAwakeSession(driver: driver)
         var checks: [String: Bool] = [:]
         var states: [[String: Any]] = []
         var kernelID: UInt32?
         defer {
+            curtain.setCovered(false)
             energy.stop()
             if let kernelID { _ = driver.release(kernelID) }
         }
@@ -41,6 +43,18 @@ enum EnergyRuntimeProbe {
 
         do {
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            curtain.setCovered(true)
+            guard let curtainID = curtain.owned else { throw EnergyFailure(code: "PROBE_CURTAIN_MISSING", message: "No curtain assertion returned") }
+            checks["curtainSystemRequestHasNoTimeout"] = driver.isActive(curtainID) && ((driver.properties(curtainID)?[kIOPMAssertionTimeoutKey] as? NSNumber)?.doubleValue ?? 0) == 0
+            curtain.setCovered(true)
+            checks["curtainRebuildPreservesID"] = curtain.owned == curtainID
+            curtain.setCovered(false)
+            checks["curtainReturnReleasesRequest"] = driver.properties(curtainID) == nil
+            curtain.setCovered(true)
+            let resumedID = curtain.owned
+            checks["curtainResumeAcquiresRequest"] = resumedID.map { driver.isActive($0) } ?? false
+            curtain.setCovered(false)
+            checks["curtainSuspendReleasesRequest"] = resumedID.map { driver.properties($0) == nil } ?? false
             checks["startsWithNoAssertions"] = energy.owned.isEmpty
             try energy.start(seconds: 6).get()
             guard let systemID = energy.owned[.system] else { throw EnergyFailure(code: "PROBE_SYSTEM_MISSING", message: "No system assertion returned") }

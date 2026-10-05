@@ -5,7 +5,7 @@ import SwiftUI
 /// Never captures the desktop, other applications, credentials or activity.
 @MainActor
 enum NativeEvidence {
-    static func exportIfRequested(panels: [NSPanel]) {
+    static func exportIfRequested(panels: [NSPanel], awakeID: UInt32? = nil) {
         let arguments = ProcessInfo.processInfo.arguments
         guard let flag = arguments.firstIndex(of: "--evidence-directory"),
               arguments.indices.contains(flag + 1) else { return }
@@ -34,6 +34,8 @@ enum NativeEvidence {
                 "timestamp": Date().ISO8601Format(),
                 "os": ProcessInfo.processInfo.operatingSystemVersionString,
                 "bundleIdentifier": Bundle.main.bundleIdentifier ?? "unset",
+                "curtainAwakeID": awakeID.map { NSNumber(value: $0) } ?? NSNull(),
+                "curtainAwakeActive": awakeID.map { IOKitAssertionDriver().isActive($0) } ?? false,
                 "displayCount": screens.count,
                 "panelCount": panels.count,
                 "expectedCurtainLevel": NSWindow.Level.screenSaver.rawValue,

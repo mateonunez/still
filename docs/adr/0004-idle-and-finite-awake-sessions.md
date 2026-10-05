@@ -2,7 +2,7 @@
 
 Date: 2026-10-04. Status: implemented for the local preview; hardware/interaction acceptance pending.
 
-Product follow-up: awake/display controls are hidden with their implementation retained, pending a unified inactivity concept. `ProductFeatures.awakeControlsVisible` is false. This ADR records the retained implementation, not currently available product controls. No combined behavior has been selected. See [follow-up evidence](../verification/phase-02-deferred-awake-and-spaces.md).
+Product follow-up: awake/display controls are hidden with their implementation retained, pending a unified inactivity concept. `ProductFeatures.awakeControlsVisible` is false. This ADR records the retained implementation, not currently available product controls. The automatic curtain-owned system request is now defined separately in [ADR 0006](0006-curtain-owned-awake-default.md). See [follow-up evidence](../verification/phase-02-deferred-awake-and-spaces.md).
 
 ## Decision
 

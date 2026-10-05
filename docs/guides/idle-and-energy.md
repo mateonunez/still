@@ -2,7 +2,7 @@
 
 Status: local preview. Quit the older running Still, then from the workspace root:
 
-Current product scope: awake-session and display-on controls are hidden pending product refinement. Inactivity remains available. The energy instructions below document the retained implementation and are not actions available in the current preview. A future combined concept is undecided.
+Still automatically keeps the Mac awake while its curtain is active, including curtains triggered by inactivity. Returning to the desktop ends that request. Simply running the menu-bar app does not keep the Mac awake. Independent timed awake and display-on controls remain retained and hidden.
 
 ```sh
 open out/Still-preview.app
@@ -15,6 +15,14 @@ Open the Still menu → **After inactivity: Never**. Select **After 1 minute** o
 A fresh interval begins when the choice changes, after returning to the desktop, and after resume. Mouse/keyboard input also keeps the elapsed-input age below the threshold. Still reads only elapsed time, not what you type. It does not change the Mac's lock policy. Default on first use is Never; your explicit idle choice persists.
 
 For the first acceptance run choose one minute, stop input, then observe whether the curtain appears. Authenticate and confirm it does not immediately reappear. Restore Never if you do not want automatic curtains yet.
+
+## Automatic awake behavior
+
+There is no switch or duration to configure. Still creates one system-idle-sleep request for the active curtain, shared across every display. Authentication cancellation and display changes keep that request; successful return releases it. Explicit Sleep, user-session changes and Quit release it. When macOS resumes a covered session, Still requests it again.
+
+The screen may dim or turn off according to macOS settings while the Mac keeps processing. Manual Sleep, lid closure, low battery and other system overrides remain available. This is an idle-sleep request, not a guarantee that every application makes progress. If the request cannot be acquired, the curtain shows **Mac may sleep** and retries while covered.
+
+For acceptance: show Still, check its process's **Still — curtain awake session** in `pmset -g assertions`, return using Touch ID or Mac password, and verify that request disappears. Check manual Sleep/wake and Quit. Do not change your sleep preferences for this test.
 
 ## Retained implementation — awake sessions (hidden)
 

@@ -9,9 +9,9 @@ final class IOKitAssertionDriver: AwakeAssertionDriver {
         var identifier: IOPMAssertionID = 0
         let result = IOPMAssertionCreateWithDescription(
             type as CFString,
-            "Still — timed \(kind.rawValue) awake session" as CFString,
+            (timeout == 0 ? "Still — curtain awake session" : "Still — timed \(kind.rawValue) awake session") as CFString,
             nil,
-            "An explicitly started, finite Still awake session." as CFString,
+            (timeout == 0 ? "Keep the Mac awake while Still covers the desktop." : "An explicitly started, finite Still awake session.") as CFString,
             nil, timeout, kIOPMAssertionTimeoutActionRelease as CFString, &identifier
         )
         guard result == kIOReturnSuccess else {
