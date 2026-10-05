@@ -185,6 +185,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         presentation.extensionCards = Array(((nativePlugins.agentsEnabled ? [] : activity) + plugins.cards).prefix(max(0, 4 - presentation.widgetCards.count - presentation.nativeCards.count)))
         if let template, widgets.layout != template.template.layout.rawValue { widgets.layout = template.template.layout.rawValue }
         presentation.widgetLayout = widgets.layout
+        presentation.widgetSide = widgets.side
         let activate = controls.tick(alreadyCovered: session.isRequested, sessionAvailable: !sleeping && userSessionActive)
         energyMenuItem?.title = controls.running ? controls.energyStatus : "Keep Mac awake"
         if activate { cover() }

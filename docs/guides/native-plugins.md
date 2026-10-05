@@ -45,3 +45,11 @@ pnpm still:task run --label Build -- pnpm build
 The wrapper executes the command you supply without a shell, passes output directly to your terminal and shares only its chosen label/state/start time. Exit status is preserved. Four distinct task labels can be observed concurrently. Active receipts expire after two minutes without a heartbeat; terminal states expire after thirty seconds. Do not put sensitive content in a public task label. Reconnection, restart or suspension rotates the host UUID; existing commands continue, but old telemetry is rejected. Start new wrapped tasks after reconnecting.
 
 Missing, expired or invalid facts remain unavailable. Every source refresh is bounded; failed CLI reads leave an explicit status. Mac resource readings do not identify apps or capture input. Manual sleep and system security remain under macOS control.
+
+## Arrange modules
+
+In **Plugins → Arrange your curtain**, drag a handle onto another row to place it before that module. Use the up/down buttons for keyboard-accessible ordering. The visible order persists between launches. Changes affect native modules; imported package ordering remains owned by its template.
+
+In **Appearance**, choose **Side rail** for a centered vertical group or **Quiet corner** for a horizontal group above return controls, then select **Left** or **Right**. On constrained displays the group can scroll. Reset an applied template before changing its composition. Arrangement happens in the desktop Hub; curtain modules do not bypass authentication to enter an editor.
+
+Spotify needs **Configure Spotify → Allow Spotify Automation…** while the desktop is visible. Keep Spotify open. If macOS declines, check Privacy & Security → Automation. Background reads never open a consent dialog; an unresponsive Spotify reports unavailable rather than remaining indefinitely on Connecting. Permission setup alone does not establish successful playback access.

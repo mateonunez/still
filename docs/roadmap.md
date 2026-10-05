@@ -21,3 +21,5 @@ Porcelain light/dark/system, native glass service controls, system authenticatio
 Independent timed awake/display controls remain hidden pending a unified product concept. Homebrew follows a signed artifact; no usable public install command is advertised. No App Store release is planned. Additional theme assets, catalog, automatic plugin updates, payments, isolated runners and in-app approvals remain separate future contracts.
 
 Still is visual privacy, not the macOS security lock. Trackpad/desktop transitions remain a known limitation; green builds do not establish native hardware acceptance.
+
+Native module arrangement now supports persistent order, drag handles/keyboard alternatives and left/right composition. [Arrangement and Spotify evidence](verification/module-arrangement-and-spotify.md) records inspected native-view exports and the remaining playback consent check.

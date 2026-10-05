@@ -14,6 +14,7 @@ final class CurtainPresentation: ObservableObject {
     @Published var extensionCards: [ExtensionCard] = []
     @Published var nativeCards: [NativePluginCard] = []
     @Published var widgetLayout = "corner"
+    @Published var widgetSide = "right"
     @Published var appearance: StillAppearance = .system
 }
 
@@ -69,7 +70,7 @@ struct CurtainView: View {
                                 else { Text(activityTitle(card.state)).font(.system(size: 10)).lineLimit(2) }
                             }.foregroundStyle(palette.secondary)
                         }
-                    } }.frame(maxHeight: 170).padding(.top, 20)
+                    } }.frame(height: 250).padding(.top, 20)
                 }
                 Spacer()
                 TimelineView(.periodic(from: .now, by: 1)) { timeline in
@@ -86,8 +87,17 @@ struct CurtainView: View {
                             .font(.custom("InstrumentSerif-Regular", size: 32))
                             .foregroundStyle(palette.secondary)
                     }
+                    .padding(.leading, presentation.widgetLayout == "rail" && presentation.widgetSide == "left" && geometry.size.width >= 1250 ? 340 : 0)
+                    .padding(.trailing, presentation.widgetLayout == "rail" && presentation.widgetSide == "right" && geometry.size.width >= 1250 ? 340 : 0)
                 }
                 Spacer()
+                if geometry.size.width >= 1250, geometry.size.height >= 700, presentation.widgetLayout == "corner", hasModules {
+                    ViewThatFits(in: .horizontal) {
+                        HStack(alignment: .top, spacing: 14) { moduleCards }
+                        ScrollView(.horizontal, showsIndicators: true) { HStack(alignment: .top, spacing: 14) { moduleCards } }
+                    }.frame(width: min(1320, geometry.size.width - 100), height: min(300, geometry.size.height * 0.28))
+                        .frame(maxWidth: .infinity, alignment: presentation.widgetSide == "left" ? .leading : .trailing).padding(.bottom, 24)
+                }
                 VStack(spacing: 14) {
                     if let view = presentation.touchIDView, isAuthenticationDisplay {
                         EmbeddedTouchID(authenticationView: view, ready: { touchIDReady(view) })
@@ -143,18 +153,22 @@ struct CurtainView: View {
             .padding(.vertical, 40)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(palette.background)
-            .overlay(alignment: presentation.widgetLayout == "rail" ? .trailing : .bottomTrailing) {
-                if geometry.size.width >= 1250, geometry.size.height >= 700 {
-                    ScrollView(.vertical, showsIndicators: false) { VStack(spacing: 12) {
-                        ForEach(presentation.nativeCards) { card in NativePluginCardView(card: card, palette: palette) }
-                        ForEach(presentation.widgetCards) { card in UsageCardView(card: card, palette: palette, compact: geometry.size.height < 1000) }
-                        ForEach(presentation.extensionCards) { card in ExtensionCardView(card: card, palette: palette) }
-                    } }.frame(maxHeight: max(200, geometry.size.height - 100))
-                    .padding(.trailing, max(32, geometry.size.width * 0.055))
-                    .padding(.bottom, 40)
+            .overlay(alignment: presentation.widgetSide == "left" ? .leading : .trailing) {
+                if geometry.size.width >= 1250, geometry.size.height >= 700, presentation.widgetLayout == "rail", hasModules {
+                    ViewThatFits(in: .vertical) {
+                        VStack(spacing: 14) { moduleCards }.fixedSize(horizontal: false, vertical: true)
+                        ScrollView(.vertical, showsIndicators: true) { VStack(spacing: 14) { moduleCards } }
+                    }.frame(width: 312).frame(maxHeight: max(200, geometry.size.height - 180))
+                        .padding(.horizontal, max(32, geometry.size.width * 0.055))
                 }
             }
         }
         .onExitCommand(perform: cancelAuthentication)
+    }
+    private var hasModules: Bool { !presentation.nativeCards.isEmpty || !presentation.widgetCards.isEmpty || !presentation.extensionCards.isEmpty }
+    @ViewBuilder private var moduleCards: some View {
+        ForEach(presentation.nativeCards) { card in NativePluginCardView(card: card, palette: palette).fixedSize(horizontal: false, vertical: true) }
+        ForEach(presentation.widgetCards) { card in UsageCardView(card: card, palette: palette, compact: true).fixedSize(horizontal: false, vertical: true) }
+        ForEach(presentation.extensionCards) { card in ExtensionCardView(card: card, palette: palette).fixedSize(horizontal: false, vertical: true) }
     }
 }

@@ -2,9 +2,12 @@
 import { createHash } from 'node:crypto';
 import { open, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { parseArgs } from 'node:util';
 import { outputDirectory, ownedProcess, root, stop, waitForFile } from './probe-support.mjs';
 
-const executable = join(root, 'out/Still-preview.app/Contents/MacOS/Still');
+const { values } = parseArgs({ options: { app: { type: 'string', default: 'Still-preview' } } });
+if (!['Still', 'Still-preview'].includes(values.app)) throw new Error('Unsupported app name');
+const executable = join(root, `out/${values.app}.app/Contents/MacOS/Still`);
 const output = await outputDirectory(
   `out/verification/native-collection/${new Date().toISOString().replaceAll(':', '-')}`,
 );

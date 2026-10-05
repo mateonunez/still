@@ -47,7 +47,7 @@ enum NativeReadCommand {
         guard let url = locate(name) else { return .failure(.missingClient) }
         return await fetch(executable: url, arguments: arguments)
     }
-    static func fetch(executable url: URL, arguments: [String]) async -> Result<Data, NativeReadFailure> {
+    static func fetch(executable url: URL, arguments: [String], timeoutSeconds: TimeInterval = 15) async -> Result<Data, NativeReadFailure> {
         guard FileManager.default.isExecutableFile(atPath: url.path) else { return .failure(.missingClient) }
         let box = NativeCommandProcess()
         return await withTaskCancellationHandler {
@@ -65,7 +65,7 @@ enum NativeReadCommand {
                 guard box.launch() else { return box.result() }
                 try? input.fileHandleForWriting.close()
                 let timeout = DispatchWorkItem { box.stop(.timeout) }
-                DispatchQueue.global().asyncAfter(deadline: .now() + 15, execute: timeout)
+                DispatchQueue.global().asyncAfter(deadline: .now() + min(60, max(0.1, timeoutSeconds)), execute: timeout)
                 while true { let chunk = output.fileHandleForReading.availableData; if chunk.isEmpty { break }; box.append(chunk) }
                 box.process.waitUntilExit(); timeout.cancel()
                 return box.result()

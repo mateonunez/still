@@ -39,7 +39,13 @@ struct NativePluginCardView: View {
             if let event { Text(event.title).font(.system(size: 13, weight: .medium)); Text(event.startsAt, style: .relative).font(.custom("InstrumentSerif-Regular", size: 28)); Text(event.startsAt.formatted(date: .omitted, time: .shortened)).font(.system(size: 11)).foregroundStyle(palette.secondary) }
             else { Text("A clear day ahead.").font(.custom("InstrumentSerif-Regular", size: 26)) }
         case .clocks(let clocks):
-            TimelineView(.periodic(from: .now, by: 30)) { timeline in ForEach(Array(clocks.enumerated()), id: \.offset) { _, clock in HStack { Text(clock.name).font(.system(size: 11)); Spacer(); Text(clockTime(timeline.date, zone: clock.timeZone)).font(.custom("InstrumentSerif-Regular", size: 26)).monospacedDigit() } } }
+            TimelineView(.periodic(from: .now, by: 30)) { timeline in
+                VStack(spacing: 10) {
+                    ForEach(Array(clocks.enumerated()), id: \.offset) { _, clock in
+                        HStack { Text(clock.name).font(.system(size: 11)); Spacer(); Text(clockTime(timeline.date, zone: clock.timeZone)).font(.custom("InstrumentSerif-Regular", size: 26)).monospacedDigit() }
+                    }
+                }
+            }
         case .timer(let deadline):
             TimelineView(.periodic(from: .now, by: 1)) { _ in
                 let seconds = deadline.map { max(0, Int(ceil($0 - ProcessInfo.processInfo.systemUptime))) }
@@ -65,6 +71,24 @@ struct NativePluginLibraryView: View {
         VStack(alignment: .leading, spacing: 18) {
             HStack { VStack(alignment: .leading, spacing: 5) { Text("Made for Still.").font(.custom("InstrumentSerif-Regular", size: 28)); Text("mateonunez · Native collection · v0.1.0").font(.system(size: 11)).foregroundStyle(palette.secondary) }; Spacer(); Button("Discover sources") { center.discover() }.stillControl() }
             Text("Connect any plugin. Choose up to four to show on your curtain.").font(.system(size: 12)).foregroundStyle(palette.secondary)
+            if !center.visibleIDs.isEmpty {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Arrange your curtain").font(.system(size: 14, weight: .semibold))
+                    Text("Drag a handle to reorder. Choose composition and position in Appearance.").font(.system(size: 11)).foregroundStyle(palette.secondary)
+                    ForEach(center.visibleIDs) { id in
+                        HStack(spacing: 12) {
+                            Image(systemName: "line.3.horizontal").foregroundStyle(palette.secondary).padding(6).draggable(id.rawValue).accessibilityLabel("Drag \(id.title) to reorder")
+                            Text(id.title).font(.system(size: 12)); Spacer()
+                            Button { center.move(id, by: -1) } label: { Image(systemName: "arrow.up") }.accessibilityLabel("Move \(id.title) up").disabled(center.visibleIDs.first == id)
+                            Button { center.move(id, by: 1) } label: { Image(systemName: "arrow.down") }.accessibilityLabel("Move \(id.title) down").disabled(center.visibleIDs.last == id)
+                        }.padding(10).background(palette.surface.opacity(0.7), in: RoundedRectangle(cornerRadius: 10))
+                            .dropDestination(for: String.self) { items, _ in
+                                guard items.count == 1, let dragged = NativePluginID(rawValue: items[0]), center.visibleIDs.contains(dragged) else { return false }
+                                center.move(dragged, before: id); return true
+                            }
+                    }
+                }.padding(.vertical, 8)
+            }
             if center.installed.isEmpty { Text("Install the native collection from the workspace CLI, then relaunch Still.").font(.system(size: 13)) }
             ForEach(center.installed) { id in
                 VStack(alignment: .leading, spacing: 14) {

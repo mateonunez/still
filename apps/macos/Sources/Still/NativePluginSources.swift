@@ -27,7 +27,7 @@ enum SpotifyPluginSource {
     }
     static func read(showTitles: Bool) async -> NativePluginCard {
         guard let helper = Bundle.main.executableURL?.deletingLastPathComponent().appendingPathComponent("StillSpotifyBridge") else { return NativePluginCard(.spotify, state: .setupRequired, detail: "Spotify helper is missing. Rebuild the development app.") }
-        switch await NativeReadCommand.fetch(executable: helper, arguments: [showTitles ? "--show-titles" : "--hide-titles"]) {
+        switch await NativeReadCommand.fetch(executable: helper, arguments: [showTitles ? "--show-titles" : "--hide-titles"], timeoutSeconds: 7) {
         case .success(let data):
             guard let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return NativePluginCard(.spotify, state: .unavailable, detail: "Spotify returned an unsupported response.") }
             guard object["state"] as? String == "ready", let title = object["title"] as? String, let artist = object["artist"] as? String, let playing = object["playing"] as? Bool else { return NativePluginCard(.spotify, state: object["state"] as? String == "permissionRequired" ? .permissionRequired : .unavailable, detail: "Open Spotify and check Automation access in plugin settings.") }

@@ -18,6 +18,7 @@ final class NativePluginCenter: ObservableObject {
     @Published private(set) var issue = ""
     @Published private(set) var calendarChoices: [EKCalendar] = []
     @Published private(set) var requestingSpotify = false
+    @Published private(set) var order: [NativePluginID] = NativePluginID.allCases
     private let store: NativePluginStore
     private let widgets: WidgetCenter
     private let calendar = CalendarPluginSource()
@@ -33,16 +34,33 @@ final class NativePluginCenter: ObservableObject {
     private var deadlines: [NativePluginID: TimeInterval] = [:]
     private var suspended = false
     private let persist: Bool
+    private let persistArrangement: Bool
     private let logger = Logger(subsystem: "co.mateonunez.still.development", category: "native-plugins")
 
     init(widgets: WidgetCenter, persist: Bool = true, root: URL? = nil) {
         self.widgets = widgets; self.persist = persist
+        persistArrangement = persist && root == nil
+        if persistArrangement {
+            let saved = (UserDefaults.standard.stringArray(forKey: "StillNativePluginOrder") ?? []).compactMap(NativePluginID.init(rawValue:))
+            order = saved.reduce(into: []) { if !$0.contains($1) { $0.append($1) } } + NativePluginID.allCases.filter { !saved.contains($0) }
+        }
         store = NativePluginStore(root: root ?? ClaudeBridgeInstaller.root.appendingPathComponent("native-plugins"))
         if persist { for id in NativePluginID.allCases { configurations[id] = store.configuration(id) } }
         discover()
         if configurations[.taskWatch]?.enabled == true { rotateTasks() }
     }
-    var installed: [NativePluginID] { NativePluginID.allCases.filter { configurations[$0] != nil } }
+    var installed: [NativePluginID] { order.filter { configurations[$0] != nil } }
+    var visibleIDs: [NativePluginID] { installed.filter { configurations[$0]?.enabled == true && configurations[$0]?.visible == true } }
+    func move(_ id: NativePluginID, before target: NativePluginID) {
+        guard id != target, order.contains(id), let destination = order.filter({ $0 != id }).firstIndex(of: target) else { return }
+        var updated = order.filter { $0 != id }; updated.insert(id, at: destination); order = updated
+        if persistArrangement { UserDefaults.standard.set(order.map(\.rawValue), forKey: "StillNativePluginOrder") }
+    }
+    func move(_ id: NativePluginID, by delta: Int) {
+        guard let index = visibleIDs.firstIndex(of: id), visibleIDs.indices.contains(index + delta) else { return }
+        let neighbor = visibleIDs[index + delta]
+        if delta < 0 { move(id, before: neighbor) } else { move(neighbor, before: id) }
+    }
     var visibleCards: [NativePluginCard] { installed.filter { configurations[$0]?.enabled == true && configurations[$0]?.visible == true }.prefix(4).compactMap { cards[$0]?.current(now: Date()) } }
     var agentsEnabled: Bool { configurations[.agents]?.enabled == true }
     var taskInbox: URL { store.directory(.taskWatch) }
@@ -134,7 +152,7 @@ final class NativePluginCenter: ObservableObject {
             case .taskWatch: cards[id] = taskCard()
             default:
                 let generation = UUID(); generations[id] = generation
-                if cards[id]?.payload == nil { cards[id] = NativePluginCard(id, state: .refreshing, detail: "Connecting to source…") }
+                if cards[id] == nil { cards[id] = NativePluginCard(id, state: .refreshing, detail: "Connecting to source…") }
                 fetching[id] = Task { [weak self] in
                     let card = await Self.fetch(id, settings: config.settings)
                     guard let self, !Task.isCancelled, self.generations[id] == generation, !self.suspended, self.configurations[id]?.enabled == true else { return }

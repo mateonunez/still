@@ -116,6 +116,7 @@ struct WidgetsHubView: View {
             Picker("Appearance", selection: $presentation.appearance) { ForEach(StillAppearance.allCases, id: \.self) { Text($0.title).tag($0) } }.pickerStyle(.segmented)
                 .onChange(of: presentation.appearance) { _, value in UserDefaults.standard.set(value.rawValue, forKey: "StillAppearance") }
             Picker("Composition", selection: $widgets.layout) { Text("Quiet corner").tag("corner"); Text("Side rail").tag("rail") }.disabled(plugins.template != nil)
+            Picker("Widget position", selection: $widgets.side) { Text("Left").tag("left"); Text("Right").tag("right") }.pickerStyle(.segmented)
             if let template = plugins.template { Text("Composition from \(template.name)").font(.system(size: 11)).foregroundStyle(palette.secondary) }
             Text("Up to four optional cards. Your clock and return controls always stay visible.").font(.system(size: 12)).foregroundStyle(palette.secondary)
             Button("Reset composition") { plugins.apply(nil); widgets.layout = "corner" }.stillControl()

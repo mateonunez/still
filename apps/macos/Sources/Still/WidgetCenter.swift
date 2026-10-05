@@ -20,6 +20,7 @@ final class WidgetCenter: ObservableObject {
     @Published private(set) var activityEnabled: Set<UsageProvider> = []
     @Published private(set) var activityCards: [ExtensionCard] = []
     @Published var layout = "corner" { didSet { if persist { UserDefaults.standard.set(layout, forKey: "StillWidgetLayout") } } }
+    @Published var side = "right" { didSet { if persist { UserDefaults.standard.set(side, forKey: "StillWidgetSide") } } }
     private var snapshot: UsageSnapshot?
     private var codexIssue: UsageFailure?
     private var lastFetch = Date.distantPast
@@ -39,6 +40,7 @@ final class WidgetCenter: ObservableObject {
             activityEnabled = Set((UserDefaults.standard.stringArray(forKey: "StillActivitySources") ?? []).compactMap(UsageProvider.init(rawValue:)))
             let saved = UserDefaults.standard.string(forKey: "StillWidgetLayout")
             layout = saved == "rail" ? "rail" : "corner"
+            side = UserDefaults.standard.string(forKey: "StillWidgetSide") == "left" ? "left" : "right"
             if let path = UserDefaults.standard.string(forKey: "StillCodexExecutable") { codexURL = URL(fileURLWithPath: path) }
         }
         rebuild()

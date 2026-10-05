@@ -52,6 +52,15 @@ enum NativePluginRuntimeProbe {
                 if let image = renderer.nsImage, let tiff = image.tiffRepresentation, let bitmap = NSBitmapImageRep(data: tiff), let png = bitmap.representation(using: .png, properties: [:]) { try png.write(to: directory.appendingPathComponent("native-plugins-\(appearance.rawValue).png")); exports += 1 }
             }
             checks["lightAndDarkCardsExported"] = exports == 2
+            let presentation = CurtainPresentation()
+            presentation.nativeCards = center.visibleCards
+            presentation.appearance = .dark
+            for composition in ["corner", "rail"] {
+                presentation.widgetLayout = composition
+                let renderer = ImageRenderer(content: CurtainView(presentation: presentation, authenticate: {}, evidenceRender: true).frame(width: 1920, height: 1080).environment(\.colorScheme, .dark))
+                renderer.scale = 1
+                if let image = renderer.nsImage, let tiff = image.tiffRepresentation, let bitmap = NSBitmapImageRep(data: tiff), let png = bitmap.representation(using: .png, properties: [:]) { try png.write(to: directory.appendingPathComponent("curtain-\(composition).png")) }
+            }
             let states = NativePluginID.allCases.map { id in ["plugin": id.rawValue, "state": center.cards[id]?.state.rawValue ?? "missing", "hasPayload": center.cards[id]?.payload != nil] as [String: Any] }
             center.tick(available: false)
             checks["suspensionClearsPayloads"] = center.cards.values.allSatisfy { $0.payload == nil && $0.state == .paused }
