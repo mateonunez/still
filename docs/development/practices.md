@@ -125,3 +125,7 @@ Screen-parameter notifications include Dock/menu visible-area changes. Compare p
 A container's window is not proof its embedded LAAuthenticationView is attached. Check the actual child at deferred readiness time, mark readiness only after success and permit later valid attachment. Evaluation requires the current view on an owned key window with the app active; activation notifications can complete pending setup. Never introduce continuous focus reclamation, automatic failed-authentication retries or system-dialog interference. Test detached→attached→duplicate readiness against real AppKit NSViews without evaluating credentials.
 
 The native runtime probe now asserts one panel generation for unchanged topology and writes an explicit state-only trace. This does not replace the physical gesture/authentication checklist. [Regression evidence](../verification/activation-readiness-regression.md).
+
+## Physical authentication comparisons
+
+Separate fresh-process Touch-ID-only trials from system-dialog trials and validate the actual method in the state trace. Ask for observations after returning so Terminal focus does not contaminate a covered trial. Test dialog-open, immediate cancel recovery and settled cancel recovery separately. Presentation flags with an inactive app do not prove effective restrictions. Treat a fallback change as a separate product decision and never infer complete gesture privacy from removing a dialog.

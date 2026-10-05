@@ -46,3 +46,7 @@ node scripts/verify-native-interaction.mjs --app Still-preview
 ```
 
 This selects the already rebuilt `out/Still-preview.app` and stores the new report/trace under `out/verification/interaction-trial/Still-preview`. Both settled covers and the activation-time swipe must pass; see [regression evidence](../verification/activation-readiness-regression.md).
+
+## Isolate the password handoff
+
+`node scripts/verify-native-password-boundary.mjs` compares two fresh processes: Touch-ID-only activation-time swipe, then a separate password-dialog/cancel trial. Observe all gestures while covered; return before answering in Terminal. Never enter an account password in Terminal or an app-owned field. Reports identify whether trace events match the required method; failed/invalid trials exit1. The candidate and selected methods stay unchanged. [Evidence and decision boundary](../verification/password-dialog-boundary.md).

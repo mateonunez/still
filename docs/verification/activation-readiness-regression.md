@@ -36,3 +36,7 @@ New frozen candidate `out/Still-preview.app/Contents/MacOS/Still` SHA-256: `7257
 Run `node scripts/verify-native-interaction.mjs --app Still-preview`. It asks the owner to quit older instances, launches this candidate and preserves separate receipts under `out/verification/interaction-trial/Still-preview`. Check the original first/repeated/swipe-during-activation cases plus real Touch ID and system-password cancel/retry.
 
 These corrections establish lifecycle/readiness behavior, not successful physical Touch ID or a blanket Spaces swipe veto. Public AppKit presentation options remain active-app scoped. No persistent Trackpad preference change, private API, input interception or recovery suppression was added. If a Space transition still exposes a window, that trial remains failed rather than inferred safe from flags or tests. Signing/notarization remains deferred.
+
+## Physical follow-up
+
+The next owner trial on the frozen candidate confirms Touch ID visible on first and second activation and no exposure in either settled gesture trial. Activation-time swipe remains failed. The first-readiness correction is accepted for the reported visibility case; full coverage remains open. Password handoff/cancel behavior now has a [separate investigation](password-dialog-boundary.md).
