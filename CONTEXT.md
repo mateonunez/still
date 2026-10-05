@@ -8,6 +8,13 @@ The public website origin is https://meet-still.app. The code repository is priv
 
 ## Extension vocabulary
 
+- Native collection: reviewed, compiled first-party plugins owned by mateonunez, with per-plugin configuration and source consent.
+- Agents: one plugin grouping discovered supported clients and their independently configured quota/activity sources.
+- Installed: a known native module has local catalog/configuration metadata; no source access is implied.
+- Enabled: Still may read configured sources; OS grants and external client authentication remain separate.
+- Visible: a plugin occupies one of at most four curtain cards; hidden enabled sources remain previewable in the Hub.
+- Task Watch: status of commands explicitly registered by the caller, without command output or automatic process discovery.
+
 - Widget: host-rendered typed fact card; at most four optional cards globally.
 - Template: approved Porcelain composition, never a source grant.
 - Local metadata connection: host-issued UUID granting consumption of declared snapshot facts; not external-process permissions.

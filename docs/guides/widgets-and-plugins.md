@@ -9,13 +9,17 @@ open out/Still-preview.app --args --widgets
 
 **Customize…** opens the Hub after returning to the desktop. Appearance offers Porcelain Light/Dark/System, Quiet corner and Side rail. An applied library template owns composition until **Reset composition**. The clock and system return controls remain host-owned.
 
+## Native collection
+
+The **Plugins** tab also contains the ten configurable mateonunez native modules. When Agents is enabled, Codex and Claude share one card; quota and advisory activity remain separate opt-ins in the **Agents** tab. Native and imported cards share four visible slots. See [native plugin setup](native-plugins.md) for installation, permissions and Task Watch commands.
+
 ## Sources
 
 Enable quota and activity separately. The four optional card slots are shared across built-in and imported sources.
 
 **Connect Codex quota** uses the installed, already-authenticated Codex CLI. **How it connects → Choose Codex executable…** handles failed discovery. Sign in in Codex itself. Refresh is at most once per minute. Windows report account quota, never task progress.
 
-**Connect Claude quota** installs the bundled native status-line bridge in Claude Code settings. Existing status-line command/options survive, and a private backup is retained under Application Support/Still. Normal Claude work provides the next supported quota observation. Claude Code 2.1.80+ and a supported account are required. Disconnect restores only Still-owned configuration; external edits require manual resolution. This is a Claude Code status-line integration, not a macOS menu-bar plugin. Missing/unchanged/stale quota remains unavailable.
+**Connect Claude quota** installs the bundled native status-line bridge in Claude Code settings. Existing status-line command/options survive, and a private backup is retained under Application Support/Still. Normal Claude work provides the next supported quota observation. Claude Code 2.1.80+ and a supported account are required. Disconnect restores only Still-owned configuration; external edits require manual resolution. This is a Claude Code status-line integration, not a macOS menu-bar plugin. Fresh observations expire after five minutes. Older Claude quota may remain explicitly labelled **Last reported**, with its original observation time, for up to 24 hours and only while each reported window has a known future reset. Reset windows disappear; missing or invalid data remains unavailable. Reactivation does not create a new server observation.
 
 **Enable Codex/Claude activity** adds local command hooks backed by bundled Swift StillAgentBridge. The installer preserves other hooks/settings. Hook input may transiently include content; only anonymous event states are persisted, and referenced transcripts are never opened. This is optional and distinct from quota.
 

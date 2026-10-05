@@ -2,6 +2,8 @@
 
 Protocol v1 supports local declarative templates and metadata packages. The native host imports and validates manifests, renders approved cards, and never executes package code. There is no marketplace or isolated executable runner. See [ADR 0008](../adr/0008-declarative-plugin-contract.md).
 
+The separate mateonunez compiled native collection has configurable adapters and a local workspace installer. See [native authoring](../development/native-plugin-authoring.md) and [configuration](native-plugins.md). Its version-2 configuration/Task Watch receipts do not change this v1 protocol.
+
 ## Start with a package
 
 A package is a directory ending in `.stillplugin`, containing `manifest.json` and optionally `README.md` and `LICENSE`. Other files, directories, executable payloads and symbolic links are rejected. The manifest is limited to 32 KiB; optional files to 64 KiB each. Import copies the manifest only. Publisher attribution is not a verified identity.

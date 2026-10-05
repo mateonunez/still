@@ -11,6 +11,10 @@ Protocol v1 is implemented in the local development app: a declarative package i
 
 Still owns the opaque curtain, clock, authentication, layout and accessibility. Plugins cannot supply WebViews, JavaScript, shell commands or arbitrary controls. A publisher name is attribution, not a trust certificate. Import does not grant source access.
 
+## Owned native collection
+
+Ten configurable compiled plugins are registered in the mateonunez catalog. Agents combines discovered Codex/Claude clients; other modules use bounded native facts and explicitly selected sources. Their native configuration and Task Watch transport use version 2; this does not change the declarative v1 protocol. See the [configuration guide](guides/native-plugins.md), [native authoring guide](development/native-plugin-authoring.md) and [ADR](adr/0009-owned-native-plugin-collection.md). Native modules can invoke fixed host-owned helpers; imported community manifests cannot.
+
 ## Adopted protocol
 
 The normative implementation is [StillPluginKit](../packages/StillPluginKit); [manifest](../schemas/plugin-manifest-v1.schema.json) and [snapshot](../schemas/plugin-snapshot-v1.schema.json) schemas document the wire shape. Integer versions are 1. Snapshots identify the package and host-issued UUID, increase revision, contain ISO 8601 observation/expiry, explicitly mark samples, and replace at most four facts. Unknown fields fail closed. Supported facts are account-quota windows and advisory states, not pending approval records.
@@ -25,6 +29,6 @@ Native activity hooks can receive content-rich stdin. The helper discards conten
 
 ## Later extensions
 
-Arbitrary theme assets, typed plugin settings, isolated executable runners, provider actions, curated discovery, upgrades and marketplace economics need separate contracts and evidence. Current support does not promise these features. CodexBar informed provider semantics; its JavaScript plugin format is not binary/runtime-compatible with Still v1.
+Arbitrary theme assets, community plugin settings, isolated executable runners, provider actions, curated discovery, upgrades and marketplace economics need separate contracts and evidence. Typed settings for the owned native collection are implemented. Current support does not promise these features. CodexBar informed provider semantics; its JavaScript plugin format is not binary/runtime-compatible with Still v1.
 
 Start with the [developer guide](guides/plugin-development.md), [starter packages](../examples/plugins), [ADR](adr/0008-declarative-plugin-contract.md) and [phase evidence](verification/phase-05-plugin-sdk-and-agent-signals.md). Native swipe/authentication acceptance remains a separate gate.
