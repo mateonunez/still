@@ -11,7 +11,7 @@ final class DesktopPresentationPolicy {
     }
     func restore() {
         guard let previous else { return }
-        NSApp.presentationOptions = previous
         self.previous = nil
+        NSApp.presentationOptions = previous
     }
 }

@@ -32,7 +32,13 @@ async function verify(appName, directory) {
     .digest('hex');
   const receiptPath = join(output, 'runtime.json');
   const progressPath = join(output, 'synthetic-progress.json');
-  for (const name of ['runtime.json', 'synthetic-progress.json', 'porcelain-light.png', 'porcelain-dark.png'])
+  for (const name of [
+    'runtime.json',
+    'interaction.json',
+    'synthetic-progress.json',
+    'porcelain-light.png',
+    'porcelain-dark.png',
+  ])
     await rm(join(output, name), { force: true });
   let workload;
   let app;
@@ -42,13 +48,19 @@ async function verify(appName, directory) {
     await waitForFile(progressPath);
     const progress = async () => JSON.parse(await readFile(progressPath, 'utf8')).completed;
     const before = await progress();
-    app = ownedProcess(executable, ['--cover', '--evidence-directory', output], ['ignore', log.fd, log.fd]);
+    app = ownedProcess(
+      executable,
+      ['--cover', '--evidence-directory', output, '--interaction-trace', output],
+      ['ignore', log.fd, log.fd],
+    );
     await waitForFile(receiptPath);
     await waitForFile(join(output, 'porcelain-dark.png'));
     await delay(750);
     const during = await progress();
     const alive = app.running();
     const receipt = JSON.parse(await readFile(receiptPath, 'utf8'));
+    const interaction = JSON.parse(await readFile(join(output, 'interaction.json'), 'utf8'));
+    const panelGenerations = interaction.events.filter((event) => event.phase === 'touchIDPreparation').length;
     const ownCurtainAssertions = async () =>
       (await commandOutput('pmset', ['-g', 'assertions']))
         .split('\n')
@@ -66,6 +78,7 @@ async function verify(appName, directory) {
     const checks = {
       appAliveWhilePanelsReportedVisible: alive,
       onePanelPerReportedDisplay: receipt.panelCount === receipt.displayCount && receipt.displayCount > 0,
+      onePanelGenerationWithoutPhysicalDisplayChange: panelGenerations === 1,
       allPanelFramesMatchReportedScreens: receipt.windows.every((window) => window.matchesScreenFrame),
       allPanelsReportedVisible: receipt.windows.every((window) => window.visible),
       allPanelsAtExpectedCurtainLevel: receipt.windows.every((window) => window.level === receipt.expectedCurtainLevel),
@@ -82,6 +95,7 @@ async function verify(appName, directory) {
       executableSHA256,
       checks,
       syntheticIterations: { before, during, after },
+      panelGenerations,
       boundary: 'Not visual coverage, authentication, sleep prevention or universal workload proof.',
     };
     await writeFile(join(output, 'smoke.json'), `${JSON.stringify(result, null, 2)}\n`);

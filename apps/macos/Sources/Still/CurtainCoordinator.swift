@@ -23,6 +23,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     private let plugins = PluginCenter(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
     private let desktopPolicy = DesktopPresentationPolicy()
     private let interactionTrace = InteractionTrace()
+    private var rebuildGate = CurtainRebuildGate()
     private let controls = SessionControls(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
     private var policyTimer: Timer?
     private var energyMenuItem: NSMenuItem?
@@ -55,7 +56,17 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         let mode: String = switch presentation.authenticationMode { case .none: "none"; case .touchID: "touchID"; case .system: "system" }
         interactionTrace.record(phase, covered: session.isRequested, touchID: presentation.touchIDView != nil, preparationError: authentication.preparationError, authentication: mode, panelCount: panels.count, keyPanel: panels.contains { $0.isKeyWindow }, attached: presentation.touchIDView?.window != nil)
     }
-    @objc private func interactionChanged(_ notification: Notification) { trace(notification.name.rawValue) }
+    @objc private func interactionChanged(_ notification: Notification) {
+        trace(notification.name.rawValue)
+        if notification.name == NSApplication.didBecomeActiveNotification || notification.name == NSWindow.didBecomeKeyNotification {
+            startAttachedTouchID()
+        }
+    }
+
+    private func startAttachedTouchID() {
+        guard presentation.authenticationMode == .none, let view = presentation.touchIDView else { return }
+        touchIDViewReady(view)
+    }
 
     func installMenu() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -275,7 +286,9 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
 
     private func touchIDViewReady(_ view: LAAuthenticationView) {
         trace("touchIDViewReady")
-        guard presentation.touchIDView === view,
+        guard session.isRequested, NSApp.isActive, let window = view.window,
+              panels.contains(where: { $0 === window && $0.isKeyWindow }),
+              presentation.touchIDView === view, presentation.authenticationMode == .none,
               let attempt = session.beginAuthentication() else { return }
         presentation.authenticationMode = .touchID
         trace("touchIDEvaluation")
@@ -372,8 +385,15 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         statusItem?.button?.toolTip = "Still — " + (session.isRequested ? "your desktop is covered" : "ready when you are") + (session.isRequested && controls.curtainAwakeID != nil ? " · Mac stays awake" : "")
     }
 
-    private func rebuildPanels() {
-        closePanels()
+    private func rebuildPanels(force: Bool = true) {
+        guard rebuildGate.begin(CurtainDisplay.current(), force: force) else { trace("topologyUnchangedOrBuilding"); return }
+        defer {
+            rebuildGate.finish()
+            // A physical change during construction is reconciled once the build is complete.
+            Task { @MainActor [weak self] in self?.displaysChanged() }
+        }
+        session.invalidateAuthentication()
+        closePanels(restoringPresentation: false)
         presentation.authenticationMode = .none
         let isProbe = ProcessInfo.processInfo.arguments.contains("--evidence-directory")
         presentation.touchIDView = isProbe ? nil : authentication.prepareTouchID()
@@ -415,18 +435,16 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         NativeEvidence.exportIfRequested(panels: panels, awakeID: controls.curtainAwakeID)
     }
 
-    private func closePanels() {
-        desktopPolicy.restore()
+    private func closePanels(restoringPresentation: Bool = true) {
+        if restoringPresentation { desktopPolicy.restore(); rebuildGate.reset() }
         panels.forEach { $0.orderOut(nil); $0.close() }
         panels.removeAll()
     }
 
     @objc private func displaysChanged() {
         guard session.isRequested, !sleeping, userSessionActive else { return }
-        session.invalidateAuthentication()
-        authentication.invalidate()
-        presentation.message = ""
-        rebuildPanels()
+        trace("screenParametersChanged")
+        rebuildPanels(force: false)
     }
 
     private func suspend() {

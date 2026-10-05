@@ -4,12 +4,15 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
+import { parseArgs } from 'node:util';
 
 // Physical gestures/biometrics cannot be synthesized: preserve an explicit human verdict.
-const directory = resolve('out/verification/interaction-trial');
+const { values } = parseArgs({ options: { app: { type: 'string', default: 'Still' }, report: { type: 'string' } } });
+assert.ok(['Still', 'Still-preview'].includes(values.app), 'Unsupported candidate name');
+const directory = resolve(`out/verification/interaction-trial/${values.app}`);
 let report;
-if (process.argv[2] === '--report') {
-  report = JSON.parse(await readFile(process.argv[3], 'utf8'));
+if (values.report) {
+  report = JSON.parse(await readFile(values.report, 'utf8'));
 } else {
   const terminal = createInterface({ input: process.stdin, output: process.stdout });
   const yesNo = async (question) => {
@@ -20,7 +23,7 @@ if (process.argv[2] === '--report') {
   };
   try {
     await mkdir(directory, { recursive: true, mode: 0o700 });
-    const app = resolve('out/Still.app');
+    const app = resolve(`out/${values.app}.app`);
     const hash = createHash('sha256')
       .update(await readFile(`${app}/Contents/MacOS/Still`))
       .digest('hex');

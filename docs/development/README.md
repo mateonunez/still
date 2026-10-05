@@ -18,3 +18,5 @@ Implementation, automated verification and manual acceptance are tracked separat
 The design preview and verification tooling now share Node/Next.js; see [migration evidence](../verification/nextjs-preview-and-node-tooling.md). Trackpad gesture coverage remains [open](../verification/native-trackpad-coverage.md).
 
 Build artifacts, screenshots and private logs are excluded from source control. A written checklist does not establish that its cases passed.
+
+The first-activation biometric/gesture regression now has [native red/green lifecycle evidence](../verification/activation-readiness-regression.md). The corrected candidate still requires the original physical trial; automated passes do not establish gesture privacy or successful authentication.

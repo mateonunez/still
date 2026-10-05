@@ -39,3 +39,7 @@ Replay of the owner report with `node scripts/verify-native-interaction.mjs --re
 A separate diagnostic candidate `out/Still.app` (SHA-256 `622c4433dad26cf93e3d9a9ca70c7772d1e2d18156422eac1744c0a232bd870f`) builds/signature-verifies and adds opt-in `--interaction-trace`. It does not claim to fix the regression. The bounded local trace records application activation, key-panel status, Touch ID preparation/attachment, normalized preparation error code and presentation flags; no input, content, window titles or client data. Normal launches write no trace.
 
 `node scripts/verify-native-interaction.mjs` guides three physical trials and writes private receipts under `out/verification/interaction-trial`. It never terminates an existing user app. Root cause and an original-reproduction pass remain pending this trace.
+
+## Stable activation candidate
+
+The complete guided owner trial confirms both settled activations suppress the tested gestures, but the first lacks Touch ID and a swipe coinciding with setup exposes windows. The new candidate removes unchanged-topology panel reconstruction and detached biometric evaluation. Native red/green evidence is [recorded separately](activation-readiness-regression.md); physical reacceptance remains open. No gesture-veto claim is made.

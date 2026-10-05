@@ -117,3 +117,11 @@ Hook input can contain content transiently. Project only supported events/identi
 Presentation restrictions must restore exact prior options on return, suspension, teardown and system-authentication handoff; cancellation reapplies only while covered. Preserve recovery. Cmd-Tab restriction is not a Spaces swipe veto. Physical slow/fast/partial transitions require their own red-capable test. Inactive glass controls use a readable standard-control fallback; keyboard focus is retained.
 
 For activation/authentication regressions, use the guided native interaction loop and opt-in bounded state trace. Preserve null for untested human observations. Report replay is not unattended gesture synthesis. Capture app active/key-window state, embedded-view attachment and presentation flags before choosing a timing/focus fix; normal launches must not write diagnostics. Do not rebuild a user-owned running candidate during a trial.
+
+## Stable activation and biometric readiness
+
+Screen-parameter notifications include Dock/menu visible-area changes. Compare physical display identity/full frame/scale, guard reentrant panel construction, and retain presentation-policy ownership across a covered rebuild. Invalidate authentication only for an actual new topology or deliberate new cover. Reconcile a physical change arriving during construction after the current build finishes.
+
+A container's window is not proof its embedded LAAuthenticationView is attached. Check the actual child at deferred readiness time, mark readiness only after success and permit later valid attachment. Evaluation requires the current view on an owned key window with the app active; activation notifications can complete pending setup. Never introduce continuous focus reclamation, automatic failed-authentication retries or system-dialog interference. Test detached→attached→duplicate readiness against real AppKit NSViews without evaluating credentials.
+
+The native runtime probe now asserts one panel generation for unchanged topology and writes an explicit state-only trace. This does not replace the physical gesture/authentication checklist. [Regression evidence](../verification/activation-readiness-regression.md).

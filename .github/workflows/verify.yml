@@ -35,3 +35,4 @@ jobs:
       - run: swift run --package-path packages/StillPluginKit still-plugin validate examples/plugins/porcelain-rail.stillplugin
       - run: swift run --package-path packages/StillPluginKit still-plugin validate examples/plugins/local-signals.stillplugin
       - run: swift build --package-path apps/macos
+      - run: swift test --package-path apps/macos

@@ -38,3 +38,11 @@ node scripts/verify-native-interaction.mjs
 ```
 
 The guided loop asks you to quit every existing Still yourself, launches `out/Still.app`, then checks first activation, second activation and a swipe during activation. Answer y/n from actual observation. Exit 1 means a failed or untested acceptance case, not a build error. Keep its state-only `interaction.json` and `owner-trial.json` local; no passwords/content are recorded.
+
+The stable-activation candidate can be tested separately without rebuilding a running diagnostic app:
+
+```sh
+node scripts/verify-native-interaction.mjs --app Still-preview
+```
+
+This selects the already rebuilt `out/Still-preview.app` and stores the new report/trace under `out/verification/interaction-trial/Still-preview`. Both settled covers and the activation-time swipe must pass; see [regression evidence](../verification/activation-readiness-regression.md).

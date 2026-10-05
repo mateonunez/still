@@ -11,15 +11,18 @@ struct EmbeddedTouchID: NSViewRepresentable {
         AuthenticationContainer(authenticationView: authenticationView, ready: ready)
     }
 
-    func updateNSView(_ nsView: AuthenticationContainer, context: Context) {}
+    func updateNSView(_ nsView: AuthenticationContainer, context: Context) { nsView.checkReadiness() }
 
     @MainActor
     final class AuthenticationContainer: NSView {
         private let ready: @MainActor () -> Void
+        private let authenticationView: LAAuthenticationView
         private var didNotify = false
+        private var checking = false
 
         init(authenticationView: LAAuthenticationView, ready: @escaping @MainActor () -> Void) {
             self.ready = ready
+            self.authenticationView = authenticationView
             super.init(frame: .zero)
             authenticationView.translatesAutoresizingMaskIntoConstraints = false
             addSubview(authenticationView)
@@ -35,10 +38,17 @@ struct EmbeddedTouchID: NSViewRepresentable {
 
         override func viewDidMoveToWindow() {
             super.viewDidMoveToWindow()
-            guard window != nil, !didNotify else { return }
-            didNotify = true
+            checkReadiness()
+        }
+
+        func checkReadiness() {
+            guard window != nil, !didNotify, !checking else { return }
+            checking = true
             Task { @MainActor [weak self] in
-                guard let self, self.window != nil else { return }
+                guard let self else { return }
+                self.checking = false
+                guard !self.didNotify, let window = self.window, self.authenticationView.window === window else { return }
+                self.didNotify = true
                 self.ready()
             }
         }
