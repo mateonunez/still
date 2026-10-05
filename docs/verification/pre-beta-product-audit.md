@@ -39,3 +39,7 @@ Headless mobile axe audits: catalog, developer guide and Spotify detail have zer
 Physical activation-time swipes and password-dialog exposure remain unresolved. The reported one-hour screensaver incident has no verified endurance fix. Test the final candidate with real multi-monitor topology changes, Touch ID/password retry, VoiceOver, material accessibility and AC/battery idle timing. Calendar consent and clean-Mac installation remain open. Choose a verified compatibility matrix, release identity and license before the final signing/notarization step.
 
 Updates remain manual for the first verified distribution. No public artifact, Homebrew package, automatic updater, community submission service, accounts or payments is advertised.
+
+## Remote delivery
+
+Commits `7276fec`, `cb5d66b` and `cadeea0` were pushed to personal main. The first CLI deployment failed because `.vercelignore` excluded canonical SDK starters. Removing that exclusion fixed the exact failure. Production deployment `dpl_BC66FzNucXCVLqzocaSVj11UXDja` reached READY. `node scripts/verify-website.mjs https://meet-still.app --indexable` passed all eighteen served routes, sitemap, share image, SDK byte comparisons, schema URLs and machine documentation. This does not establish Google indexing/rankings. GitHub API/provider DNS failures remain separate from successful Git transport and Vercel delivery.
