@@ -10,7 +10,7 @@ A calm screen for your Mac, with optional inactivity activation.
 
 [Meet Still](https://meet-still.app) · [Development field notes](https://meet-still.app/changelog)
 
-Still creates a visual privacy curtain over the desktop. It does not replace the macOS security lock or guarantee that every third-party task continues processing. Porcelain is the initial design standard, with warm light/dark appearances and a burgundy identity. Optional native Codex and Claude quota widgets are available in the local development app. A community plugin contract/importer and additional theme collections remain follow-up scope.
+Still creates a visual privacy curtain over the desktop. It does not replace the macOS security lock or guarantee that every third-party task continues processing. Porcelain is the initial design standard, with warm light/dark appearances and a burgundy identity. Optional native Codex and Claude quota widgets are available in the local development app. A local declarative plugin SDK/importer and optional advisory agent activity hooks are implemented; additional themes and a marketplace remain future scope.
 
 ## Try the native preview
 
@@ -41,7 +41,7 @@ This is a disposable browser prototype. Authentication, activity and energy are 
 | Appearance | Porcelain, burgundy, light/dark/system | Interactive design preview with local licensed fonts |
 | Website | Next.js App Router, typed content/SEO, local fonts | Live on [meet-still.app](https://meet-still.app); GitHub-connected Vercel builds |
 | Distribution | Signed/notarized app download; evaluate Homebrew cask | No release, hosted package or usable install command |
-| Plugins and agents | Native Hub, Codex and Claude quota widgets | Real local sources exercised; community SDK/import and approvals remain future scope |
+| Plugins and agents | Native Hub, Codex and Claude quota widgets | Real quota exercised; local SDK/import built; advisory hook delivery acceptance pending; no approval actions |
 
 ## Workspace map
 

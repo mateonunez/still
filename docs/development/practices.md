@@ -100,8 +100,20 @@ Keep disposable UI under the existing Next.js preview route, with explicit ficti
 
 ## Native quota adapters
 
-Project provider input into `StillWidgets.UsageSnapshot` before rendering; never retain vendor payloads, transcripts or credentials in evidence. Validate observation age, actual window duration, finite percentage and reset expiry. Absence is unavailable. Keep built-in protocol evidence distinct from the unimplemented community contract.
+Project provider input into `StillWidgets.UsageSnapshot` before rendering; never retain vendor payloads, transcripts or credentials in evidence. Validate observation age, actual window duration, finite percentage and reset expiry. Absence is unavailable. Keep internal built-in protocol evidence distinct from the public StillPluginKit wire contract.
 
 Use dedicated owned subprocesses with bounded output, timeout, cancellation and cadence. Source changes invalidate callbacks. Claude settings changes must preserve existing command/options and unrelated settings, retain private backups and refuse restoration over external edits. Test wrapper forwarding and stale-data removal in owned scratch directories.
 
 Open interactive app bundles through Launch Services. For transparent title bars, extend the background through full-size content while reserving measured native title-bar space for scroll content. Verify a real control action and scroll screenshot; build success alone does not prove interaction or materials.
+
+## Local plugin contracts and advisory hooks
+
+Keep the public wire format in StillPluginKit, independently versioned from internal StillWidgets Codable files. Validate exact keys, package shape, bounded regular files, provider/capability combinations, connection identity, revisions and freshness before rendering. Use ISO 8601 on public wire dates and a monotonic host expiry. Full replacement/empty facts clear prior signals. Never execute imported code; a manifest is not an OS sandbox or publisher verification.
+
+Treat connection as explicit consumption consent. Reconnect rotates UUID; disconnect clears cards/files and invalidates old producers. External same-user producers keep their own permissions. Label fixtures Sample, and never use them as unavailable live fallback. Validate both starter packages in CI.
+
+Hook input can contain content transiently. Project only supported events/identities, privately HMAC identities, never retain vendor input/logs/transcripts, and emit no decision output. Preserve unrelated hooks/settings and client trust. Test settings conflicts, expiry, concurrent session groups, stop/failure/end, disable, and helper timeouts in owned scratch. Live client delivery is separate from a synthetic stdin test.
+
+Presentation restrictions must restore exact prior options on return, suspension, teardown and system-authentication handoff; cancellation reapplies only while covered. Preserve recovery. Cmd-Tab restriction is not a Spaces swipe veto. Physical slow/fast/partial transitions require their own red-capable test. Inactive glass controls use a readable standard-control fallback; keyboard focus is retained.
+
+For activation/authentication regressions, use the guided native interaction loop and opt-in bounded state trace. Preserve null for untested human observations. Report replay is not unattended gesture synthesis. Capture app active/key-window state, embedded-view attachment and presentation flags before choosing a timing/focus fix; normal launches must not write diagnostics. Do not rebuild a user-owned running candidate during a trial.

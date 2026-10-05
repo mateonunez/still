@@ -25,3 +25,17 @@ A trial fails if another app or desktop appears at any intermediate frame. Test 
 Temporarily blocking transitions while covered is a desired behavior, not a proven public-API capability. Do not silently change persistent Trackpad/Dock preferences, use private APIs or disable recovery as a substitute for passing coverage. A session-scoped supported restriction must demonstrate restoration on return, cancellation, sleep/wake and process failure.
 
 See [manual guide](../guides/desktop-coverage.md), [prior compositor evidence](phase-02-deferred-awake-and-spaces.md) and [roadmap](../roadmap.md).
+
+## 2026-10-05 public-API hardening
+
+The next candidate adds scoped hideDock/autoHideMenuBar/disableProcessSwitching and exact restoration. Runtime getters/idempotence/restoration are verified, but they are not trackpad or compositor coverage. Public contracts reviewed do not provide a blanket desktop-gesture veto. Three-finger exposure remains open pending physical trials. See [research](../research/desktop-transition-boundary-2026.md), [phase evidence](phase-05-plugin-sdk-and-agent-signals.md) and [acceptance guide](../guides/pre-release-native-checks.md).
+
+## Owner trial — first/repeated activation regression
+
+The owner reports that the first activation suppresses trackpad gestures but has no visible/usable embedded Touch ID, requiring the Mac-password action. Later activations show Touch ID. A desktop swipe during activation reintroduces underlying-window previews and gesture exposure. The loaded executable hash and repeat-without-swipe coverage were not established from the report. This is a failed native acceptance case, not a gesture fix.
+
+Replay of the owner report with `node scripts/verify-native-interaction.mjs --report out/verification/interaction-trial/owner-baseline.json` exits 1: firstTouchIDVisible=false, noExposureDuringActivation=false. Untested fields remain null. This is a human-observation replay, not automated physical gesture synthesis.
+
+A separate diagnostic candidate `out/Still.app` (SHA-256 `622c4433dad26cf93e3d9a9ca70c7772d1e2d18156422eac1744c0a232bd870f`) builds/signature-verifies and adds opt-in `--interaction-trace`. It does not claim to fix the regression. The bounded local trace records application activation, key-panel status, Touch ID preparation/attachment, normalized preparation error code and presentation flags; no input, content, window titles or client data. Normal launches write no trace.
+
+`node scripts/verify-native-interaction.mjs` guides three physical trials and writes private receipts under `out/verification/interaction-trial`. It never terminates an existing user app. Root cause and an original-reproduction pass remain pending this trace.

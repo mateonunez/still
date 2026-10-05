@@ -16,11 +16,11 @@ Prepared for joint review. Recommendations are not approvals.
 | D10 | Remote repo visibility and workflow? | Private personal mateonunez/still; main bootstrap and CI | Selected private; repository created and pushed; broader branch protections remain undecided |
 | D12 | Website stack? | Next.js App Router with typed metadata | Implemented and hosted on personal mmateonunez/still Vercel project |
 | D13 | Product domain? | meet-still.app canonical; www redirects to apex | Configured; connected and HTTPS-verified |
-| D11 | Agent awareness timing? | Optional metadata-only Codex plugin before beta and distribution | Priority updated 2026-10-04; capabilities and source contract under research |
-| D14 | Widget/plugin extensibility? | Versioned reusable protocol, customizable native templates and community authoring path | Pre-beta priority selected; runtime, permissions and protocol details proposed, not implemented |
+| D11 | Agent awareness timing? | Optional metadata-only Codex plugin before beta and distribution | Native quota implemented; opt-in advisory hook bridge built 2026-10-05; real client trust/delivery acceptance pending |
+| D14 | Widget/plugin extensibility? | Versioned reusable protocol, customizable native templates and community authoring path | Local declarative v1/importer selected and implemented 2026-10-05; producer execution/marketplace excluded |
 
-Next step: manual review of the Phase 2 candidate using the inactivity/energy guide, including the earlier authentication and display acceptance cases. Native Liquid Glass controls and restrained service-window vibrancy use modern macOS materials; Porcelain coverage stays opaque. The Next.js website and direct app distribution are selected. OS support, pricing and remote ownership remain open.
+Next step: exact-candidate physical trackpad, authentication, accessibility, power and live source acceptance using the [native checklist](guides/pre-release-native-checks.md). Native Liquid Glass controls and restrained service-window vibrancy use modern macOS materials; Porcelain coverage stays opaque. The Next.js website and direct app distribution are selected. OS/hardware support, pricing and release identity remain open.
 
 Local development uses `co.mateonunez.still.development`; `co.mateonunez.still` is the proposed release identity, to confirm before distribution. The website uses `meet-still.app`; this does not automatically change the app's identity.
 
-Native account quota widgets are implemented locally using Codex app-server and a Claude status-line bridge. This does not implement the full D14 community contract. See [ADR 0007](adr/0007-native-account-quota-widgets.md) and [local evidence](verification/native-live-widgets.md).
+Native account quota widgets are implemented locally using Codex app-server and a Claude status-line bridge. D14 now has a constrained declarative v1; arbitrary runner/assets/actions and marketplace remain future scope. See [ADR 0007](adr/0007-native-account-quota-widgets.md) and [local evidence](verification/native-live-widgets.md).

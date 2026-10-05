@@ -10,7 +10,7 @@ Read [brand fundamentals](docs/brand-fundamentals.md) and [the design system](do
 - Generate prototype tokens and check contrast with the documented scripts.
 - Respect appearance, motion, transparency, contrast and accessibility preferences.
 - Use native Liquid Glass for selected controls on macOS 26, with standard controls on older systems. Service windows may use restrained vibrancy; Reduce Transparency and increased-contrast surfaces remain solid. The curtain remains fully opaque. Do not force focus, hide keyboard focus or add ornamental animation.
-- Preserve the user's activity privacy. Agent awareness and marketplace features are follow-up scope.
+- Preserve the user's activity privacy. Agent cards are optional, anonymous and advisory; marketplace features remain future scope.
 - Use real product evidence for screenshots, claims, compatibility and installation.
 
 The browser prototype is a design artifact. It is not the native app or the Next.js production landing.

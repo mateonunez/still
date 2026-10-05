@@ -1,5 +1,7 @@
 # Plugin and Codex planning evidence
 
+Historical checkpoint. For the current local SDK and advisory-hook scope, see [Phase 05](phase-05-plugin-sdk-and-agent-signals.md).
+
 2026-10-04. Status: proposed architecture and source research; no plugin runtime or live integration implemented.
 
 ## Scope and evidence

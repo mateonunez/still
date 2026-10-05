@@ -1,92 +1,91 @@
 # Developing Still plugins
 
-This guide covers the implemented first-party adapter path and the proposed community extension path. Still currently ships native Codex and Claude quota adapters. There is no installable third-party plugin SDK, package importer or marketplace yet. A manifest alone cannot install or execute a plugin.
+Protocol v1 supports local declarative templates and metadata packages. The native host imports and validates manifests, renders approved cards, and never executes package code. There is no marketplace or isolated executable runner. See [ADR 0008](../adr/0008-declarative-plugin-contract.md).
 
-## Choose the extension
+## Start with a package
 
-| Extension | Supplies | Current authoring path |
-| --- | --- | --- |
-| Data adapter | Validated facts such as account quota and reset | Contribute reviewed Swift code to the native app |
-| Widget | Host-owned presentation of validated facts | Extend native SwiftUI views with tests and accessibility review |
-| Template | Appearance and composition of approved slots | Built-in Quiet corner and Side rail; package import is planned |
-| Community package | Declarative manifest, templates and supported adapter capabilities | Proposed contract; no external executable runner |
+A package is a directory ending in `.stillplugin`, containing `manifest.json` and optionally `README.md` and `LICENSE`. Other files, directories, executable payloads and symbolic links are rejected. The manifest is limited to 32 KiB; optional files to 64 KiB each. Import copies the manifest only. Publisher attribution is not a verified identity.
 
-An adapter never owns return/authentication or arbitrary curtain UI. A template never enables a source. Quota percentages are account usage, not task progress. Approvals remain in the original agent client until a separate supported source is implemented.
+Use either starter:
 
-## Understand the current modules
+- [Porcelain Side Rail](../../examples/plugins/porcelain-rail.stillplugin/manifest.json): a template selecting existing Codex/Claude quota/activity slots. Applying it connects no source.
+- [Local Signals](../../examples/plugins/local-signals.stillplugin/manifest.json): one local activity card with an externally started producer.
 
-- `packages/StillWidgets/Sources/StillWidgets/UsageSnapshot.swift`: typed quota model, validation and provider input projections.
-- `packages/StillWidgets/Sources/StillWidgets/ClaudeBridgePlan.swift`: pure settings patch/restore contract.
-- `apps/macos/Sources/Still/CodexUsageAdapter.swift`: bounded, cancellable request process.
-- `apps/macos/Sources/Still/ClaudeBridgeInstaller.swift` and `apps/macos/Sources/StillClaudeBridge/main.swift`: reversible installation and local metadata projection.
-- `apps/macos/Sources/Still/WidgetCenter.swift`: opt-in connection, polling, stale data, cancellation and persistence.
-- `apps/macos/Sources/Still/WidgetsView.swift`: host-rendered Hub/card.
-- `apps/macos/Sources/Still/CurtainView.swift`: host-controlled placement on the curtain.
+Validate from the workspace root:
 
-`UsageSnapshot` version 1 contains `provider`, `observedAt` and one or two `UsageWindow` values. Each window has its actual duration in minutes, finite used percentage and optional reset time. It accepts at most five minutes of observation age and five seconds of future clock skew. Percentages are 0–100 and duration is 1–44,640 minutes. Unknown, malformed or expired information is unavailable; never invent zero usage.
+```sh
+swift run --package-path packages/StillPluginKit still-plugin validate examples/plugins/porcelain-rail.stillplugin
+swift run --package-path packages/StillPluginKit still-plugin validate examples/plugins/local-signals.stillplugin
+swift test --package-path packages/StillPluginKit
+```
 
-The current `Codable` encoding is an internal Swift file format: dates use JSONEncoder's default seconds since 2001-01-01. It is **not** the proposed public plugin wire format. Do not copy these numbers into an interoperable community protocol; that protocol still needs an explicit date encoding and versioned schema.
+The CLI validates in a private scratch directory and removes it afterwards; it does not enable a source or run the package. Import through **Customize → Library → Import package…**. Installation and connection are separate actions.
 
-## Build a first-party quota adapter
+## Manifest contract
 
-1. Verify a supported metadata API from primary provider documentation. Record client versions and the exact quota meaning in `docs/research`. Avoid undocumented credential, cookie, transcript and private-cache scraping.
-2. Add a provider case/title in `UsageProvider`. The enum is intentionally closed today; adding a case is a source contribution, not runtime plugin discovery.
-3. Implement a pure projection returning `Result<UsageSnapshot, UsageFailure>`. Decode only permitted fields, bound input before decoding, use actual window duration and normalize reset timestamps. Vendor wire data must not become the renderer's domain model.
-4. Implement acquisition in a provider-owned native adapter. Use fixed executable arguments, one in-flight request, bounded output, a deadline and owned-process cancellation. Do not pass provider responses to logs or evidence. A subprocess is not an OS sandbox.
-5. Add explicit Connect/Disconnect handling in `WidgetCenter`, with cancellation, callback invalidation, observation freshness and safe errors. Review provider-specific polling cadence. A selected layout or installed template must not implicitly connect it.
-6. Add disclosure and setup instructions in the Hub. Keep credentials and sign-in in the original client. If configuration changes are necessary, preserve unrelated keys and command options, back up privately, and restore only when the configuration still belongs to Still.
-7. Use `UsageCardView` for quota data. A new fact family needs its own typed contract and host renderer; do not disguise activity or approvals as quota.
-8. Add tests and real local acceptance evidence before documenting support. Keep raw source data, backups, logs and screenshots out of Git.
+[Manifest schema](../../schemas/plugin-manifest-v1.schema.json) documents the JSON shape; `StillPluginKit.PluginManifest.decode` is the normative validator, including cross-field constraints. Schema IDs are identifiers, not published HTTP endpoints.
 
-A projection can be exercised without connecting any account:
+Both `schemaVersion` and `protocolVersion` are integer 1. IDs use a lowercase reverse-domain namespace with at least three segments and at most 96 ASCII bytes. Version is bounded major.minor.patch. Name is at most 48 characters, publisher 80; controls and directional overrides are rejected. Supported licenses are MIT, Apache-2.0, BSD-3-Clause and CC0-1.0.
 
-```swift
-import Foundation
-import StillWidgets
+- `kind: template`: built-in providers `codex` or `claude`; theme `porcelain`; layout `corner` or `rail`.
+- `kind: metadata`: provider `local`; its required Porcelain template descriptor does not apply a composition. Declared capabilities are `quota` and/or `agentActivity`.
+- `widgets`: one to four unique widget IDs, each with a declared kind and compatible provider. Every widget kind must occur in capabilities.
 
-let now = Date()
-let source = Data("""
-{"rateLimits":{"primary":{"usedPercent":25,"windowDurationMins":300}}}
-""".utf8)
+Unknown keys fail validation. Commands, URLs, arbitrary UI, credentials, custom settings and theme assets are not supported fields. The host clock and return/authentication cannot be replaced. Four optional cards is the global display/connection budget; the library holds at most 32 packages. Duplicate package IDs are rejected; upgrades are not yet supported.
 
-switch UsageProjection.codex(source, now: now) {
-case .success(let snapshot):
-    // Fixture-only example: pass validated values to the host renderer.
-    assert(snapshot.isUsable(now: now))
-    assert(snapshot.windows.first?.minutes == 300)
-case .failure(let failure):
-    // Render an unavailable state with a safe message, not vendor output.
-    print(failure.message)
+## Produce metadata
+
+Choose **Enable local source**, then **Show inbox**. The private folder under `~/Library/Application Support/Still/plugins/<pluginID>` contains a host-issued `connection.json`. Your separately started producer must read that connection and atomically replace `snapshot.json` with a full snapshot. Still does not launch, sandbox or terminate that producer. It has whatever permissions you gave it outside Still.
+
+[Snapshot schema](../../schemas/plugin-snapshot-v1.schema.json) uses:
+
+```json
+{
+  "protocolVersion": 1,
+  "pluginID": "app.example.signals",
+  "connectionID": "00000000-0000-0000-0000-000000000000",
+  "revision": 1,
+  "observedAt": "2026-10-05T12:00:00Z",
+  "expiresAt": "2026-10-05T12:01:00Z",
+  "isSample": true,
+  "facts": [{ "widgetID": "agent", "kind": "agentActivity", "state": "working", "count": 1 }]
 }
 ```
 
-This example is fixture data for authoring. It must never become a fallback for a live card.
+This is illustrative and cannot be accepted as a current live snapshot. Use your manifest/widget ID and current connection UUID; dates are ISO 8601 with optional fractions. Every accepted update increases a positive revision, bounded to JavaScript's safe integer range. At most four unique facts and 64 KiB per update. Unknown or private fields are rejected, not forwarded to UI.
 
-## Claude's local bridge
+Activity states: `working`, `attentionRequested`, `completed`, `interrupted`, `failed`, `unknown`. Count is 0–64 recent signals, never an authoritative pending-approval count. Quota facts contain one or two windows with actual `minutes` (1–44,640), finite `usedPercent` (0–100), and optional future `resetsAt`. Missing quota stays unavailable.
 
-Claude Code invokes its configured status-line command with JSON on stdin. The bundled `StillClaudeBridge` executable decodes only `rate_limits.five_hour` and `rate_limits.seven_day`, projects quota and writes `~/Library/Application Support/Still/usage/claude.json` with mode 0600. Still reads that projected file. The existing user-owned status-line command receives the original input and retains its output. Still does not open the referenced transcript or credential stores.
+No prompts, responses, commands, paths, transcript references, tokens, cookies or raw errors belong in a snapshot. Use `isSample: true` for authoring fixtures; the native card visibly labels Sample. Production facts require real source evidence and `isSample: false`.
 
-Connect updates `~/.claude/settings.json` while preserving existing options and unrelated settings. Its private backup and restoration record live under Application Support/Still, never in the repository. Disconnect refuses to overwrite external status-line edits. Repeated unchanged metadata does not refresh the observation timestamp; missing metadata clears an earlier healthy snapshot.
+Freshness is at most five minutes, with five seconds of future skew. The host converts expiry into a monotonic deadline. Re-reading the same revision does not extend it. Each snapshot replaces all facts: `facts: []` clears old signals. Bad input clears displayed facts; old revisions cannot overwrite newer facts. Suspension clears facts and does not revive an old snapshot on return.
 
-This is a local native helper attached to **Claude Code's status line**, not a macOS menu-bar plugin. Claude Code supplies the account data and may itself communicate with its service; Still's Claude adapter makes no independent quota-network request. Supported account data appears during normal Claude operation. See [Claude's documented input](https://code.claude.com/docs/en/statusline#available-data), [source research](../research/claude-usage-integration-2026.md) and [ADR 0007](../adr/0007-native-account-quota-widgets.md).
-
-## Validation
+To exercise the included fixture producer after enabling Local Signals:
 
 ```sh
-swift test --package-path packages/StillWidgets
-swift test --package-path packages/SessionKit
-swift build --package-path apps/macos
-pnpm check
-pnpm typecheck
-pnpm build
+node examples/plugins/publish-sample.mjs "$HOME/Library/Application Support/Still/plugins/app.meet-still.local-signals" attentionRequested
 ```
 
-Cover missing windows, actual durations, oversized/malformed input, non-finite/out-of-range percentages, reset expiry, future/stale observations, cancellation, reconnect and unavailable sign-in. Configuration bridges also need preserved stdout/exit behavior, unrelated settings, options, safe restore and external-edit conflicts.
+Check the starter's actual ID before running. The script publishes a 60-second **sample**, observes no real agent, and exits. Disable the source afterwards. Disconnect removes its connection and snapshot, clears cards, and rejects the old UUID. Re-enable/app restart rotates the connection: producers must reread it. Revocation stops consumption; it cannot revoke the external process's OS permissions.
 
-Exercise real Connect/Disconnect and stale/unavailable states on the native candidate. Verify light/dark, keyboard/VoiceOver, Reduce Transparency, long labels, layout and multiple displays. Verify cover/authentication recovery separately. Unit tests and a projected fixture do not establish live provider compatibility or desktop privacy.
+## First-party native sources
 
-## Prepare a community plugin
+`StillWidgets` owns internal quota/activity normalization; `StillPluginKit` owns the interoperable public wire protocol. Internal Swift Codable dates are not this public ISO 8601 format. Vendor payloads never become renderer models.
 
-Until the importer is implemented, prepare a proposal with a namespaced package ID, publisher/source/license, supported protocol version, declared facts, typed settings, refresh limits, template slots and explicit source capabilities. Follow the [extension proposal](../plugins-and-widgets.md). Treat that manifest as a review artifact, not a supported installation format.
+Codex quota uses its installed, authenticated app-server client. Claude quota uses the bundled Swift `StillClaudeBridge` in Claude Code's status line, preserving an existing command/options. It reads supported quota fields, writes a bounded private projection and opens no transcript or credential store. It is not a macOS menu-bar plugin. See [quota research](../research/claude-usage-integration-2026.md).
 
-The next SDK milestone must deliver a versioned schema, fixture corpus, validator, starter package, explicit local import and revocation tests. External executable support requires a separately verified isolated runner; accounts, payments and automatic updates are outside this first authoring path.
+Optional activity uses `StillAgentBridge` and supported client hooks. Hook stdin may include prompt/tool content transiently. The helper projects only event/session/agent identity to a state, privately HMACs identities, and does not persist/display content or open referenced transcripts. Configuration preserves unrelated hooks and removes only Still's exact group; private backups remain outside Git. Codex's client-owned `/hooks` trust is required. No approval decisions or trust bypasses are emitted. Attention expires after 90 seconds, working after 120, completed/interrupted/failed after 30; session end clears its group. See [source research](../research/agent-hooks-2026.md) and [setup guide](widgets-and-plugins.md).
+
+## Validate a contribution
+
+```sh
+swift test --package-path packages/StillPluginKit
+swift test --package-path packages/StillWidgets
+swift test --package-path packages/SessionKit
+./scripts/build-macos.sh debug Still-preview
+node scripts/verify-agent-bridge.mjs
+pnpm check
+pnpm typecheck
+```
+
+Test unsupported versions, unknown/private fields, oversized files, symlinks, undeclared facts, stale/future dates, old connection/revision, empty replacement, reconnect and revocation. Inspect real import/enable/disable and Sample labelling in the native Hub. Verify keyboard, VoiceOver, light/dark, reduced materials, long labels and displays separately. Fixtures/builds do not prove real client delivery, physical trackpad coverage or authentication. [Native acceptance guide](pre-release-native-checks.md).

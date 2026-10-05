@@ -1,5 +1,7 @@
 # Native Codex and Claude quota widgets — local evidence
 
+Historical checkpoint. For the current local SDK and advisory-hook scope, see [Phase 05](phase-05-plugin-sdk-and-agent-signals.md).
+
 Date: 2026-10-05. Candidate executable SHA-256: `48dd4e4e1f82800383ed001ff4ecae16dba4e1f25d79800edef6b1b10da44268`.
 
 ## Delivered
