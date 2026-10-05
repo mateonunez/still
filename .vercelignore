@@ -8,6 +8,9 @@ out/
 .firecrawl/
 apps/macos/
 packages/SessionKit/
+packages/StillWidgets/
+packages/StillPluginKit/
+examples/
 prototypes/
 docs/
 AGENTS.md

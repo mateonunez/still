@@ -5,17 +5,20 @@ private struct StillControlStyle: ViewModifier {
     let prominent: Bool
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.controlActiveState) private var controlActiveState
     private var palette: PorcelainPalette { colorScheme == .dark ? .dark : .light }
 
     @ViewBuilder func body(content: Content) -> some View {
-        if #available(macOS 26.0, *), !reduceTransparency {
+        if controlActiveState == .inactive {
+            content.buttonStyle(.bordered).tint(palette.accent).foregroundStyle(palette.primary)
+        } else if #available(macOS 26.0, *), !reduceTransparency {
             if prominent {
-                content.buttonStyle(.glassProminent).tint(palette.accent)
+                content.buttonStyle(.glassProminent).tint(palette.accent).foregroundStyle(palette.onAccent)
             } else {
                 content.buttonStyle(.glass).tint(palette.accent)
             }
         } else if prominent {
-            content.buttonStyle(.borderedProminent).tint(palette.accent)
+            content.buttonStyle(.borderedProminent).tint(palette.accent).foregroundStyle(palette.onAccent)
         } else {
             content.buttonStyle(.bordered).tint(palette.accent)
         }

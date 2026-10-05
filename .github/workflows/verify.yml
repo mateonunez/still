@@ -31,4 +31,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - run: swift test --package-path packages/SessionKit
       - run: swift test --package-path packages/StillWidgets
+      - run: swift test --package-path packages/StillPluginKit
+      - run: swift run --package-path packages/StillPluginKit still-plugin validate examples/plugins/porcelain-rail.stillplugin
+      - run: swift run --package-path packages/StillPluginKit still-plugin validate examples/plugins/local-signals.stillplugin
       - run: swift build --package-path apps/macos

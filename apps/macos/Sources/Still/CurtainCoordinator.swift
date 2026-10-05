@@ -20,6 +20,9 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     private var preferencesWindow: NSWindow?
     private var widgetsWindow: NSWindow?
     private let widgets = WidgetCenter(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
+    private let plugins = PluginCenter(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
+    private let desktopPolicy = DesktopPresentationPolicy()
+    private let interactionTrace = InteractionTrace()
     private let controls = SessionControls(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
     private var policyTimer: Timer?
     private var energyMenuItem: NSMenuItem?
@@ -42,7 +45,17 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         workspace.addObserver(self, selector: #selector(didWake), name: NSWorkspace.didWakeNotification, object: nil)
         workspace.addObserver(self, selector: #selector(sessionResigned), name: NSWorkspace.sessionDidResignActiveNotification, object: nil)
         workspace.addObserver(self, selector: #selector(sessionBecameActive), name: NSWorkspace.sessionDidBecomeActiveNotification, object: nil)
+        workspace.addObserver(self, selector: #selector(interactionChanged), name: NSWorkspace.activeSpaceDidChangeNotification, object: nil)
+        for name in [NSApplication.didBecomeActiveNotification, NSApplication.didResignActiveNotification, NSWindow.didBecomeKeyNotification, NSWindow.didResignKeyNotification] {
+            NotificationCenter.default.addObserver(self, selector: #selector(interactionChanged), name: name, object: nil)
+        }
     }
+
+    private func trace(_ phase: String) {
+        let mode: String = switch presentation.authenticationMode { case .none: "none"; case .touchID: "touchID"; case .system: "system" }
+        interactionTrace.record(phase, covered: session.isRequested, touchID: presentation.touchIDView != nil, preparationError: authentication.preparationError, authentication: mode, panelCount: panels.count, keyPanel: panels.contains { $0.isKeyWindow }, attached: presentation.touchIDView?.window != nil)
+    }
+    @objc private func interactionChanged(_ notification: Notification) { trace(notification.name.rawValue) }
 
     func installMenu() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -147,8 +160,14 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     }
 
     private func policyTick() {
+        trace("state")
         widgets.tick(available: !sleeping && userSessionActive)
-        presentation.widgetCards = widgets.cards
+        plugins.tick(available: !sleeping && userSessionActive)
+        let template = plugins.template
+        presentation.widgetCards = widgets.cards.filter { card in template == nil || template!.widgets.contains { $0.kind == .quota && $0.provider.rawValue == card.provider.rawValue } }
+        let activity = widgets.activityCards.filter { card in template == nil || template!.widgets.contains { $0.kind == .agentActivity && card.id == $0.provider.rawValue + "-activity" } }
+        presentation.extensionCards = Array((activity + plugins.cards).prefix(max(0, 4 - presentation.widgetCards.count)))
+        if let template, widgets.layout != template.template.layout.rawValue { widgets.layout = template.template.layout.rawValue }
         presentation.widgetLayout = widgets.layout
         let activate = controls.tick(alreadyCovered: session.isRequested, sessionAvailable: !sleeping && userSessionActive)
         energyMenuItem?.title = controls.running ? controls.energyStatus : "Keep Mac awake"
@@ -176,7 +195,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         window.minSize = NSSize(width: 560, height: 600)
         window.title = "Customize Still"; window.titlebarAppearsTransparent = true
         window.isReleasedWhenClosed = false; window.isOpaque = false; window.backgroundColor = .clear
-        window.contentView = NSHostingView(rootView: WidgetsHubView(widgets: widgets, presentation: presentation, titlebarInset: window.frame.height - window.contentLayoutRect.height)); window.center()
+        window.contentView = NSHostingView(rootView: WidgetsHubView(widgets: widgets, plugins: plugins, presentation: presentation, titlebarInset: window.frame.height - window.contentLayoutRect.height)); window.center()
         widgetsWindow = window; NSApp.activate(ignoringOtherApps: true); window.makeKeyAndOrderFront(nil)
     }
 
@@ -251,12 +270,15 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         widgetsWindow?.close()
         presentation.message = ""
         rebuildPanels()
+        trace("cover")
     }
 
     private func touchIDViewReady(_ view: LAAuthenticationView) {
+        trace("touchIDViewReady")
         guard presentation.touchIDView === view,
               let attempt = session.beginAuthentication() else { return }
         presentation.authenticationMode = .touchID
+        trace("touchIDEvaluation")
         presentation.message = "Place your finger on Touch ID to return."
         updateStatus()
         authentication.evaluateTouchID(view: view) { [weak self] outcome in
@@ -288,7 +310,9 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         presentation.touchIDView = nil
         guard let attempt = session.beginAuthentication() else { return }
         presentation.authenticationMode = .system
+        trace("systemAuthentication")
         presentation.message = "Choose Use Mac password in the macOS dialog."
+        desktopPolicy.restore()
         panels.forEach { $0.level = .normal }
         updateStatus()
         NSApp.activate(ignoringOtherApps: true)
@@ -305,6 +329,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         case .failed: result = .failed
         }
         guard session.completeAuthentication(attempt: attempt, outcome: result) else { return }
+        trace(result == .authenticated ? "authenticated" : result == .canceled ? "authenticationCanceled" : "authenticationFailed")
         authentication.invalidate()
         presentation.touchIDView = nil
         presentation.authenticationMode = .none
@@ -322,6 +347,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
             }
             panels.forEach { $0.level = .screenSaver; $0.orderFrontRegardless() }
             panels.first?.makeKeyAndOrderFront(nil)
+            desktopPolicy.cover()
             announce(presentation.message)
         }
         updateStatus()
@@ -335,6 +361,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         presentation.authenticationMode = .none
         presentation.message = "Still is here. Try again whenever you are ready."
         panels.forEach { $0.level = .screenSaver; $0.orderFrontRegardless() }
+        desktopPolicy.cover()
         updateStatus()
         announce(presentation.message)
     }
@@ -350,6 +377,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         presentation.authenticationMode = .none
         let isProbe = ProcessInfo.processInfo.arguments.contains("--evidence-directory")
         presentation.touchIDView = isProbe ? nil : authentication.prepareTouchID()
+        trace("touchIDPreparation")
         let screens = NSScreen.screens
         let cursor = NSEvent.mouseLocation
         let activeScreen = screens.first(where: { $0.frame.contains(cursor) }) ?? screens.first
@@ -381,11 +409,14 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         NSApp.activate(ignoringOtherApps: true)
         let active = panels.first(where: { $0.frame.contains(cursor) }) ?? panels.first
         active?.makeKeyAndOrderFront(nil)
+        if active != nil { desktopPolicy.cover() }
         updateStatus()
+        trace("panelsReady")
         NativeEvidence.exportIfRequested(panels: panels, awakeID: controls.curtainAwakeID)
     }
 
     private func closePanels() {
+        desktopPolicy.restore()
         panels.forEach { $0.orderOut(nil); $0.close() }
         panels.removeAll()
     }
@@ -399,6 +430,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     }
 
     private func suspend() {
+        plugins.tick(available: false)
         widgets.tick(available: false)
         session.suspend()
         controls.setCovered(false)
@@ -451,6 +483,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     @objc private func quit() { NSApp.terminate(nil) }
 
     func tearDown() {
+        desktopPolicy.restore()
+        plugins.tick(available: false)
         widgets.stop()
         session.stop()
         policyTimer?.invalidate()

@@ -10,15 +10,17 @@ final class AuthenticationService {
     }
 
     private var context: LAContext?
+    private(set) var preparationError: Int?
 
     /// Attach this system-owned view before evaluating the policy.
     /// Embedded UI does not support password entry; that uses a fresh system dialog.
     func prepareTouchID() -> LAAuthenticationView? {
         invalidate()
         let context = freshContext()
+        preparationError = nil
         var error: NSError?
         guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error),
-              context.biometryType == .touchID else { return nil }
+              context.biometryType == .touchID else { preparationError = error?.code; return nil }
         self.context = context
         return LAAuthenticationView(context: context, controlSize: .regular)
     }
