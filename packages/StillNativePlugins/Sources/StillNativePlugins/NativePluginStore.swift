@@ -5,6 +5,28 @@ public struct NativePluginStore: Sendable {
     public let root: URL
     public init(root: URL) { self.root = root }
     public func directory(_ plugin: NativePluginID) -> URL { root.appendingPathComponent(plugin.rawValue, isDirectory: true) }
+    /// Prepare compiled modules without connecting sources or replacing existing settings.
+    public func prepareMissingConfigurations() throws {
+        let fm = FileManager.default
+        func ensureDirectory(_ path: URL) throws {
+            if let attributes = try? fm.attributesOfItem(atPath: path.path) {
+                guard attributes[.type] as? FileAttributeType == .typeDirectory else { throw NativeStoreError.unsafePath }
+            } else {
+                try fm.createDirectory(at: path, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
+            }
+        }
+        try ensureDirectory(root)
+        for id in NativePluginID.allCases {
+            try ensureDirectory(directory(id))
+            let path = directory(id).appendingPathComponent("configuration.json")
+            if (try? fm.attributesOfItem(atPath: path.path)) != nil {
+                _ = try boundedRead(path, limit: 16384)
+                continue
+            }
+            try write(NativePluginConfiguration(plugin: id))
+        }
+    }
+
     public func configuration(_ plugin: NativePluginID) -> NativePluginConfiguration? {
         guard (try? checkDirectory(plugin)) != nil, let data = try? boundedRead(directory(plugin).appendingPathComponent("configuration.json"), limit: 16384) else { return nil }
         return NativePluginConfiguration.decode(data, expected: plugin)

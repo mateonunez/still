@@ -11,10 +11,14 @@ if [[ "$configuration" != debug && "$configuration" != release ]]; then
   print -u2 'Usage: scripts/build-macos.sh [debug|release]'
   exit 2
 fi
+still_app="$still_root/out/$application_name.app"
+if ps -axo comm | rg -F -x "$still_app/Contents/MacOS/Still" >/dev/null; then
+  print -u2 "Quit $application_name before rebuilding it. No running app was replaced."
+  exit 1
+fi
 node "$still_root/scripts/generate-native-tokens.mjs"
 swift build --package-path "$still_root/apps/macos" -c "$configuration"
 still_bin="$(swift build --package-path "$still_root/apps/macos" -c "$configuration" --show-bin-path)"
-still_app="$still_root/out/$application_name.app"
 # Only rebuild our generated app bundle; no installed application is modified.
 mkdir -p "$still_app/Contents/MacOS" "$still_app/Contents/Resources"
 cp "$still_bin/Still" "$still_app/Contents/MacOS/Still.new"

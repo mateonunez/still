@@ -77,6 +77,7 @@ async function verify(appName, directory) {
     const after = await progress();
     const checks = {
       appAliveWhilePanelsReportedVisible: alive,
+      exactlyOnePrimaryContentDisplay: receipt.windows.filter((window) => window.primaryContent).length === 1,
       onePanelPerReportedDisplay: receipt.panelCount === receipt.displayCount && receipt.displayCount > 0,
       onePanelGenerationWithoutPhysicalDisplayChange: panelGenerations === 1,
       allPanelFramesMatchReportedScreens: receipt.windows.every((window) => window.matchesScreenFrame),

@@ -259,6 +259,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     @objc func cover() {
         guard !sleeping, userSessionActive, session.cover() else { return }
         controls.setCovered(true)
+        if nativePlugins.requestingSpotify { nativePlugins.cancelSpotifyAuthorization() }
         rememberPreviousApplication()
         welcomeWindow?.close()
         widgetsWindow?.close()
@@ -266,6 +267,13 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         presentation.message = ""
         rebuildPanels()
         trace("cover")
+    }
+
+    private func focusPrimaryDisplay() {
+        guard session.isRequested, let panel = panels.first(where: { ($0.contentView as? NSHostingView<CurtainView>)?.rootView.isPrimaryDisplay == true }) else { return }
+        NSApp.activate(ignoringOtherApps: true)
+        panel.makeKeyAndOrderFront(nil)
+        desktopPolicy.cover()
     }
 
     private func touchIDViewReady(_ view: LAAuthenticationView) {
@@ -370,7 +378,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     }
 
     private func rebuildPanels(force: Bool = true) {
-        guard rebuildGate.begin(CurtainDisplay.current(), force: force) else { trace("topologyUnchangedOrBuilding"); return }
+        guard rebuildGate.begin(CurtainDisplay.current(), primaryID: CGMainDisplayID(), force: force) else { trace("topologyUnchangedOrBuilding"); return }
         defer {
             rebuildGate.finish()
             // A physical change during construction is reconciled once the build is complete.
@@ -383,8 +391,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         presentation.touchIDView = isProbe ? nil : authentication.prepareTouchID()
         trace("touchIDPreparation")
         let screens = NSScreen.screens
-        let cursor = NSEvent.mouseLocation
-        let activeScreen = screens.first(where: { $0.frame.contains(cursor) }) ?? screens.first
+        let mainID = CurtainDisplay.primaryID(in: CurtainDisplay.current(), mainID: CGMainDisplayID())
+        let activeScreen = screens.first(where: { ($0.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value == mainID }) ?? screens.first
         for screen in screens {
             let panel = CurtainPanel(contentRect: screen.frame, styleMask: [.borderless], backing: .buffered, defer: false)
             panel.title = "Still — Porcelain"
@@ -404,6 +412,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
                 useSystemAuthentication: { [weak self] in self?.useSystemAuthentication() },
                 cancelAuthentication: { [weak self] in self?.cancelAuthentication() },
                 touchIDReady: { [weak self] view in self?.touchIDViewReady(view) },
+                isPrimaryDisplay: screen === activeScreen,
+                focusPrimaryDisplay: { [weak self] in self?.focusPrimaryDisplay() },
                 isAuthenticationDisplay: screen === activeScreen
             )
             panel.contentView = NSHostingView(rootView: view)
@@ -411,7 +421,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
             panel.orderFrontRegardless()
         }
         NSApp.activate(ignoringOtherApps: true)
-        let active = panels.first(where: { $0.frame.contains(cursor) }) ?? panels.first
+        let active = panels.first(where: { $0.frame == activeScreen?.frame }) ?? panels.first
         active?.makeKeyAndOrderFront(nil)
         if active != nil { desktopPolicy.cover() }
         updateStatus()

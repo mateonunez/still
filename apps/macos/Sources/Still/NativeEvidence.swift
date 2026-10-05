@@ -16,6 +16,7 @@ enum NativeEvidence {
             let geometry: [[String: Any]] = panels.enumerated().map { index, panel in
                 [
                     "displayIndex": index,
+                    "primaryContent": (panel.contentView as? NSHostingView<CurtainView>)?.rootView.isPrimaryDisplay ?? false,
                     "panelFrame": NSStringFromRect(panel.frame),
                     "screenFrame": index < screens.count ? NSStringFromRect(screens[index].frame) : "missing",
                     "matchesScreenFrame": index < screens.count && panel.frame == screens[index].frame,
@@ -52,6 +53,11 @@ enum NativeEvidence {
                     CurtainView(presentation: model, authenticate: {}, evidenceRender: true)
                         .frame(width: 1440, height: 900),
                     to: directory.appendingPathComponent("porcelain-\(appearance.rawValue).png")
+                )
+                try save(
+                    CurtainView(presentation: model, authenticate: {}, isPrimaryDisplay: false, evidenceRender: true)
+                        .frame(width: 1440, height: 900),
+                    to: directory.appendingPathComponent("secondary-\(appearance.rawValue).png")
                 )
             }
             try save(GeneralSettingsView(controls: SessionControls(persist: false)).padding(32).frame(width: 560).stillServiceSurface(), to: directory.appendingPathComponent("preferences.png"))

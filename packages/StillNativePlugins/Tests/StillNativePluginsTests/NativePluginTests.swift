@@ -85,3 +85,13 @@ import Testing
     #expect(store.configuration(.worldClock) == nil)
     #expect(throws: (any Error).self) { try store.write(config) }
 }
+
+@Test func freshConfigurationPreparationRejectsSymlinkRootWithoutWriting() throws {
+    let base = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: base) }
+    let target = base.appendingPathComponent("target"), link = base.appendingPathComponent("link")
+    try FileManager.default.createDirectory(at: target, withIntermediateDirectories: true)
+    try FileManager.default.createSymbolicLink(at: link, withDestinationURL: target)
+    #expect(throws: NativeStoreError.self) { try NativePluginStore(root: link).prepareMissingConfigurations() }
+    #expect(try FileManager.default.contentsOfDirectory(atPath: target.path).isEmpty)
+}

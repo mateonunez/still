@@ -30,6 +30,8 @@ struct CurtainView: View {
     var useSystemAuthentication: () -> Void = {}
     var cancelAuthentication: () -> Void = {}
     var touchIDReady: @MainActor @Sendable (LAAuthenticationView) -> Void = { _ in }
+    var isPrimaryDisplay = true
+    var focusPrimaryDisplay: () -> Void = {}
     var isAuthenticationDisplay = true
     var evidenceRender = false
     @Environment(\.colorScheme) private var colorScheme
@@ -41,6 +43,19 @@ struct CurtainView: View {
     }
 
     var body: some View {
+        Group {
+            if isPrimaryDisplay { primaryBody }
+            else {
+                VStack(spacing: 16) {
+                    StillMarkView().frame(width: 26, height: 26).foregroundStyle(palette.accent).accessibilityHidden(true)
+                    Text("Still is on your main display.").font(.system(size: 13)).foregroundStyle(palette.secondary)
+                    Button("Go to main display", action: focusPrimaryDisplay).stillControl().keyboardShortcut(.defaultAction)
+                }.frame(maxWidth: .infinity, maxHeight: .infinity).background(palette.background).ignoresSafeArea()
+            }
+        }.onExitCommand(perform: cancelAuthentication)
+    }
+
+    private var primaryBody: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 HStack(spacing: 10) {
@@ -172,7 +187,6 @@ struct CurtainView: View {
                 }
             }
         }
-        .onExitCommand(perform: cancelAuthentication)
     }
     private var hasModules: Bool { !presentation.nativeCards.isEmpty || !presentation.widgetCards.isEmpty || !presentation.extensionCards.isEmpty }
     @ViewBuilder private var moduleCards: some View {

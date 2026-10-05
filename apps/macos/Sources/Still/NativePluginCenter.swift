@@ -49,7 +49,11 @@ final class NativePluginCenter: ObservableObject {
             order = saved.reduce(into: []) { if !$0.contains($1) { $0.append($1) } } + NativePluginID.allCases.filter { !saved.contains($0) }
         }
         store = NativePluginStore(root: root ?? ClaudeBridgeInstaller.root.appendingPathComponent("native-plugins"))
-        if persist { for id in NativePluginID.allCases { configurations[id] = store.configuration(id) } }
+        if persist {
+            do { try store.prepareMissingConfigurations() }
+            catch { issue = "Some plugins could not be prepared. Check local file access; existing settings were preserved." }
+            for id in NativePluginID.allCases { configurations[id] = store.configuration(id) }
+        }
         discover()
         if configurations[.taskWatch]?.enabled == true { rotateTasks() }
     }
@@ -161,6 +165,7 @@ final class NativePluginCenter: ObservableObject {
     func cancelSpotifyAuthorization() { spotifyAuthorization?.cancel(); spotifyAuthorization = nil; requestingSpotify = false; spotifyConnectionStatus = "Spotify connection canceled." }
     func tick(available: Bool) {
         if !available {
+            if requestingSpotify { cancelSpotifyAuthorization() }
             if !suspended { for id in installed { cancel(id) }; taskReceipt = nil; taskRevision = 0; rotateTasks() }
             suspended = true
             for id in installed where configurations[id]?.enabled == true { cards[id] = NativePluginCard(id, state: .paused, detail: "Source paused") }
@@ -231,7 +236,7 @@ final class NativePluginCenter: ObservableObject {
             guard let fact else { return NativePluginCard(id, state: .unavailable, detail: "No supported run found. Check the selected source.") }
             let now = Date()
             return NativePluginCard(id, payload: .work([fact]), state: .ready, detail: id == .buildWatch ? "GitHub CLI · read only" : "Vercel CLI · read only", observedAt: now, expiresAt: now.addingTimeInterval(300))
-        case .failure(let error): return NativePluginCard(id, state: error == .missingClient ? .setupRequired : .unavailable, detail: error == .missingClient ? "Install the source CLI and sign in separately." : "Source could not connect. Check CLI login and project access.")
+        case .failure(let error): return NativePluginCard(id, state: error == .missingClient ? .setupRequired : .unavailable, detail: error == .missingClient ? "Install the source CLI and sign in separately." : error == .timeout ? "Source timed out. Check the network and CLI availability." : "Source could not connect. Check the network, CLI login and project access.")
         }
     }
 }

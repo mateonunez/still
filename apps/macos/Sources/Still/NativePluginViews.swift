@@ -91,7 +91,7 @@ struct NativePluginLibraryView: View {
                     }
                 }.padding(.vertical, 8)
             }
-            if center.installed.isEmpty { Text("Install the native collection from the workspace CLI, then relaunch Still.").font(.system(size: 13)) }
+            if center.installed.isEmpty { Text("The native collection could not be prepared. Check local file access, then relaunch Still.").font(.system(size: 13)) }
             ForEach(center.installed) { id in
                 VStack(alignment: .leading, spacing: 14) {
                     HStack { Image(systemName: id.symbol).foregroundStyle(palette.accent).accessibilityHidden(true); Text(id.title).font(.system(size: 16, weight: .semibold)); Spacer(); Toggle("Enabled", isOn: Binding(get: { center.configurations[id]?.enabled == true }, set: { center.setEnabled(id, $0) })).toggleStyle(.switch).controlSize(.small).accessibilityLabel("Enable \(id.title)") }

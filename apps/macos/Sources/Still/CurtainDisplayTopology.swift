@@ -6,6 +6,10 @@ struct CurtainDisplay: Equatable {
     let frame: NSRect
     let scale: CGFloat
 
+    static func primaryID(in displays: [Self], mainID: UInt32) -> UInt32? {
+        displays.first(where: { $0.id == mainID })?.id ?? displays.first?.id
+    }
+
     static func current() -> [Self] {
         NSScreen.screens.map {
             Self(id: ($0.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value ?? 0,
@@ -17,12 +21,13 @@ struct CurtainDisplay: Equatable {
 struct CurtainRebuildGate {
     private var topology: [CurtainDisplay]?
     private var building = false
+    private var primaryID: UInt32?
 
-    mutating func begin(_ current: [CurtainDisplay], force: Bool = false) -> Bool {
-        guard !building, force || current != topology else { return false }
-        building = true; topology = current
+    mutating func begin(_ current: [CurtainDisplay], primaryID: UInt32? = nil, force: Bool = false) -> Bool {
+        guard !building, force || current != topology || primaryID != self.primaryID else { return false }
+        building = true; topology = current; self.primaryID = primaryID
         return true
     }
     mutating func finish() { building = false }
-    mutating func reset() { topology = nil }
+    mutating func reset() { topology = nil; primaryID = nil }
 }

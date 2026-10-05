@@ -55,3 +55,18 @@ import Testing
     let newSession = gate.begin([display], force: true)
     #expect(newSession)
 }
+
+@Test func oneContentDisplayTracksTheSystemPrimaryAndFallback() {
+    let displays = [CurtainDisplay(id: 1, frame: .zero, scale: 2), CurtainDisplay(id: 2, frame: .zero, scale: 1)]
+    #expect(CurtainDisplay.primaryID(in: displays, mainID: 2) == 2)
+    #expect(CurtainDisplay.primaryID(in: displays, mainID: 99) == 1)
+    #expect(CurtainDisplay.primaryID(in: [], mainID: 2) == nil)
+    var gate = CurtainRebuildGate()
+    let initial = gate.begin(displays, primaryID: 1)
+    #expect(initial)
+    gate.finish()
+    let unchanged = gate.begin(displays, primaryID: 1)
+    #expect(!unchanged)
+    let changedPrimary = gate.begin(displays, primaryID: 2)
+    #expect(changedPrimary)
+}
