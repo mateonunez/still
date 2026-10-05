@@ -17,11 +17,11 @@ struct NativePluginCardView: View {
             }
             if let payload = card.payload { payloadView(payload) }
             else { Text(stateTitle).font(.custom("InstrumentSerif-Regular", size: 24)) }
-            if showDetails { Text(card.detail).font(.system(size: 10)).foregroundStyle(palette.secondary).fixedSize(horizontal: false, vertical: true) }
+            if showDetails || card.payload == nil { Text(card.detail).font(.system(size: 10)).foregroundStyle(palette.secondary).fixedSize(horizontal: false, vertical: true) }
             if showDetails, let observed = card.observedAt, ![.worldClock, .quietTimer, .agents].contains(card.plugin) { Text("Observed \(observed.formatted(.relative(presentation: .numeric)))").font(.system(size: 9)).foregroundStyle(palette.secondary) }
         }.padding(16).frame(width: width, alignment: .leading).foregroundStyle(palette.primary)
             .background(palette.surface.opacity(0.96), in: RoundedRectangle(cornerRadius: 18))
-            .overlay(RoundedRectangle(cornerRadius: 18).stroke(palette.secondary.opacity(0.18), lineWidth: 1)).accessibilityElement(children: .combine)
+            .overlay(RoundedRectangle(cornerRadius: 18).stroke(palette.secondary.opacity(0.18), lineWidth: 1)).help(card.detail).accessibilityElement(children: .combine)
     }
     private var stateTitle: String { switch card.state { case .ready: "Ready"; case .refreshing: "Connecting…"; case .unavailable: "Unavailable"; case .permissionRequired: "Permission needed"; case .setupRequired: "Choose a source"; case .paused: "Paused" } }
     @ViewBuilder private func payloadView(_ payload: NativePayload) -> some View {

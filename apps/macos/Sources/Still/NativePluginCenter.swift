@@ -62,8 +62,8 @@ final class NativePluginCenter: ObservableObject {
     var installed: [NativePluginID] { order.filter { configurations[$0] != nil } }
     var visibleIDs: [NativePluginID] { installed.filter { configurations[$0]?.enabled == true && configurations[$0]?.visible == true } }
     func place(_ id: String, _ placement: CanvasPlacement) {
-        guard id == "clock" || NativePluginID(rawValue: id) != nil, placement.x.isFinite, placement.y.isFinite else { return }
-        composition.placements[id] = placement.snapped()
+        guard id == "clock" || NativePluginID(rawValue: id) != nil, placement.x.isFinite, placement.y.isFinite, placement.width == nil || placement.width!.isFinite else { return }
+        composition.placements[id] = placement.fitted()
         saveComposition()
     }
     func resetComposition() { composition = ScreenComposition(); saveComposition() }

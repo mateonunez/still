@@ -3,8 +3,8 @@ set -euo pipefail
 still_root="${0:A:h:h}"
 configuration="${1:-debug}"
 application_name="${2:-Still}"
-if [[ "$application_name" != Still && "$application_name" != Still-preview ]]; then
-  print -u2 'App output must be Still or Still-preview under out/.'
+if [[ "$application_name" != Still && "$application_name" != Still-preview && "$application_name" != Still-canvas ]]; then
+  print -u2 'App output must be Still, Still-preview or Still-canvas under out/.'
   exit 2
 fi
 if [[ "$configuration" != debug && "$configuration" != release ]]; then

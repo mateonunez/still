@@ -43,3 +43,26 @@ import Testing
     let frames = CanvasGeometry(viewport: CGSize(width: 1024, height: 768)).frames(for: items)
     for i in items.indices { for j in items.indices where j > i { #expect(!frames[items[i].id]!.intersects(frames[items[j].id]!)) } }
 }
+
+@Test func continuousWidthsRoundTripWithoutSnappingAndAutoRemainsAuto() throws {
+    var scene = ScreenComposition()
+    scene.placements["spotify"] = CanvasPlacement(x: 0.347, y: 0.413, width: 297.5).fitted()
+    scene.placements["clock"] = CanvasPlacement(x: 0.5, y: 0.4)
+    let restored = try #require(ScreenComposition.decode(JSONEncoder().encode(scene)))
+    #expect(restored == scene)
+    #expect(restored.placement("spotify").x == 0.347)
+    #expect(restored.placement("spotify").resolvedWidth(viewport: 1512) == 297.5)
+    #expect(restored.placement("clock").width == nil)
+    let auto = CanvasPlacement(x: 0.5, y: 0.4)
+    #expect(auto.resolvedWidth(viewport: 1201) > auto.resolvedWidth(viewport: 1200))
+    scene.placements["spotify"]?.width = 9999
+    #expect(ScreenComposition.decode(try JSONEncoder().encode(scene)) == nil)
+}
+@Test func legacySizesMigrateWithoutChangingSavedCenters() throws {
+    let data = Data(#"{"version":1,"placements":{"clock":{"x":0.5,"y":0.4,"size":"regular"},"spotify":{"x":0.347,"y":0.6,"size":"wide"}}}"#.utf8)
+    let scene = try #require(ScreenComposition.decode(data))
+    #expect(scene.placement("clock").width == nil)
+    #expect(scene.placement("spotify").width == 380)
+    #expect(scene.placement("spotify").x == 0.347)
+    #expect(ScreenComposition.decode(try JSONEncoder().encode(scene)) == scene)
+}

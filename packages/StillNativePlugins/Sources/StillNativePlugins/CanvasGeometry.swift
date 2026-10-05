@@ -21,9 +21,9 @@ public struct CanvasGeometry: Sendable {
         var index = 0
         let balanced = items.map { item -> CanvasItem in
             let point: CanvasPlacement
-            if item.id == "clock" { point = CanvasPlacement(x: 0.5, y: 0.4, size: item.placement.size) }
+            if item.id == "clock" { point = CanvasPlacement(x: 0.5, y: 0.4, size: item.placement.size, width: item.placement.width) }
             else {
-                point = CanvasPlacement(x: index % 2 == 0 ? 0.18 : 0.82, y: index < 2 ? 0.28 : 0.62, size: item.placement.size)
+                point = CanvasPlacement(x: index % 2 == 0 ? 0.18 : 0.82, y: index < 2 ? 0.28 : 0.62, size: item.placement.size, width: item.placement.width)
                 index += 1
             }
             return CanvasItem(id: item.id, size: item.size, placement: point)

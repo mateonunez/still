@@ -6,7 +6,7 @@ import { parseArgs } from 'node:util';
 import { outputDirectory, ownedProcess, root, stop, waitForFile } from './probe-support.mjs';
 
 const { values } = parseArgs({ options: { app: { type: 'string', default: 'Still-preview' } } });
-if (!['Still', 'Still-preview'].includes(values.app)) throw new Error('Unsupported app name');
+if (!['Still', 'Still-preview', 'Still-canvas'].includes(values.app)) throw new Error('Unsupported app name');
 const executable = join(root, `out/${values.app}.app/Contents/MacOS/Still`);
 const output = await outputDirectory(
   `out/verification/native-collection/${new Date().toISOString().replaceAll(':', '-')}`,
