@@ -21,6 +21,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     private var widgetsWindow: NSWindow?
     private let widgets = WidgetCenter(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
     private let plugins = PluginCenter(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
+    private lazy var nativePlugins = NativePluginCenter(widgets: widgets, persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
     private let desktopPolicy = DesktopPresentationPolicy()
     private let interactionTrace = InteractionTrace()
     private var rebuildGate = CurtainRebuildGate()
@@ -174,10 +175,14 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         trace("state")
         widgets.tick(available: !sleeping && userSessionActive)
         plugins.tick(available: !sleeping && userSessionActive)
+        nativePlugins.tick(available: !sleeping && userSessionActive)
+        presentation.nativeCards = nativePlugins.visibleCards
         let template = plugins.template
         presentation.widgetCards = widgets.cards.filter { card in template == nil || template!.widgets.contains { $0.kind == .quota && $0.provider.rawValue == card.provider.rawValue } }
+        if nativePlugins.agentsEnabled { presentation.widgetCards = [] }
+        presentation.widgetCards = Array(presentation.widgetCards.prefix(max(0, 4 - presentation.nativeCards.count)))
         let activity = widgets.activityCards.filter { card in template == nil || template!.widgets.contains { $0.kind == .agentActivity && card.id == $0.provider.rawValue + "-activity" } }
-        presentation.extensionCards = Array((activity + plugins.cards).prefix(max(0, 4 - presentation.widgetCards.count)))
+        presentation.extensionCards = Array(((nativePlugins.agentsEnabled ? [] : activity) + plugins.cards).prefix(max(0, 4 - presentation.widgetCards.count - presentation.nativeCards.count)))
         if let template, widgets.layout != template.template.layout.rawValue { widgets.layout = template.template.layout.rawValue }
         presentation.widgetLayout = widgets.layout
         let activate = controls.tick(alreadyCovered: session.isRequested, sessionAvailable: !sleeping && userSessionActive)
@@ -206,9 +211,11 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         window.minSize = NSSize(width: 560, height: 600)
         window.title = "Customize Still"; window.titlebarAppearsTransparent = true
         window.isReleasedWhenClosed = false; window.isOpaque = false; window.backgroundColor = .clear
-        window.contentView = NSHostingView(rootView: WidgetsHubView(widgets: widgets, plugins: plugins, presentation: presentation, titlebarInset: window.frame.height - window.contentLayoutRect.height)); window.center()
+        window.contentView = NSHostingView(rootView: WidgetsHubView(widgets: widgets, plugins: plugins, nativePlugins: nativePlugins, presentation: presentation, titlebarInset: window.frame.height - window.contentLayoutRect.height)); window.center()
         widgetsWindow = window; NSApp.activate(ignoringOtherApps: true); window.makeKeyAndOrderFront(nil)
     }
+
+    func configureNativePlugins() { nativePlugins.configureDiscoveredAgents() }
 
     @objc private func showPreferences() {
         guard !session.isRequested else { return }
@@ -450,6 +457,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     private func suspend() {
         plugins.tick(available: false)
         widgets.tick(available: false)
+        nativePlugins.tick(available: false)
         session.suspend()
         controls.setCovered(false)
         controls.stop()
@@ -504,6 +512,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         desktopPolicy.restore()
         plugins.tick(available: false)
         widgets.stop()
+        nativePlugins.stop()
         session.stop()
         policyTimer?.invalidate()
         policyTimer = nil

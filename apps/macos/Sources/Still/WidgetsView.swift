@@ -12,7 +12,7 @@ struct UsageCardView: View {
                 Image(systemName: card.provider == .codex ? "command" : "asterisk").foregroundStyle(palette.accent).accessibilityHidden(true)
                 Text(card.provider.title).font(.system(size: 13, weight: .semibold))
                 Spacer()
-                Text("ACCOUNT QUOTA").font(.system(size: 8, weight: .medium)).tracking(1).foregroundStyle(palette.secondary)
+                Text(card.isLastReported ? "LAST REPORTED" : "ACCOUNT QUOTA").font(.system(size: 8, weight: .medium)).tracking(1).foregroundStyle(palette.secondary)
             }
             if let snapshot = card.snapshot {
                 ForEach(Array(snapshot.windows.enumerated()), id: \.offset) { _, window in
@@ -77,19 +77,20 @@ struct ExtensionCardView: View {
 struct WidgetsHubView: View {
     @ObservedObject var widgets: WidgetCenter
     @ObservedObject var plugins: PluginCenter
+    @ObservedObject var nativePlugins: NativePluginCenter
     @ObservedObject var presentation: CurtainPresentation
     let titlebarInset: CGFloat
     @Environment(\.colorScheme) private var colorScheme
     private var palette: PorcelainPalette { colorScheme == .dark ? .dark : .light }
     @State private var section = "appearance"
-    private var cardCount: Int { widgets.cards.count + widgets.activityCards.count + plugins.cards.count }
+    private var cardCount: Int { nativePlugins.visibleCards.count + (nativePlugins.agentsEnabled ? 0 : widgets.cards.count + widgets.activityCards.count) + plugins.cards.count }
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
                 Text("Your kind of quiet.").font(.custom("InstrumentSerif-Regular", size: 36))
                 Text("A calm screen. Only what matters to you.").font(.system(size: 13)).foregroundStyle(palette.secondary)
                 Picker("Customize section", selection: $section) {
-                    Text("Appearance").tag("appearance"); Text("Sources").tag("sources"); Text("Library").tag("library")
+                    Text("Appearance").tag("appearance"); Text("Agents").tag("sources"); Text("Plugins").tag("library")
                 }.pickerStyle(.segmented).labelsHidden()
                 if section == "appearance" { appearanceSection }
                 if section == "sources" { sourcesSection }
@@ -97,6 +98,7 @@ struct WidgetsHubView: View {
                 if !widgets.connectionIssue.isEmpty { Text(widgets.connectionIssue).font(.system(size: 12)).foregroundStyle(palette.secondary) }
             }.padding(32).frame(maxWidth: .infinity, alignment: .leading)
         }.padding(.top, titlebarInset).frame(minWidth: 560, minHeight: 570).foregroundStyle(palette.primary).tint(palette.accent).stillServiceSurface()
+            .onAppear { if ProcessInfo.processInfo.arguments.contains("--plugins") { section = "library" } }
             .preferredColorScheme(presentation.appearance == .system ? nil : presentation.appearance == .dark ? .dark : .light)
     }
 
@@ -122,6 +124,8 @@ struct WidgetsHubView: View {
 
     private var sourcesSection: some View {
         VStack(alignment: .leading, spacing: 22) {
+            HStack { Text("Agents").font(.custom("InstrumentSerif-Regular", size: 28)); Spacer(); Button("Discover installed agents") { nativePlugins.discover() }.stillControl() }
+            ForEach(nativePlugins.discovered) { source in Text("\(source.provider.title) · \(source.executable == nil ? "not installed" : "installed")").font(.system(size: 11)).foregroundStyle(palette.secondary) }
             ForEach(UsageProvider.allCases, id: \.self) { provider in providerSection(provider) }
             HStack { Button("Refresh quota") { widgets.refresh() }.stillControl().disabled(!widgets.canRefresh); if widgets.fetching { ProgressView().controlSize(.small) } }
             Text("Quota is account usage. Activity is an advisory event signal; resolve requests in the original client.").font(.system(size: 11)).foregroundStyle(palette.secondary)
@@ -135,11 +139,11 @@ struct WidgetsHubView: View {
                 Text("Account quota").font(.system(size: 13)); Spacer()
                 Button(widgets.enabled.contains(provider) ? "Disconnect \(provider.title) quota" : "Connect \(provider.title) quota") {
                     if widgets.enabled.contains(provider) { widgets.disconnect(provider) } else { widgets.connect(provider) }
-                }.stillControl(prominent: !widgets.enabled.contains(provider)).disabled(!widgets.enabled.contains(provider) && cardCount >= 4)
+                }.stillControl(prominent: !widgets.enabled.contains(provider)).disabled(!nativePlugins.agentsEnabled && !widgets.enabled.contains(provider) && cardCount >= 4)
             }
             HStack {
                 Text("Activity signals").font(.system(size: 13)); Spacer()
-                Button(widgets.activityEnabled.contains(provider) ? "Disable \(provider.title) activity" : "Enable \(provider.title) activity") { widgets.toggleActivity(provider) }.stillControl().disabled(!widgets.activityEnabled.contains(provider) && cardCount >= 4)
+                Button(widgets.activityEnabled.contains(provider) ? "Disable \(provider.title) activity" : "Enable \(provider.title) activity") { widgets.toggleActivity(provider) }.stillControl().disabled(!nativePlugins.agentsEnabled && !widgets.activityEnabled.contains(provider) && cardCount >= 4)
             }
             Text("Local hooks receive client input. Only anonymous states are saved; prompts and tool inputs are discarded.").font(.system(size: 11)).foregroundStyle(palette.secondary)
             DisclosureGroup("How it connects") {
@@ -157,6 +161,8 @@ struct WidgetsHubView: View {
 
     private var librarySection: some View {
         VStack(alignment: .leading, spacing: 18) {
+            NativePluginLibraryView(center: nativePlugins, palette: palette)
+            Divider()
             HStack { Text("Make it yours.").font(.custom("InstrumentSerif-Regular", size: 28)); Spacer(); Button("Import package…") { plugins.importPackage() }.stillControl(prominent: true) }
             Text("Local templates and metadata. Still renders every card and runs no package code.").font(.system(size: 12)).foregroundStyle(palette.secondary)
             Text("\(cardCount) of 4 card slots connected").font(.system(size: 11)).foregroundStyle(palette.secondary)

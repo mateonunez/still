@@ -7,6 +7,7 @@ struct NativeWidgetCard: Identifiable {
     let provider: UsageProvider
     let snapshot: UsageSnapshot?
     let status: String
+    var isLastReported = false
     var id: UsageProvider { provider }
 }
 
@@ -141,7 +142,10 @@ final class WidgetCenter: ObservableObject {
                   let value = try? JSONDecoder().decode(UsageSnapshot.self, from: data), value.provider == .claude else {
                 return NativeWidgetCard(provider: provider, snapshot: nil, status: "Waiting for Claude’s next response. Quota may be unavailable for this account.")
             }
-            guard value.isUsable(now: now) else { return NativeWidgetCard(provider: provider, snapshot: nil, status: "Client data is out of date. Waiting for a new quota observation.") }
+            guard value.isUsable(now: now) else {
+                if let historical = value.lastReported(now: now) { return NativeWidgetCard(provider: provider, snapshot: historical, status: "Last reported · waiting for a new Claude update", isLastReported: true) }
+                return NativeWidgetCard(provider: provider, snapshot: nil, status: "Waiting for a new Claude usage update.")
+            }
             return NativeWidgetCard(provider: provider, snapshot: value, status: "Client-reported quota · status line")
         }
     }

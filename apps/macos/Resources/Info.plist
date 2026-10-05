@@ -11,4 +11,7 @@
     <key>LSMinimumSystemVersion</key><string>14.0</string>
     <key>LSUIElement</key><true/>
     <key>NSHighResolutionCapable</key><true/>
+    <key>NSCalendarsFullAccessUsageDescription</key><string>Still shows the next event from a calendar you choose. Event titles stay hidden unless you enable them.</string>
+    <key>NSCalendarsUsageDescription</key><string>Still shows your next event from a selected calendar.</string>
+    <key>NSAppleEventsUsageDescription</key><string>Still reads playback status from the local Spotify app when you connect its plugin.</string>
 </dict></plist>

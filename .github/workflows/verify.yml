@@ -22,6 +22,7 @@ jobs:
           corepack prepare pnpm@10.32.1 --activate
       - run: pnpm install --frozen-lockfile --registry=https://registry.npmjs.org/
       - run: pnpm check
+      - run: pnpm --filter @mateonunez/still-plugins test
       - run: pnpm check:brand
       - run: pnpm build
       - run: pnpm typecheck
@@ -32,6 +33,7 @@ jobs:
       - run: swift test --package-path packages/SessionKit
       - run: swift test --package-path packages/StillWidgets
       - run: swift test --package-path packages/StillPluginKit
+      - run: swift test --package-path packages/StillNativePlugins
       - run: swift run --package-path packages/StillPluginKit still-plugin validate examples/plugins/porcelain-rail.stillplugin
       - run: swift run --package-path packages/StillPluginKit still-plugin validate examples/plugins/local-signals.stillplugin
       - run: swift build --package-path apps/macos

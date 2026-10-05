@@ -30,6 +30,16 @@ public struct UsageSnapshot: Codable, Equatable, Sendable {
             ($0.resetsAt.map { $0 > now } ?? true)
         }
     }
+    /// Historical display only: never refreshes observation time or claims current account usage.
+    public func lastReported(now: Date) -> UsageSnapshot? {
+        guard protocolVersion == 1, provider == .claude, observedAt <= now.addingTimeInterval(5),
+              now.timeIntervalSince(observedAt) <= 86400, !windows.isEmpty, windows.count <= 2,
+              windows.allSatisfy({ $0.usedPercent.isFinite && (0...100).contains($0.usedPercent) && (1...44640).contains($0.minutes) }) else { return nil }
+        // A window without a known future reset cannot safely remain visible as historical quota.
+        let remaining = windows.filter { $0.resetsAt.map { $0 > now } ?? false }
+        guard !remaining.isEmpty else { return nil }
+        return UsageSnapshot(provider: provider, observedAt: observedAt, windows: remaining)
+    }
 }
 
 public enum UsageFailure: String, Error, Codable, Sendable {

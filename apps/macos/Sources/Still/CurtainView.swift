@@ -1,5 +1,6 @@
 import LocalAuthenticationEmbeddedUI
 import SwiftUI
+import StillNativePlugins
 
 @MainActor
 final class CurtainPresentation: ObservableObject {
@@ -11,6 +12,7 @@ final class CurtainPresentation: ObservableObject {
     @Published var energyWarning = ""
     @Published var widgetCards: [NativeWidgetCard] = []
     @Published var extensionCards: [ExtensionCard] = []
+    @Published var nativeCards: [NativePluginCard] = []
     @Published var widgetLayout = "corner"
     @Published var appearance: StillAppearance = .system
 }
@@ -50,7 +52,8 @@ struct CurtainView: View {
                         .tracking(3).foregroundStyle(palette.secondary)
                 }
                 if geometry.size.width < 1250 || geometry.size.height < 700 {
-                    HStack(spacing: 20) {
+                    ScrollView(.horizontal, showsIndicators: false) { HStack(spacing: 12) {
+                        ForEach(presentation.nativeCards) { card in NativePluginCardView(card: card, palette: palette) }
                         ForEach(presentation.widgetCards) { card in
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(card.provider.title).font(.system(size: 12, weight: .semibold))
@@ -66,7 +69,7 @@ struct CurtainView: View {
                                 else { Text(activityTitle(card.state)).font(.system(size: 10)).lineLimit(2) }
                             }.foregroundStyle(palette.secondary)
                         }
-                    }.padding(.top, 20)
+                    } }.frame(maxHeight: 170).padding(.top, 20)
                 }
                 Spacer()
                 TimelineView(.periodic(from: .now, by: 1)) { timeline in
@@ -142,10 +145,11 @@ struct CurtainView: View {
             .background(palette.background)
             .overlay(alignment: presentation.widgetLayout == "rail" ? .trailing : .bottomTrailing) {
                 if geometry.size.width >= 1250, geometry.size.height >= 700 {
-                    VStack(spacing: 12) {
+                    ScrollView(.vertical, showsIndicators: false) { VStack(spacing: 12) {
+                        ForEach(presentation.nativeCards) { card in NativePluginCardView(card: card, palette: palette) }
                         ForEach(presentation.widgetCards) { card in UsageCardView(card: card, palette: palette, compact: geometry.size.height < 1000) }
                         ForEach(presentation.extensionCards) { card in ExtensionCardView(card: card, palette: palette) }
-                    }
+                    } }.frame(maxHeight: max(200, geometry.size.height - 100))
                     .padding(.trailing, max(32, geometry.size.width * 0.055))
                     .padding(.bottom, 40)
                 }

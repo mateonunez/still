@@ -23,6 +23,8 @@ cp "$still_bin/StillClaudeBridge" "$still_app/Contents/MacOS/StillClaudeBridge.n
 mv -f "$still_app/Contents/MacOS/StillClaudeBridge.new" "$still_app/Contents/MacOS/StillClaudeBridge"
 cp "$still_bin/StillAgentBridge" "$still_app/Contents/MacOS/StillAgentBridge.new"
 mv -f "$still_app/Contents/MacOS/StillAgentBridge.new" "$still_app/Contents/MacOS/StillAgentBridge"
+cp "$still_bin/StillSpotifyBridge" "$still_app/Contents/MacOS/StillSpotifyBridge.new"
+mv -f "$still_app/Contents/MacOS/StillSpotifyBridge.new" "$still_app/Contents/MacOS/StillSpotifyBridge"
 cp "$still_root/apps/macos/Resources/Info.plist" "$still_app/Contents/Info.plist"
 cp "$still_root/design/fonts/InstrumentSerif-Regular.ttf" "$still_app/Contents/Resources/"
 cp "$still_root/design/fonts/InstrumentSerif-OFL.txt" "$still_app/Contents/Resources/"
