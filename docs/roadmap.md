@@ -27,3 +27,5 @@ Native module arrangement now supports persistent order, drag handles/keyboard a
 A [full-screen native canvas editor](verification/full-screen-canvas-and-spotify-authorization.md) now supports clock/module positioning, size choices and saved compositions. Pointer/keyboard/accessibility and Spotify real-consent acceptance remain open; collision resolution and per-display scenes follow this initial canvas.
 
 Customize and Preferences are consolidated into one Settings window. Next canvas work: collision handling, responsive geometry, per-display scene behavior and native keyboard/VoiceOver acceptance.
+
+Settings sidebar/header and Spotify process-target correction are built; [transport evidence and remaining native acceptance](verification/spotify-process-target-and-settings.md).

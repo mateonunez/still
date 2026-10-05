@@ -12,23 +12,24 @@ func property(_ name: String, container: NSAppleEventDescriptor = .null()) -> NS
     record.setDescriptor(container, forKeyword: AEKeyword(keyAEContainer))
     return record.coerce(toDescriptorType: DescType(typeObjectSpecifier))
 }
-func get(_ object: NSAppleEventDescriptor, authorize: Bool = false) throws -> NSAppleEventDescriptor? {
-    let event = NSAppleEventDescriptor(eventClass: AEEventClass(kAECoreSuite), eventID: AEEventID(kAEGetData), targetDescriptor: NSAppleEventDescriptor(bundleIdentifier: "com.spotify.client"), returnID: AEReturnID(kAutoGenerateReturnID), transactionID: AETransactionID(kAnyTransactionID))
+func get(_ object: NSAppleEventDescriptor, target: NSAppleEventDescriptor, authorize: Bool = false) throws -> NSAppleEventDescriptor? {
+    let event = NSAppleEventDescriptor(eventClass: AEEventClass(kAECoreSuite), eventID: AEEventID(kAEGetData), targetDescriptor: target, returnID: AEReturnID(kAutoGenerateReturnID), transactionID: AETransactionID(kAnyTransactionID))
     event.setParam(object, forKeyword: AEKeyword(keyDirectObject))
     let reply = try event.sendEvent(options: authorize ? [.waitForReply, .canInteract, .dontRecord] : [.waitForReply, .neverInteract, .dontRecord], timeout: authorize ? 25 : 2)
     if let number = reply.paramDescriptor(forKeyword: AEKeyword(keyErrorNumber)), number.int32Value != 0 { throw NSError(domain: NSOSStatusErrorDomain, code: Int(number.int32Value)) }
     return reply.paramDescriptor(forKeyword: AEKeyword(keyDirectObject))
 }
 func read() -> [String: Any] {
-    guard CommandLine.arguments.count == 2, ["--show-titles", "--hide-titles", "--authorize"].contains(CommandLine.arguments[1]), !NSRunningApplication.runningApplications(withBundleIdentifier: "com.spotify.client").isEmpty, let player = property("pPlS") else { return ["state": "unavailable"] }
+    guard CommandLine.arguments.count == 2, ["--show-titles", "--hide-titles", "--authorize"].contains(CommandLine.arguments[1]), let spotify = NSRunningApplication.runningApplications(withBundleIdentifier: "com.spotify.client").first(where: { !$0.isTerminated }), let player = property("pPlS") else { return ["state": "unavailable"] }
+    let target = NSAppleEventDescriptor(processIdentifier: spotify.processIdentifier)
     do {
-        guard let value = try get(player, authorize: CommandLine.arguments[1] == "--authorize") else { return ["state": "unavailable"] }
+        guard let value = try get(player, target: target, authorize: CommandLine.arguments[1] == "--authorize") else { return ["state": "unavailable"] }
         let state = value.enumCodeValue
         guard [code("kPSP"), code("kPSp"), code("kPSS")].contains(state) else { return ["state": "unavailable"] }
         var title = "Spotify", artist = "Track details hidden"
         if CommandLine.arguments[1] == "--show-titles", state != code("kPSS"), let track = property("pTrk"), let name = property("pnam", container: track), let author = property("pArt", container: track) {
-            title = try get(name)?.stringValue ?? "Spotify"
-            artist = try get(author)?.stringValue ?? ""
+            title = try get(name, target: target)?.stringValue ?? "Spotify"
+            artist = try get(author, target: target)?.stringValue ?? ""
         }
         func label(_ value: String) -> String { String(value.unicodeScalars.filter { !CharacterSet.controlCharacters.contains($0) && !(0x202A...0x202E).contains($0.value) && !(0x2066...0x2069).contains($0.value) }.map(String.init).joined().prefix(80)) }
         return ["state": "ready", "title": label(title), "artist": label(artist), "playing": state == code("kPSP")]

@@ -151,3 +151,5 @@ Full-screen composition stores normalized module centers and explicit size value
 Explicit authorization may also hang: never put an unbounded native permission API in the app's detached task and treat thread separation as a lifetime bound. Use an owned cancelable helper with reply/process limits and require a real successful read before recording connection. Keep unresolved authorization feedback adjacent to the permission button.
 
 Settings has one window owner and one shared section container. General controls must not introduce a second preferences window or wrap their content in a competing service material/title-bar layout. The screen editor returns to Settings.
+
+Spotify transport regression checks must distinguish the caller identity from Still-owned consent. A timeout is not a permission denial. Resolve the installed, running player to its process descriptor and retain subprocess bounds. Settings navigation and the section heading stay outside scrollable plugin content; appearance controls have one settings entry point.

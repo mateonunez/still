@@ -145,17 +145,6 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         let settings = addItem("Settings…", action: #selector(showWidgets), key: ",", to: menu)
         settings.isEnabled = !session.isRequested
         menu.addItem(.separator())
-        let appearanceItem = NSMenuItem(title: "Appearance", action: nil, keyEquivalent: "")
-        let appearances = NSMenu()
-        appearances.autoenablesItems = false
-        for mode in StillAppearance.allCases {
-            let choice = addItem(mode.title, action: #selector(changeAppearance(_:)), to: appearances)
-            choice.representedObject = mode.rawValue
-            choice.state = presentation.appearance == mode ? .on : .off
-        }
-        appearanceItem.submenu = appearances
-        menu.addItem(appearanceItem)
-        menu.addItem(.separator())
         let about = addItem("About Still", action: #selector(about), to: menu)
         about.isEnabled = !session.isRequested
         addItem("Quit Still", action: #selector(quit), key: "q", to: menu)
@@ -207,8 +196,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     @objc func showWidgets() {
         guard !session.isRequested else { return }
         if let widgetsWindow { NSApp.activate(ignoringOtherApps: true); widgetsWindow.makeKeyAndOrderFront(nil); return }
-        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 590, height: 740), styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
-        window.minSize = NSSize(width: 560, height: 600)
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 840, height: 680), styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
+        window.minSize = NSSize(width: 780, height: 600)
         window.title = "Still Settings"; window.titlebarAppearsTransparent = true
         window.isReleasedWhenClosed = false; window.isOpaque = false; window.backgroundColor = .clear
         window.contentView = NSHostingView(rootView: WidgetsHubView(controls: controls, widgets: widgets, plugins: plugins, nativePlugins: nativePlugins, presentation: presentation, titlebarInset: window.frame.height - window.contentLayoutRect.height, editScreen: { [weak self] in self?.showScreenEditor() })); window.center()
@@ -470,13 +459,6 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     @objc private func didWake() { sleeping = false; resumeIfPossible() }
     @objc private func sessionResigned() { userSessionActive = false; suspend() }
     @objc private func sessionBecameActive() { userSessionActive = true; resumeIfPossible() }
-
-    @objc private func changeAppearance(_ item: NSMenuItem) {
-        guard let value = item.representedObject as? String, let mode = StillAppearance(rawValue: value) else { return }
-        presentation.appearance = mode
-        UserDefaults.standard.set(value, forKey: "StillAppearance")
-        item.menu?.items.forEach { $0.state = $0 === item ? .on : .off }
-    }
 
     @objc private func about() {
         let alert = NSAlert()

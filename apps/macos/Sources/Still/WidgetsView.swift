@@ -86,22 +86,45 @@ struct WidgetsHubView: View {
     private var palette: PorcelainPalette { colorScheme == .dark ? .dark : .light }
     @State private var section = "general"
     private var cardCount: Int { nativePlugins.visibleCards.count + (nativePlugins.agentsEnabled ? 0 : widgets.cards.count + widgets.activityCards.count) + plugins.cards.count }
+    private var sections: [(id: String, title: String, symbol: String, detail: String)] {
+        [("general", "General", "slider.horizontal.3", "A quieter rhythm for your Mac."),
+         ("appearance", "Appearance", "paintpalette", "Make the screen feel like yours."),
+         ("sources", "Agents", "sparkles", "Connect only the details that matter."),
+         ("library", "Plugins", "square.grid.2x2", "Small windows into the things you choose.")]
+    }
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 22) {
-                Text("Your kind of quiet.").font(.custom("InstrumentSerif-Regular", size: 36))
-                Text("A calm screen. Only what matters to you.").font(.system(size: 13)).foregroundStyle(palette.secondary)
-                Picker("Settings section", selection: $section) {
-                    Text("General").tag("general"); Text("Appearance").tag("appearance"); Text("Agents").tag("sources"); Text("Plugins").tag("library")
-                }.pickerStyle(.segmented).labelsHidden()
-                Button("Edit screen…", action: editScreen).stillControl(prominent: true)
-                if section == "general" { GeneralSettingsView(controls: controls) }
-                if section == "appearance" { appearanceSection }
-                if section == "sources" { sourcesSection }
-                if section == "library" { librarySection }
-                if !widgets.connectionIssue.isEmpty { Text(widgets.connectionIssue).font(.system(size: 12)).foregroundStyle(palette.secondary) }
-            }.padding(32).frame(maxWidth: .infinity, alignment: .leading)
-        }.padding(.top, titlebarInset).frame(minWidth: 560, minHeight: 570).foregroundStyle(palette.primary).tint(palette.accent).stillServiceSurface()
+        HStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 20) {
+                Label("Still", systemImage: "circle.dotted").font(.custom("InstrumentSerif-Regular", size: 30)).padding(.horizontal, 20).padding(.top, 20)
+                List(selection: $section) {
+                    ForEach(sections, id: \.id) { item in
+                        Label(item.title, systemImage: item.symbol).padding(.vertical, 6).tag(item.id)
+                    }
+                }.listStyle(.sidebar).scrollContentBackground(.hidden)
+                Text("YOUR KIND OF QUIET").font(.system(size: 9, weight: .medium)).tracking(1.5).foregroundStyle(palette.secondary).padding(20)
+            }.frame(width: 184)
+            Divider()
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(alignment: .center) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(sections.first { $0.id == section }?.title ?? "Settings").font(.system(size: 24, weight: .semibold))
+                        Text(sections.first { $0.id == section }?.detail ?? "").font(.system(size: 12)).foregroundStyle(palette.secondary)
+                    }
+                    Spacer()
+                    Button("Edit screen…", action: editScreen).stillControl(prominent: true)
+                }.padding(28)
+                Divider()
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        if section == "general" { GeneralSettingsView(controls: controls) }
+                        if section == "appearance" { appearanceSection }
+                        if section == "sources" { sourcesSection }
+                        if section == "library" { librarySection }
+                        if section == "sources", !widgets.connectionIssue.isEmpty { Text(widgets.connectionIssue).font(.system(size: 12)).foregroundStyle(palette.secondary) }
+                    }.padding(28).frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }.frame(maxWidth: .infinity)
+        }.padding(.top, titlebarInset).frame(minWidth: 780, minHeight: 570).foregroundStyle(palette.primary).tint(palette.accent).stillServiceSurface()
             .onAppear { if ProcessInfo.processInfo.arguments.contains("--plugins") { section = "library" } }
             .preferredColorScheme(presentation.appearance == .system ? nil : presentation.appearance == .dark ? .dark : .light)
     }
@@ -117,10 +140,14 @@ struct WidgetsHubView: View {
                 }.frame(maxWidth: .infinity).padding(.vertical, 35).background(palette.background, in: RoundedRectangle(cornerRadius: 22))
                     .overlay(RoundedRectangle(cornerRadius: 22).stroke(palette.secondary.opacity(0.15), lineWidth: 1))
             }
+            Text("COLOR & LIGHT").font(.system(size: 10, weight: .semibold)).tracking(1.5).foregroundStyle(palette.secondary)
             Picker("Appearance", selection: $presentation.appearance) { ForEach(StillAppearance.allCases, id: \.self) { Text($0.title).tag($0) } }.pickerStyle(.segmented)
                 .onChange(of: presentation.appearance) { _, value in UserDefaults.standard.set(value.rawValue, forKey: "StillAppearance") }
+            Divider()
+            Text("COMPOSITION").font(.system(size: 10, weight: .semibold)).tracking(1.5).foregroundStyle(palette.secondary)
             Picker("Composition", selection: $widgets.layout) { Text("Quiet corner").tag("corner"); Text("Side rail").tag("rail"); Text("Custom canvas").tag("canvas") }.disabled(plugins.template != nil)
-            Picker("Widget position", selection: $widgets.side) { Text("Left").tag("left"); Text("Right").tag("right") }.pickerStyle(.segmented)
+            if widgets.layout != "canvas" { Picker("Widget position", selection: $widgets.side) { Text("Left").tag("left"); Text("Right").tag("right") }.pickerStyle(.segmented) }
+            else { Text("Move and resize modules in the full-screen editor.").font(.system(size: 12)).foregroundStyle(palette.secondary) }
             if let template = plugins.template { Text("Composition from \(template.name)").font(.system(size: 11)).foregroundStyle(palette.secondary) }
             Text("Up to four optional cards. Your clock and return controls always stay visible.").font(.system(size: 12)).foregroundStyle(palette.secondary)
             Button("Reset composition") { plugins.apply(nil); widgets.layout = "corner" }.stillControl()

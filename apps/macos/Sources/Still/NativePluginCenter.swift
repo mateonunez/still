@@ -139,10 +139,21 @@ final class NativePluginCenter: ObservableObject {
             guard let self, !Task.isCancelled else { return }
             self.requestingSpotify = false
             self.spotifyAuthorization = nil
-            let connected: Bool
-            if case .success(let data) = result, let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] { connected = object["state"] as? String == "ready" } else { connected = false }
+            var connected = false
+            let message: String
+            switch result {
+            case .success(let data):
+                let object = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+                connected = object?["state"] as? String == "ready"
+                if connected { message = "Spotify connected. Playback is read-only." }
+                else if object?["state"] as? String == "permissionRequired" { message = "macOS denied Spotify access. Review Privacy & Security → Automation, then retry." }
+                else if object?["errorCode"] as? Int == -1712 { message = "Spotify did not respond. Keep Spotify open and try connecting again." }
+                else { message = "Spotify playback is unavailable. Keep Spotify open and try again." }
+            case .failure(.timeout): message = "The connection timed out. Keep Spotify open and try again."
+            case .failure: message = "Spotify could not connect. Try again with Spotify open."
+            }
             if connected, var settings = self.configurations[.spotify]?.settings { settings.spotifyAuthorized = true; self.update(.spotify, settings: settings) }
-            self.issue = connected ? "Spotify connected. Playback is read-only." : "Spotify did not connect. Check Privacy & Security → Automation, keep Spotify open, then retry. No permission was inferred."
+            self.issue = message
             self.spotifyConnectionStatus = self.issue
             self.refresh(.spotify)
         }

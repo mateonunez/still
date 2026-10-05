@@ -67,3 +67,11 @@ Spotify authorization is now a bounded owned helper operation, started only by *
 ## Unified settings
 
 **Settings…** (Command-comma from the Still menu) is the single window for General, Appearance, Agents and Plugins. General contains inactivity settings; Appearance chooses the composition and theme; Agents connects local clients; Plugins configures sources. **Edit screen…** opens the full-screen editor. Done returns to Settings. Independent awake-session controls remain implemented but hidden.
+
+Settings uses a persistent sidebar and header; only the current section content scrolls. Appearance is available only inside Settings. Custom canvas hides the side-position control because positioning belongs to the full-screen editor.
+
+### Spotify connection troubleshooting
+
+Open the local Spotify app, then choose **Settings → Plugins → Configure Spotify → Allow Spotify Automation…**. Accept the system request if shown. A successful response connects the source; no grant is inferred from a timeout. A denied request points to Automation; an unresponsive player asks for a retry. Do not reset the system privacy database.
+
+The helper targets the running Spotify process, using fixed read-only Apple Events. `node scripts/verify-spotify-transport.mjs --app Still-preview` checks that helper returns playback state without track/artist titles. Its caller has a different permission attribution from a request originating in Still: a passing receipt does not prove Still's Automation grant.

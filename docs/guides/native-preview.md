@@ -23,7 +23,7 @@ Normal builds can still use `./scripts/build-macos.sh` and `open out/Still.app`;
 
 The first normal launch shows **Meet Still**, including the mark to look for at the top of the screen. Still has no Dock icon. Its menu-bar mark is an open ring with a point above it. Reopening the app shows the welcome window again while inactive.
 
-Choose **Appearance → Light**, **Dark** or **System**, then **Show Still**. Appearance is saved locally. The menu offers one primary action matching the current session; it no longer shows Show and Return together. The covered state adds an inner point to the icon and updates the status text.
+Open **Settings… → Appearance** and choose **Light**, **Dark** or **System**, then **Show Still**. Appearance is saved locally. The menu offers one primary action matching the current session; it no longer shows Show and Return together. The covered state adds an inner point to the icon and updates the status text.
 
 ## Touch ID
 

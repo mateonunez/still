@@ -7,7 +7,7 @@ struct GeneralSettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            Text("Your Mac, on your terms.").font(.custom("InstrumentSerif-Regular", size: 34))
+            Label("Your Mac stays awake while Still is active.", systemImage: "sun.max").font(.system(size: 13, weight: .medium)).padding(16).frame(maxWidth: .infinity, alignment: .leading).background(palette.background, in: RoundedRectangle(cornerRadius: 16))
             inactivitySection
             if ProductFeatures.awakeControlsVisible {
                 Divider()
