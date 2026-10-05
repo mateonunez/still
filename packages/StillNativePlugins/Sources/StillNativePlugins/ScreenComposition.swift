@@ -23,3 +23,25 @@ public struct ScreenComposition: Codable, Equatable, Sendable {
         return value
     }
 }
+
+public enum CanvasPreset: String, CaseIterable, Sendable {
+    case balanced, focus, dashboard
+    public var title: String { switch self { case .balanced: "Balanced"; case .focus: "Focus"; case .dashboard: "Dashboard" } }
+}
+extension ScreenComposition {
+    public static func preset(_ preset: CanvasPreset, ids: [NativePluginID]) -> Self {
+        var scene = Self()
+        scene.placements["clock"] = CanvasPlacement(x: preset == .focus ? 0.4 : 0.5, y: preset == .dashboard ? 0.27 : 0.4)
+        for (index, id) in ids.prefix(4).enumerated() {
+            let x: Double
+            let y: Double
+            switch preset {
+            case .balanced: x = index % 2 == 0 ? 0.18 : 0.82; y = index < 2 ? 0.28 : 0.62
+            case .focus: x = 0.82; y = 0.22 + Double(index) * 0.14
+            case .dashboard: x = index % 2 == 0 ? 0.3 : 0.7; y = index < 2 ? 0.48 : 0.7
+            }
+            scene.placements[id.rawValue] = CanvasPlacement(x: x, y: y, size: .compact)
+        }
+        return scene
+    }
+}

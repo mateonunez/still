@@ -2,6 +2,11 @@ import LocalAuthenticationEmbeddedUI
 import SwiftUI
 import StillNativePlugins
 
+private struct ReturnRegionHeight: PreferenceKey {
+    static let defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = max(value, nextValue()) }
+}
+
 @MainActor
 final class CurtainPresentation: ObservableObject {
     enum AuthenticationMode { case none, touchID, system }
@@ -34,6 +39,7 @@ struct CurtainView: View {
     var focusPrimaryDisplay: () -> Void = {}
     var isAuthenticationDisplay = true
     var evidenceRender = false
+    @State private var reservedFooter: CGFloat = 230
     @Environment(\.colorScheme) private var colorScheme
 
     private var palette: PorcelainPalette {
@@ -164,7 +170,7 @@ struct CurtainView: View {
                     }
                     Text("Visual privacy · Not the macOS security lock")
                         .font(.system(size: 11)).foregroundStyle(palette.secondary)
-                }
+                }.background { GeometryReader { proxy in Color.clear.preference(key: ReturnRegionHeight.self, value: proxy.size.height) } }
             }
             .foregroundStyle(palette.primary)
             .padding(.horizontal, max(32, geometry.size.width * 0.055))
@@ -173,7 +179,7 @@ struct CurtainView: View {
             .background(palette.background)
             .overlay {
                 if presentation.widgetLayout == "canvas" {
-                    ScreenCanvasView(cards: presentation.nativeCards, composition: presentation.composition, palette: palette, selection: .constant(""))
+                    ScreenCanvasView(cards: presentation.nativeCards, composition: presentation.composition, palette: palette, selection: .constant(""), reservedFooter: reservedFooter)
                         .allowsHitTesting(false)
                 }
             }
@@ -186,6 +192,7 @@ struct CurtainView: View {
                         .padding(.horizontal, max(32, geometry.size.width * 0.055))
                 }
             }
+            .onPreferenceChange(ReturnRegionHeight.self) { reservedFooter = max(230, $0 + 56) }
         }
     }
     private var hasModules: Bool { !presentation.nativeCards.isEmpty || !presentation.widgetCards.isEmpty || !presentation.extensionCards.isEmpty }

@@ -21,7 +21,11 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     private var editorWindow: NSWindow?
     private let widgets = WidgetCenter(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
     private let plugins = PluginCenter(persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
-    private lazy var nativePlugins = NativePluginCenter(widgets: widgets, persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"))
+    private lazy var nativePlugins = NativePluginCenter(widgets: widgets, persist: !ProcessInfo.processInfo.arguments.contains("--evidence-directory"), externalSlots: { [weak self] agentsEnabled in
+        guard let self else { return 0 }
+        let local = self.plugins.manifests.filter { self.plugins.enabled.contains($0.id) }.reduce(0) { $0 + $1.widgets.count }
+        return local + (agentsEnabled ? 0 : self.widgets.enabled.count + self.widgets.activityEnabled.count)
+    })
     private let desktopPolicy = DesktopPresentationPolicy()
     private let interactionTrace = InteractionTrace()
     private var rebuildGate = CurtainRebuildGate()
@@ -59,6 +63,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     }
     @objc private func interactionChanged(_ notification: Notification) {
         trace(notification.name.rawValue)
+        if session.isRequested, NSApp.isActive { desktopPolicy.cover() }
         if notification.name == NSApplication.didBecomeActiveNotification || notification.name == NSWindow.didBecomeKeyNotification {
             startAttachedTouchID()
         }
@@ -209,11 +214,12 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         guard !session.isRequested else { return }
         if let window = editorWindow, window.isVisible { NSApp.activate(ignoringOtherApps: true); window.makeKeyAndOrderFront(nil); return }
         plugins.apply(nil); widgets.layout = "canvas"
-        let screen = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1440, height: 900)
+        let screen = CurtainDisplay.mainScreen?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1440, height: 900)
         let window = NSWindow(contentRect: screen, styleMask: [.titled, .closable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
         window.title = "Edit Still screen"; window.titlebarAppearsTransparent = true; window.isReleasedWhenClosed = false
         window.collectionBehavior = [.fullScreenPrimary]
-        window.contentView = NSHostingView(rootView: ScreenEditorView(center: nativePlugins, presentation: presentation, finish: { [weak self, weak window] in window?.close(); self?.showWidgets() }))
+        window.contentView = CurtainDisplay.hostingView(ScreenEditorView(center: nativePlugins, presentation: presentation, finish: { [weak self, weak window] in window?.close(); self?.showWidgets() }), viewport: screen.size)
+        window.setFrame(screen, display: false)
         editorWindow = window; widgetsWindow?.close(); NSApp.activate(ignoringOtherApps: true); window.makeKeyAndOrderFront(nil); window.toggleFullScreen(nil)
     }
 
@@ -261,6 +267,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         controls.setCovered(true)
         if nativePlugins.requestingSpotify { nativePlugins.cancelSpotifyAuthorization() }
         rememberPreviousApplication()
+        NSApp.activate(ignoringOtherApps: true)
+        desktopPolicy.cover()
         welcomeWindow?.close()
         widgetsWindow?.close()
         editorWindow?.close()
@@ -317,7 +325,6 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         presentation.authenticationMode = .system
         trace("systemAuthentication")
         presentation.message = "Choose Use Mac password in the macOS dialog."
-        desktopPolicy.restore()
         panels.forEach { $0.level = .normal }
         updateStatus()
         NSApp.activate(ignoringOtherApps: true)
@@ -351,8 +358,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
             case .authenticated: break
             }
             panels.forEach { $0.level = .screenSaver; $0.orderFrontRegardless() }
-            panels.first?.makeKeyAndOrderFront(nil)
-            desktopPolicy.cover()
+            focusPrimaryDisplay()
+            presentation.touchIDView = authentication.prepareTouchID()
             announce(presentation.message)
         }
         updateStatus()
@@ -366,13 +373,14 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         presentation.authenticationMode = .none
         presentation.message = "Still is here. Try again whenever you are ready."
         panels.forEach { $0.level = .screenSaver; $0.orderFrontRegardless() }
-        desktopPolicy.cover()
+        focusPrimaryDisplay()
+        presentation.touchIDView = authentication.prepareTouchID()
         updateStatus()
         announce(presentation.message)
     }
 
     private func updateStatus() {
-        presentation.energyWarning = controls.curtainAwakeIssue.isEmpty ? "" : "Mac may sleep. " + controls.curtainAwakeIssue
+        presentation.energyWarning = controls.curtainAwakeIssue.isEmpty ? "" : "Idle prevention needs attention. " + controls.curtainAwakeIssue
         statusItem?.button?.image = StillMark.menuImage(covered: session.isRequested)
         statusItem?.button?.toolTip = "Still — " + (session.isRequested ? "your desktop is covered" : "ready when you are") + (session.isRequested && controls.curtainAwakeID != nil ? " · Mac stays awake" : "")
     }
@@ -416,7 +424,9 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
                 focusPrimaryDisplay: { [weak self] in self?.focusPrimaryDisplay() },
                 isAuthenticationDisplay: screen === activeScreen
             )
-            panel.contentView = NSHostingView(rootView: view)
+            let host = CurtainDisplay.hostingView(view, viewport: screen.frame.size)
+            panel.contentView = host
+            panel.setFrame(screen.frame, display: false)
             panels.append(panel)
             panel.orderFrontRegardless()
         }

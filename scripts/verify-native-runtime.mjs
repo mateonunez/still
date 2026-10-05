@@ -81,6 +81,7 @@ async function verify(appName, directory) {
       onePanelPerReportedDisplay: receipt.panelCount === receipt.displayCount && receipt.displayCount > 0,
       onePanelGenerationWithoutPhysicalDisplayChange: panelGenerations === 1,
       allPanelFramesMatchReportedScreens: receipt.windows.every((window) => window.matchesScreenFrame),
+      everyViewportMatchesItsOwnPanel: receipt.windows.every((window) => window.viewportMatchesPanel),
       allPanelsReportedVisible: receipt.windows.every((window) => window.visible),
       allPanelsAtExpectedCurtainLevel: receipt.windows.every((window) => window.level === receipt.expectedCurtainLevel),
       displayFontRegistered: receipt.displayFontRegistered,

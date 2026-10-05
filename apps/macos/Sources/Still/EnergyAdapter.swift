@@ -3,7 +3,14 @@ import IOKit.pwr_mgt
 import SessionKit
 
 @MainActor
-final class IOKitAssertionDriver: AwakeAssertionDriver {
+final class IOKitAssertionDriver: AwakeAssertionDriver, CurtainActivityDriver {
+    func declareActivity(previous: UInt32?) -> Result<UInt32, EnergyFailure> {
+        var identifier = previous ?? 0
+        let result = IOPMAssertionDeclareUserActivity("Still — active curtain" as CFString, kIOPMUserActiveLocal, &identifier)
+        guard result == kIOReturnSuccess else { return .failure(EnergyFailure(code: "ACTIVITY_DECLARE_\(result)", message: "macOS could not renew the active curtain request.")) }
+        return .success(identifier)
+    }
+    func releaseActivity(_ id: UInt32) -> Result<Void, EnergyFailure> { release(id) }
     func acquire(_ kind: AwakeAssertion, timeout: Double) -> Result<UInt32, EnergyFailure> {
         let type = kind == .system ? kIOPMAssertionTypePreventUserIdleSystemSleep : kIOPMAssertionTypePreventUserIdleDisplaySleep
         var identifier: IOPMAssertionID = 0

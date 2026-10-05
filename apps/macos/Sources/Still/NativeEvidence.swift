@@ -17,6 +17,7 @@ enum NativeEvidence {
                 [
                     "displayIndex": index,
                     "primaryContent": (panel.contentView as? NSHostingView<CurtainView>)?.rootView.isPrimaryDisplay ?? false,
+                    "viewportMatchesPanel": panel.contentView?.bounds.size == panel.frame.size,
                     "panelFrame": NSStringFromRect(panel.frame),
                     "screenFrame": index < screens.count ? NSStringFromRect(screens[index].frame) : "missing",
                     "matchesScreenFrame": index < screens.count && panel.frame == screens[index].frame,

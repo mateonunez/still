@@ -4,14 +4,17 @@ import AppKit
 @MainActor
 final class DesktopPresentationPolicy {
     private var previous: NSApplication.PresentationOptions?
+    private let read: @MainActor () -> NSApplication.PresentationOptions
+    private let write: @MainActor (NSApplication.PresentationOptions) -> Void
+    init(read: @escaping @MainActor () -> NSApplication.PresentationOptions = { NSApp.presentationOptions }, write: @escaping @MainActor (NSApplication.PresentationOptions) -> Void = { NSApp.presentationOptions = $0 }) { self.read = read; self.write = write }
     func cover() {
-        guard previous == nil else { return }
-        previous = NSApp.presentationOptions
-        NSApp.presentationOptions = [.hideDock, .autoHideMenuBar, .disableProcessSwitching]
+        if previous == nil { previous = read() }
+        let desired: NSApplication.PresentationOptions = [.hideDock, .autoHideMenuBar, .disableProcessSwitching]
+        if read() != desired { write(desired) }
     }
     func restore() {
         guard let previous else { return }
         self.previous = nil
-        NSApp.presentationOptions = previous
+        write(previous)
     }
 }

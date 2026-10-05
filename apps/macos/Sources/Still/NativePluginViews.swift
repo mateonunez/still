@@ -7,6 +7,7 @@ struct NativePluginCardView: View {
     let palette: PorcelainPalette
     var width: CGFloat = 280
     var showDetails = true
+    var taskLimit = 4
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
@@ -29,14 +30,15 @@ struct NativePluginCardView: View {
             ForEach(Array(metrics.enumerated()), id: \.offset) { _, metric in VStack(alignment: .leading, spacing: 4) { Text(metric.label).font(.system(size: 10)).foregroundStyle(palette.secondary); Text(metric.value).font(.system(size: 13, weight: .medium)).fixedSize(horizontal: false, vertical: true) } }
         case .work(let tasks):
             if tasks.isEmpty { Text("No tasks registered").font(.system(size: 13)) }
-            ForEach(Array(tasks.enumerated()), id: \.offset) { _, task in
+            ForEach(Array(tasks.prefix(taskLimit).enumerated()), id: \.offset) { _, task in
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(task.label).font(.system(size: 11)).foregroundStyle(palette.secondary)
+                    Text(task.label).font(.system(size: 11)).foregroundStyle(palette.secondary).lineLimit(2)
                     Text(task.state.rawValue.capitalized).font(.custom("InstrumentSerif-Regular", size: 26))
                     if let progress = task.progress { ProgressView(value: progress, total: 100).tint(palette.accent).accessibilityLabel(task.label).accessibilityValue("\(Int(progress)) percent") }
                     if let start = task.startedAt { Text("Started \(start.formatted(.relative(presentation: .numeric)))").font(.system(size: 10)).foregroundStyle(palette.secondary) }
                 }
             }
+            if tasks.count > taskLimit { Text("+\(tasks.count - taskLimit) other tasks").font(.system(size: 10)).foregroundStyle(palette.secondary) }
         case .agenda(let event):
             if let event { Text(event.title).font(.system(size: 13, weight: .medium)); Text(event.startsAt, style: .relative).font(.custom("InstrumentSerif-Regular", size: 28)); Text(event.startsAt.formatted(date: .omitted, time: .shortened)).font(.system(size: 11)).foregroundStyle(palette.secondary) }
             else { Text("A clear day ahead.").font(.custom("InstrumentSerif-Regular", size: 26)) }

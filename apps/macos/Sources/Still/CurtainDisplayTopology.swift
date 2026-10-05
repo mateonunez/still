@@ -1,4 +1,5 @@
 import AppKit
+import SwiftUI
 
 /// Dock/menu changes alter visibleFrame, not the physical coverage topology.
 struct CurtainDisplay: Equatable {
@@ -8,6 +9,17 @@ struct CurtainDisplay: Equatable {
 
     static func primaryID(in displays: [Self], mainID: UInt32) -> UInt32? {
         displays.first(where: { $0.id == mainID })?.id ?? displays.first?.id
+    }
+
+    @MainActor static var mainScreen: NSScreen? {
+        NSScreen.screens.first { ($0.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value == CGMainDisplayID() } ?? NSScreen.screens.first
+    }
+    @MainActor static func hostingView<Content: View>(_ content: Content, viewport: CGSize) -> NSHostingView<Content> {
+        let host = NSHostingView(rootView: content)
+        host.sizingOptions = []
+        host.frame = NSRect(origin: .zero, size: viewport)
+        host.autoresizingMask = [.width, .height]
+        return host
     }
 
     static func current() -> [Self] {

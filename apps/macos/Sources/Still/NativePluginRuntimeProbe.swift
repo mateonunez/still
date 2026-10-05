@@ -1,5 +1,6 @@
 import AppKit
 import StillNativePlugins
+import StillWidgets
 import SwiftUI
 
 /// Explicit opt-in live probe. Copies configuration into owned scratch; never asks for OS permission.
@@ -17,9 +18,9 @@ enum NativePluginRuntimeProbe {
                 try fm.createDirectory(at: store.directory(id), withIntermediateDirectories: true)
                 try store.write(config)
             }
-            let widgets = WidgetCenter(persist: false)
-            // Codex connection reads quota only and persist:false writes no preferences.
-            if CodexUsageAdapter.locate() != nil { widgets.connect(.codex) }
+            // Read configured quota sources without installing a status line, hooks or preferences.
+            let widgets = WidgetCenter(persist: false, readOnlySources: Set(UsageProvider.allCases))
+            widgets.tick(available: true)
             let center = NativePluginCenter(widgets: widgets, root: scratch)
             center.tick(available: true)
             if let taskProducer {
@@ -33,7 +34,7 @@ enum NativePluginRuntimeProbe {
             var checks: [String: Bool] = ["tenPluginsLoaded": center.installed.count == 10, "fourVisibleCards": center.visibleCards.count == 4, "codexAndClaudeDiscovery": center.discovered.count == 2]
             for id in [NativePluginID.buildWatch, .deployWatch, .macPulse, .worldClock, .quietTimer, .weather] { checks[id.rawValue + "LivePayload"] = center.cards[id]?.payload != nil && center.cards[id]?.state == .ready }
             checks["spotifyDoesNotFakePlayback"] = center.cards[.spotify]?.state == .ready || center.cards[.spotify]?.state == .permissionRequired || center.cards[.spotify]?.state == .unavailable
-            checks["calendarNeedsExplicitSelectionOrPermission"] = [.setupRequired, .permissionRequired].contains(center.cards[.nextUp]?.state ?? .ready)
+            checks["calendarNeedsExplicitSelectionOrPermission"] = [.setupRequired, .permissionRequired].contains(center.cards[.nextUp]?.state ?? .ready) || (center.cards[.nextUp]?.state == .ready && !(center.configurations[.nextUp]?.settings.calendarID ?? "").isEmpty)
             if case .work(let tasks) = center.cards[.taskWatch]?.payload { checks["realTaskReportedCompleted"] = tasks.contains { $0.label == "Verification task" && $0.state == .completed } } else { checks["realTaskReportedCompleted"] = false }
             center.startTimer(); checks["timerStarted"] = center.cards[.quietTimer]?.payload != .timer(deadline: nil)
             center.stopTimer(); checks["timerStopped"] = center.cards[.quietTimer]?.payload == .timer(deadline: nil)
@@ -55,6 +56,16 @@ enum NativePluginRuntimeProbe {
             let presentation = CurtainPresentation()
             presentation.nativeCards = center.visibleCards
             presentation.appearance = .dark
+            for preset in CanvasPreset.allCases {
+                center.applyPreset(preset)
+                presentation.composition = center.composition
+                presentation.widgetLayout = "canvas"
+                for viewport in [CGSize(width: 1512, height: 982), CGSize(width: 2560, height: 1440), CGSize(width: 1024, height: 768)] {
+                    let renderer = ImageRenderer(content: CurtainView(presentation: presentation, authenticate: {}, evidenceRender: true).frame(width: viewport.width, height: viewport.height).environment(\.colorScheme, .dark))
+                    renderer.scale = 1
+                    if let image = renderer.nsImage, let tiff = image.tiffRepresentation, let bitmap = NSBitmapImageRep(data: tiff), let png = bitmap.representation(using: .png, properties: [:]) { try png.write(to: directory.appendingPathComponent("canvas-\(preset.rawValue)-\(Int(viewport.width)).png")) }
+                }
+            }
             for composition in ["corner", "rail", "canvas"] {
                 presentation.widgetLayout = composition
                 let renderer = ImageRenderer(content: CurtainView(presentation: presentation, authenticate: {}, evidenceRender: true).frame(width: 1920, height: 1080).environment(\.colorScheme, .dark))

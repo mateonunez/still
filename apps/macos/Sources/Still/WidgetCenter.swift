@@ -32,7 +32,7 @@ final class WidgetCenter: ObservableObject {
     private let logger = Logger(subsystem: "co.mateonunez.still.development", category: "usage")
     private var codexURL: URL?
 
-    init(persist: Bool = true) {
+    init(persist: Bool = true, readOnlySources: Set<UsageProvider> = []) {
         self.persist = persist
         codexURL = CodexUsageAdapter.locate()
         if persist {
@@ -42,7 +42,7 @@ final class WidgetCenter: ObservableObject {
             layout = saved == "canvas" ? "canvas" : saved == "rail" ? "rail" : "corner"
             side = UserDefaults.standard.string(forKey: "StillWidgetSide") == "left" ? "left" : "right"
             if let path = UserDefaults.standard.string(forKey: "StillCodexExecutable") { codexURL = URL(fileURLWithPath: path) }
-        }
+        } else { enabled = readOnlySources }
         rebuild()
     }
 

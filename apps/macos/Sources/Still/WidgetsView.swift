@@ -85,7 +85,7 @@ struct WidgetsHubView: View {
     @Environment(\.colorScheme) private var colorScheme
     private var palette: PorcelainPalette { colorScheme == .dark ? .dark : .light }
     @State private var section = "general"
-    private var cardCount: Int { nativePlugins.visibleCards.count + (nativePlugins.agentsEnabled ? 0 : widgets.cards.count + widgets.activityCards.count) + plugins.cards.count }
+    private var cardCount: Int { nativePlugins.visibleIDs.count + (nativePlugins.agentsEnabled ? 0 : widgets.enabled.count + widgets.activityEnabled.count) + plugins.manifests.filter { plugins.enabled.contains($0.id) }.reduce(0) { $0 + $1.widgets.count } }
     private var sections: [(id: String, title: String, symbol: String, detail: String)] {
         [("general", "General", "slider.horizontal.3", "A quieter rhythm for your Mac."),
          ("appearance", "Appearance", "paintpalette", "Make the screen feel like yours."),
@@ -198,6 +198,8 @@ struct WidgetsHubView: View {
             HStack { Text("Make it yours.").font(.custom("InstrumentSerif-Regular", size: 28)); Spacer(); Button("Import package…") { plugins.importPackage() }.stillControl(prominent: true) }
             Text("Local templates and metadata. Still renders every card and runs no package code.").font(.system(size: 12)).foregroundStyle(palette.secondary)
             Text("\(cardCount) of 4 card slots connected").font(.system(size: 11)).foregroundStyle(palette.secondary)
+            if cardCount > 4 { Text("More than four slots are reserved. Hide a native widget or disconnect a local source to see every selected card.").font(.system(size: 12)).foregroundStyle(palette.secondary) }
+            if widgets.layout == "canvas" { Text("Imported metadata cards use Quiet corner or Side rail. The screen editor currently arranges native widgets.").font(.system(size: 12)).foregroundStyle(palette.secondary) }
             if plugins.manifests.isEmpty { Text("Your library is ready for its first .stillplugin package.").font(.system(size: 13)).padding(.vertical, 24) }
             ForEach(plugins.manifests) { manifest in
                 VStack(alignment: .leading, spacing: 10) {
