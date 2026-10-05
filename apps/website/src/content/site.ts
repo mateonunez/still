@@ -4,7 +4,7 @@ export const site = {
   name: 'Still',
   origin: 'https://meet-still.app',
   description:
-    'A calm privacy screen for your Mac. Meet Still: a native macOS app with Porcelain light and dark themes, system authentication and optional inactivity activation.',
+    'A calm privacy screen for your Mac. Meet Still: a native macOS app with Porcelain light and dark themes, system authentication, a customizable canvas and ten optional native plugins.',
   indexable: process.env.VERCEL_ENV === 'production' || process.env.STILL_INDEXABLE === 'true',
 };
 

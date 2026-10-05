@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1",
-    "prebuild": "node ../../scripts/generate-website-tokens.mjs",
+    "prebuild": "node ../../scripts/generate-website-tokens.mjs && node ../../scripts/generate-public-sdk.mjs",
     "build": "next build",
     "start": "next start --hostname 127.0.0.1",
     "typecheck": "tsc --noEmit"

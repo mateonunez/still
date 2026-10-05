@@ -153,3 +153,9 @@ Explicit authorization may also hang: never put an unbounded native permission A
 Settings has one window owner and one shared section container. General controls must not introduce a second preferences window or wrap their content in a competing service material/title-bar layout. The screen editor returns to Settings.
 
 Spotify transport regression checks must distinguish the caller identity from Still-owned consent. A timeout is not a permission denial. Resolve the installed, running player to its process descriptor and retain subprocess bounds. Settings navigation and the section heading stay outside scrollable plugin content; appearance controls have one settings entry point.
+
+## Public catalog and fresh profiles
+
+Generate public manifest metadata and SDK downloads with `node scripts/generate-public-sdk.mjs`; do not edit generated copies. Keep provider setup/privacy descriptions typed and separate from canonical manifests. Verify schema-ID URLs and asset bytes as well as HTML metadata. Agent text resources are documentation, not a ranking protocol.
+
+Prepare missing built-in configurations disabled and hidden, preserve existing bounded regular files, and reject symlink roots. Installation must not connect providers or request permissions. Main content uses the macOS main display ID; topology reconciliation also tracks main-display changes. Never replace a running candidate: the builder checks the exact bundle executable path before mutation.

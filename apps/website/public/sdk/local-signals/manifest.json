@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 1,
+  "id": "app.meet-still.local-signals",
+  "version": "1.0.0",
+  "name": "Local Signals",
+  "publisher": "Still examples",
+  "license": "MIT",
+  "kind": "metadata",
+  "capabilities": ["agentActivity"],
+  "widgets": [{ "id": "signal", "kind": "agentActivity", "provider": "local" }],
+  "template": { "theme": "porcelain", "layout": "corner" }
+}

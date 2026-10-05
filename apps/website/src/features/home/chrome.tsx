@@ -10,7 +10,8 @@ export function Header() {
       </Link>
       <nav aria-label="Main navigation">
         <Link href="/how-it-works">How it works</Link>
-        <Link href="/changelog">Field notes</Link>
+        <Link href="/plugins">Plugins</Link>
+        <Link href="/developers">Developers</Link>
         <Link className="nav-pill" href="/download">
           In development <span aria-hidden="true">↗</span>
         </Link>
@@ -30,6 +31,8 @@ export function Footer() {
         <a href="https://mateonunez.co">A personal project by Mateo Nunez ↗</a>
       </div>
       <nav aria-label="Footer navigation">
+        <Link href="/plugins">Plugins</Link>
+        <Link href="/developers">Developers</Link>
         <Link href="/support">Support</Link>
         <Link href="/privacy">Privacy</Link>
         <Link href="/changelog">Changelog</Link>

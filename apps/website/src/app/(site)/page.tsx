@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { pageMetadata, site } from '@/content/site';
 import { Preview } from '@/features/home/preview';
+import { plugins } from '@/features/plugins/catalog';
 
 export const metadata = pageMetadata('Still — A calm privacy screen for Mac', site.description, '/');
 const benefits = [
@@ -44,7 +45,7 @@ export default function Home() {
           </h1>
           <p className="hero-description">
             A beautiful screen for the moments between.
-            <br className="desktop-break" /> Cover your desktop. Let the day breathe.
+            <br className="desktop-break" /> Cover your desktop. Keep a little of your world in view.
           </p>
           <div className="hero-actions">
             <a className="button-primary" href="#preview">
@@ -90,6 +91,28 @@ export default function Home() {
           </article>
         ))}
       </section>
+      <section className="product-extensions">
+        <p className="eyebrow">YOUR SCREEN. YOUR COMPOSITION.</p>
+        <h2>
+          A clock. A few essentials.
+          <br />
+          Room for quiet.
+        </h2>
+        <p>
+          Move and resize native widgets in a full-screen editor. Follow your agents, a build, your next event or the
+          music playing nearby. Connect only the sources you choose.
+        </p>
+        <div className="product-extension-links">
+          {plugins.map((plugin) => (
+            <Link key={plugin.id} href={`/plugins/${plugin.slug}`}>
+              {plugin.name}
+            </Link>
+          ))}
+        </div>
+        <Link className="text-link" href="/plugins">
+          Explore the native collection ↗
+        </Link>
+      </section>
       <section className="closing">
         <p className="eyebrow">A SMALL APP. A CONSIDERED BEGINNING.</p>
         <h2>
@@ -101,7 +124,7 @@ export default function Home() {
         <Link className="button-primary" href="/changelog">
           Follow the field notes <span aria-hidden="true">↗</span>
         </Link>
-        <p className="closing-note">Porcelain first. Agent awareness and more themes, later.</p>
+        <p className="closing-note">Porcelain. Ten configurable native plugins. A considered path to beta.</p>
       </section>
     </main>
   );

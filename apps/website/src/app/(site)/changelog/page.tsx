@@ -9,8 +9,20 @@ const content: ArticleContent = {
   lead: 'A public notebook for an app taking shape. Development progress is not a release announcement.',
   sections: [
     {
+      title: 'Ten native plugins. One quiet screen.',
+      text: 'The development app now includes the mateonunez collection: Agents, Build Watch, Deploy Watch, Task Watch, Mac Pulse, Next Up, World Clock, Quiet Timer, Weather and Spotify. Each source has its own configuration. Spotify playback has been confirmed in the native candidate; broader source, permission and failure cases remain under acceptance.',
+    },
+    {
+      title: 'Make room, across the screen.',
+      text: 'A full-screen editor positions the clock and native widgets, with grid snapping, size choices and saved layouts. General, Appearance, Agents and Plugins now share one Settings window. Collision handling, varied display geometries and accessibility still need refinement.',
+    },
+    {
+      title: 'A public foundation for builders.',
+      text: 'The website now documents the native collection, publishes versioned declarative schemas and starter resources, and shares a plain-text guide for agents. This is a catalog and local SDK, not community publishing or remote executable installation.',
+    },
+    {
       title: 'A small library. A clear contract.',
-      text: 'The development app now has a native Appearance, Sources and Library Hub. Local declarative packages use a versioned manifest and validated metadata; templates never connect a source. A developer validator and starter packages are prepared. Still renders the cards and runs no imported code; a hosted marketplace remains future scope.',
+      text: 'The development app now has a unified General, Appearance, Agents and Plugins Settings window. Local declarative packages use a versioned manifest and validated metadata; templates never connect a source. A developer validator and starter packages are prepared. Still renders the cards and runs no imported code; a hosted marketplace remains future scope.',
     },
     {
       title: 'Optional agent signals.',
@@ -26,7 +38,7 @@ const content: ArticleContent = {
     },
     {
       title: 'A simpler product surface.',
-      text: 'The local app now keeps the Mac awake automatically while its curtain is active, releasing that request when you return. Display sleep remains under macOS control. Independent timed awake controls remain retained and hidden.',
+      text: 'The local app now keeps the Mac awake automatically while its curtain is active, releasing that request when you return. The display also stays awake during idle coverage; explicit sleep and system overrides remain available. Independent timed awake controls remain retained and hidden.',
     },
     {
       title: 'The desktop edge cases.',

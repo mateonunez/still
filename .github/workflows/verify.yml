@@ -26,6 +26,7 @@ jobs:
       - run: pnpm check:brand
       - run: pnpm build
       - run: pnpm typecheck
+      - run: node scripts/verify-site-server.mjs
   native-domain:
     runs-on: macos-latest
     steps:

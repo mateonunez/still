@@ -1,0 +1,144 @@
+[
+  {
+    "slug": "agents",
+    "schemaVersion": 2,
+    "id": "co.mateonunez.still.agents",
+    "name": "Agents",
+    "version": "0.1.0",
+    "publisher": "mateonunez",
+    "license": "MIT",
+    "runtime": "native-builtin",
+    "capabilities": [
+      "agentDiscovery",
+      "quota",
+      "agentActivity"
+    ],
+    "configurationRequired": true
+  },
+  {
+    "slug": "build-watch",
+    "schemaVersion": 2,
+    "id": "co.mateonunez.still.build-watch",
+    "name": "Build Watch",
+    "version": "0.1.0",
+    "publisher": "mateonunez",
+    "license": "MIT",
+    "runtime": "native-builtin",
+    "capabilities": [
+      "githubWorkflowStatus"
+    ],
+    "configurationRequired": true
+  },
+  {
+    "slug": "deploy-watch",
+    "schemaVersion": 2,
+    "id": "co.mateonunez.still.deploy-watch",
+    "name": "Deploy Watch",
+    "version": "0.1.0",
+    "publisher": "mateonunez",
+    "license": "MIT",
+    "runtime": "native-builtin",
+    "capabilities": [
+      "vercelDeploymentStatus"
+    ],
+    "configurationRequired": true
+  },
+  {
+    "slug": "task-watch",
+    "schemaVersion": 2,
+    "id": "co.mateonunez.still.task-watch",
+    "name": "Task Watch",
+    "version": "0.1.0",
+    "publisher": "mateonunez",
+    "license": "MIT",
+    "runtime": "native-builtin",
+    "capabilities": [
+      "localTaskStatus"
+    ],
+    "configurationRequired": true
+  },
+  {
+    "slug": "mac-pulse",
+    "schemaVersion": 2,
+    "id": "co.mateonunez.still.mac-pulse",
+    "name": "Mac Pulse",
+    "version": "0.1.0",
+    "publisher": "mateonunez",
+    "license": "MIT",
+    "runtime": "native-builtin",
+    "capabilities": [
+      "systemMetrics"
+    ],
+    "configurationRequired": true
+  },
+  {
+    "slug": "next-up",
+    "schemaVersion": 2,
+    "id": "co.mateonunez.still.next-up",
+    "name": "Next Up",
+    "version": "0.1.0",
+    "publisher": "mateonunez",
+    "license": "MIT",
+    "runtime": "native-builtin",
+    "capabilities": [
+      "selectedCalendar"
+    ],
+    "configurationRequired": true
+  },
+  {
+    "slug": "world-clock",
+    "schemaVersion": 2,
+    "id": "co.mateonunez.still.world-clock",
+    "name": "World Clock",
+    "version": "0.1.0",
+    "publisher": "mateonunez",
+    "license": "MIT",
+    "runtime": "native-builtin",
+    "capabilities": [
+      "localClock"
+    ],
+    "configurationRequired": true
+  },
+  {
+    "slug": "quiet-timer",
+    "schemaVersion": 2,
+    "id": "co.mateonunez.still.quiet-timer",
+    "name": "Quiet Timer",
+    "version": "0.1.0",
+    "publisher": "mateonunez",
+    "license": "MIT",
+    "runtime": "native-builtin",
+    "capabilities": [
+      "localTimer"
+    ],
+    "configurationRequired": true
+  },
+  {
+    "slug": "weather",
+    "schemaVersion": 2,
+    "id": "co.mateonunez.still.weather",
+    "name": "Weather",
+    "version": "0.1.0",
+    "publisher": "mateonunez",
+    "license": "MIT",
+    "runtime": "native-builtin",
+    "capabilities": [
+      "weatherNetwork"
+    ],
+    "configurationRequired": true
+  },
+  {
+    "slug": "spotify",
+    "schemaVersion": 2,
+    "id": "co.mateonunez.still.spotify",
+    "name": "Spotify",
+    "version": "0.1.0",
+    "publisher": "mateonunez",
+    "license": "MIT",
+    "runtime": "native-builtin",
+    "capabilities": [
+      "spotifyAutomation"
+    ],
+    "configurationRequired": true
+  }
+]

@@ -1,9 +1,23 @@
 #!/usr/bin/env node
 /** Check served routes and SEO metadata; never infer search rankings. */
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 
-const paths = ['/', '/how-it-works', '/download', '/privacy', '/support', '/changelog'];
+const manifests = JSON.parse(
+  await readFile(new URL('../apps/website/src/features/plugins/native-manifests.json', import.meta.url), 'utf8'),
+);
+const paths = [
+  '/',
+  '/how-it-works',
+  '/download',
+  '/privacy',
+  '/support',
+  '/changelog',
+  '/plugins',
+  '/developers',
+  ...manifests.map((plugin) => `/plugins/${plugin.slug}`),
+];
 const origin = 'https://meet-still.app';
 const { values, positionals } = parseArgs({
   options: { indexable: { type: 'boolean', default: false } },
@@ -77,6 +91,36 @@ const locations = new Set([...sitemap.matchAll(/<loc>([^<]*)<\/loc>/g)].map((mat
 assert.deepEqual(locations, new Set(paths.map((path) => origin + path)), 'Sitemap route mismatch');
 const robots = await (await fetchRoute('/robots.txt')).text();
 assert.equal(robots.includes(`Sitemap: ${origin}/sitemap.xml`), indexable, 'Robots sitemap directive');
+const catalog = await (await fetchRoute('/plugins/catalog.json')).json();
+assert.equal(catalog.catalogVersion, 1);
+assert.equal(catalog.plugins.length, 10);
+assert.deepEqual(
+  catalog.plugins.map((plugin) => plugin.id),
+  manifests.map((plugin) => plugin.id),
+);
+assert.equal(catalog.appAvailability, 'development-preview');
+for (const [source, resource] of [
+  ['schemas/plugin-manifest-v1.schema.json', '/sdk/plugin-manifest-v1.schema.json'],
+  ['schemas/plugin-snapshot-v1.schema.json', '/sdk/plugin-snapshot-v1.schema.json'],
+  ['examples/plugins/local-signals.stillplugin/manifest.json', '/sdk/local-signals/manifest.json'],
+  ['examples/plugins/porcelain-rail.stillplugin/manifest.json', '/sdk/porcelain-rail/manifest.json'],
+  ['examples/plugins/publish-sample.mjs', '/sdk/publish-sample.mjs'],
+]) {
+  assert.equal(
+    await (await fetchRoute(resource)).text(),
+    await readFile(new URL(`../${source}`, import.meta.url), 'utf8'),
+    `${resource}: SDK source drift`,
+  );
+}
+for (const name of ['plugin-manifest-v1.schema.json', 'plugin-snapshot-v1.schema.json']) {
+  const schema = await (await fetchRoute(`/schemas/${name}`)).json();
+  assert.equal(schema.$id, `${origin}/schemas/${name}`, 'Schema identity must resolve');
+}
+for (const path of ['/llms.txt', '/llms-full.txt']) {
+  const response = await fetchRoute(path);
+  assert.ok(response.headers.get('content-type')?.startsWith('text/plain'));
+  assert.ok((await response.text()).includes('no public app download'));
+}
 const image = Buffer.from(await (await fetchRoute('/opengraph-image')).arrayBuffer());
 assert.ok(image.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])), 'Share image must be PNG');
 assert.equal(image.readUInt32BE(16), 1200, 'Share image width');

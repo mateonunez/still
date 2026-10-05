@@ -7,7 +7,7 @@ Updated 2026-10-05. Native development preview; no signed/notarized beta or publ
 | 1 | Physical desktop privacy | Exact-candidate slow/fast/partial three-finger swipes, Mission Control, multiple displays and recovery; document any exposed frame. Public API restrictions do not prove gesture coverage. |
 | 2 | Native interaction/accessibility | Touch ID + system password cancel/retry, glass active/inactive, keyboard/VoiceOver, reduced materials, resize/display changes, sleep/wake and awake lifecycle |
 | 3 | Live advisory agent activity | Client opt-in/trust/reload, parallel sessions, attention→progress, failure/interrupt/end/expiry and disconnect for Codex/Claude |
-| 4 | Native collection acceptance | Ten configurable modules implemented; complete Calendar/Spotify consent, plugin configuration/expiry/disable trials, template ordering and resource acceptance |
+| 4 | Native collection acceptance | Ten configurable modules implemented; complete Calendar consent and fresh-install Spotify revocation, plugin configuration/expiry/disable trials, template ordering and resource acceptance |
 | 5 | Beta readiness | Choose verified OS/hardware matrix; fresh installation/recovery/failure checks and native visuals |
 | 6 | Direct distribution, final gate | Release identity/license, Developer ID/hardened runtime/notarization, clean-Mac install, updates and verified download. Deferred until product acceptance. |
 | 7 | Release website | Verified native visuals/version/compatibility/download, release notes, search coverage and performance |
@@ -18,7 +18,7 @@ See [native collection evidence](verification/native-plugin-collection.md) for t
 
 Porcelain light/dark/system, native glass service controls, system authentication, inactivity, automatic display/system-awake ownership while covered, real opt-in Codex/Claude quota, local declarative plugin importer/validator/starters, explicit enable/revoke, and native advisory hook bridge. [Current evidence](verification/phase-05-plugin-sdk-and-agent-signals.md) qualifies which portions were observed vs synthetic.
 
-Independent timed awake/display controls remain hidden pending a unified product concept. Homebrew follows a signed artifact; no usable public install command is advertised. No App Store release is planned. Additional theme assets, catalog, automatic plugin updates, payments, isolated runners and in-app approvals remain separate future contracts.
+Independent timed awake/display controls remain hidden pending a unified product concept. Homebrew follows a signed artifact; no usable public install command is advertised. No App Store release is planned. Additional theme assets, automatic plugin updates, payments, isolated runners and in-app approvals remain separate future contracts.
 
 Still is visual privacy, not the macOS security lock. Trackpad/desktop transitions remain a known limitation; green builds do not establish native hardware acceptance.
 
@@ -29,3 +29,7 @@ A [full-screen native canvas editor](verification/full-screen-canvas-and-spotify
 Customize and Preferences are consolidated into one Settings window. Next canvas work: collision handling, responsive geometry, per-display scene behavior and native keyboard/VoiceOver acceptance.
 
 Settings sidebar/header and Spotify process-target correction are built; [transport evidence and remaining native acceptance](verification/spotify-process-target-and-settings.md).
+
+## Pre-beta catalog and SDK
+
+The ten-plugin public catalog, detail pages, canonical schema downloads, starters, JSON catalog and human/agent developer guides are implemented and locally verified. Community publishing, accounts and payments follow beta. See the [current audit](verification/pre-beta-product-audit.md) and [acceptance guide](guides/beta-readiness.md). Spotify connection was reported working interactively; Calendar remains pending. Main scene duplication is corrected in source and awaits physical multi-monitor acceptance. Manual update policy is documented; no automatic update engine is implemented.

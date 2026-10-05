@@ -1,6 +1,6 @@
 # Configure the native collection
 
-The mateonunez collection is built into the native app. The local workspace installer registers ten plugins; native adapters are Swift modules, not JavaScript executed by Still. All configuration stays in `~/Library/Application Support/Still/native-plugins`. The installer/Task Watch CLI uses Node 24, while the Mac app remains native. GitHub and Vercel additionally need their own installed, authenticated CLIs.
+The mateonunez collection is built into the native app. A fresh app launch prepares ten disabled configurations without Node. The optional local workspace installer also registers ten plugins; native adapters are Swift modules, not JavaScript executed by Still. All configuration stays in `~/Library/Application Support/Still/native-plugins`. The installer/Task Watch CLI uses Node 24, while the Mac app remains native. GitHub and Vercel additionally need their own installed, authenticated CLIs.
 
 ```sh
 pnpm still:plugins list
@@ -75,3 +75,7 @@ Settings uses a persistent sidebar and header; only the current section content 
 Open the local Spotify app, then choose **Settings → Plugins → Configure Spotify → Allow Spotify Automation…**. Accept the system request if shown. A successful response connects the source; no grant is inferred from a timeout. A denied request points to Automation; an unresponsive player asks for a retry. Do not reset the system privacy database.
 
 The helper targets the running Spotify process, using fixed read-only Apple Events. `node scripts/verify-spotify-transport.mjs --app Still-preview` checks that helper returns playback state without track/artist titles. Its caller has a different permission attribution from a request originating in Still: a passing receipt does not prove Still's Automation grant.
+
+## Multiple displays
+
+One main scene follows the macOS main display ID. Secondary displays remain opaque with a Go to main display control; they do not duplicate clock, widgets or authentication. Physical topology and authentication acceptance remain required.

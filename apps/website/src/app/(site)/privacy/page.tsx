@@ -9,6 +9,10 @@ const content: ArticleContent = {
   lead: 'Still is being built around local preferences and system-owned authentication.',
   sections: [
     {
+      title: 'Plugin sources stay explicit.',
+      text: 'Native plugins read only the sources you configure: selected GitHub/Vercel resources through their separately authenticated CLIs, a selected local calendar with permission, local Spotify playback with Automation permission, system metrics, local clocks/timers and explicitly registered tasks. Weather sends your chosen coordinates to Open-Meteo. Titles for calendar and Spotify remain hidden unless enabled. Installing or discovering a module grants no source access.',
+    },
+    {
       title: 'On this website.',
       text: 'This site has no account, email signup, payment form or advertising analytics. Local fonts are served with the site. Hosting on Vercel involves ordinary request processing and hosting logs; visiting a website is not anonymous to its hosting provider.',
     },
@@ -26,7 +30,7 @@ const content: ArticleContent = {
     },
     {
       title: 'Local packages have a clear boundary.',
-      text: 'Importing a template or metadata package does not connect a source. Still validates its manifest, renders approved cards and runs no package code. A local metadata producer must be started separately and retains its own system permissions. Disabling it in Still removes its connection and displayed facts; it does not revoke that external program’s system access. There is no hosted marketplace or public app release.',
+      text: 'Importing a template or metadata package does not connect a source. Still validates its manifest, renders approved cards and runs no package code. A local metadata producer must be started separately and retains its own system permissions. Disabling it in Still removes its connection and displayed facts; it does not revoke that external program’s system access. The public catalog documents native modules and SDK resources; it has no account, submission or purchase flow. There is no public app release.',
     },
   ],
 };
