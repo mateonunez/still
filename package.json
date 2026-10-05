@@ -8,13 +8,15 @@
   "scripts": {
     "dev": "pnpm --filter @still/website dev",
     "build": "pnpm --filter @still/website build",
-    "check": "biome check apps/website scripts",
-    "check:fix": "biome check --write apps/website scripts",
+    "check": "biome check apps/website scripts packages/still-plugins plugins/mateonunez",
+    "check:fix": "biome check --write apps/website scripts packages/still-plugins plugins/mateonunez",
     "typecheck": "pnpm --filter @still/website typecheck",
     "check:brand": "node scripts/check-contrast.mjs",
     "verify:website": "node scripts/verify-website.mjs",
     "verify:native": "node scripts/verify-native-runtime.mjs",
-    "verify:energy": "node scripts/verify-native-energy.mjs"
+    "verify:energy": "node scripts/verify-native-energy.mjs",
+    "still:plugins": "node packages/still-plugins/src/cli.mjs",
+    "still:task": "node packages/still-plugins/src/task.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15"

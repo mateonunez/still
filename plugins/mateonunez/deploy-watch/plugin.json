@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 2,
+  "id": "co.mateonunez.still.deploy-watch",
+  "name": "Deploy Watch",
+  "version": "0.1.0",
+  "publisher": "mateonunez",
+  "license": "MIT",
+  "runtime": "native-builtin",
+  "capabilities": ["vercelDeploymentStatus"],
+  "configurationRequired": true
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 2,
+  "id": "co.mateonunez.still.task-watch",
+  "name": "Task Watch",
+  "version": "0.1.0",
+  "publisher": "mateonunez",
+  "license": "MIT",
+  "runtime": "native-builtin",
+  "capabilities": ["localTaskStatus"],
+  "configurationRequired": true
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 2,
+  "id": "co.mateonunez.still.agents",
+  "name": "Agents",
+  "version": "0.1.0",
+  "publisher": "mateonunez",
+  "license": "MIT",
+  "runtime": "native-builtin",
+  "capabilities": ["agentDiscovery", "quota", "agentActivity"],
+  "configurationRequired": true
+}

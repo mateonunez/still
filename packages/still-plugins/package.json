@@ -1,0 +1,17 @@
+{
+  "name": "@mateonunez/still-plugins",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "still-plugins": "src/cli.mjs",
+    "still-task": "src/task.mjs"
+  },
+  "scripts": {
+    "test": "node --test test/*.spec.mjs"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "license": "MIT"
+}

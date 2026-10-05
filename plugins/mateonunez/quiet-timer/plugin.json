@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 2,
+  "id": "co.mateonunez.still.quiet-timer",
+  "name": "Quiet Timer",
+  "version": "0.1.0",
+  "publisher": "mateonunez",
+  "license": "MIT",
+  "runtime": "native-builtin",
+  "capabilities": ["localTimer"],
+  "configurationRequired": true
+}
