@@ -31,15 +31,19 @@ public struct CanvasPlacement: Codable, Equatable, Sendable {
         Self(x: min(0.92, max(0.08, (x * 12).rounded() / 12)), y: min(0.76, max(0.16, (y * 8).rounded() / 8)), size: size, width: width)
     }
 }
+public enum CanvasLayoutMode: String, Codable, CaseIterable, Sendable { case grid, free }
 public struct ScreenComposition: Codable, Equatable, Sendable {
     public var version = 1
     public var placements: [String: CanvasPlacement] = [:]
+    public var layout: CanvasLayoutMode? = .grid
+    public var gridWidth: Double?
+    public var effectiveLayout: CanvasLayoutMode { layout ?? .free }
     public init() {}
     public func placement(_ id: String, index: Int = 0) -> CanvasPlacement {
         placements[id] ?? (id == "clock" ? CanvasPlacement(x: 0.5, y: 0.4) : CanvasPlacement(x: index % 2 == 0 ? 0.2 : 0.8, y: index < 2 ? 0.3 : 0.65))
     }
     public static func decode(_ data: Data) -> Self? {
-        guard data.count <= 16384, var value = try? JSONDecoder().decode(Self.self, from: data), value.version == 1, value.placements.count <= 11,
+        guard data.count <= 16384, var value = try? JSONDecoder().decode(Self.self, from: data), value.version == 1, value.placements.count <= 11, value.gridWidth == nil || (value.gridWidth!.isFinite && (180...600).contains(value.gridWidth!)),
               value.placements.allSatisfy({ key, point in (key == "clock" || NativePluginID(rawValue: key) != nil) && point.x.isFinite && point.y.isFinite && (0...1).contains(point.x) && (0...1).contains(point.y) && (point.width == nil || (point.width!.isFinite && (180...600).contains(point.width!))) }) else { return nil }
         if let root = try? JSONSerialization.jsonObject(with: data) as? [String: Any], let placements = root["placements"] as? [String: [String: Any]], let clock = placements["clock"], clock["width"] == nil { value.placements["clock"]?.width = nil }
         return value
@@ -53,6 +57,7 @@ public enum CanvasPreset: String, CaseIterable, Sendable {
 extension ScreenComposition {
     public static func preset(_ preset: CanvasPreset, ids: [NativePluginID]) -> Self {
         var scene = Self()
+        scene.layout = .free
         scene.placements["clock"] = CanvasPlacement(x: preset == .focus ? 0.4 : 0.5, y: preset == .dashboard ? 0.27 : 0.4)
         for (index, id) in ids.enumerated() {
             let x: Double

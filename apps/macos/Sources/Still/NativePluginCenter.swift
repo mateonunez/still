@@ -64,6 +64,11 @@ final class NativePluginCenter: ObservableObject {
         composition.placements[id] = placement.fitted()
         saveComposition()
     }
+    func setLayout(_ mode: CanvasLayoutMode) { composition.layout = mode; saveComposition() }
+    func setGridWidth(_ width: Double?) {
+        guard width == nil || (width!.isFinite && (180...600).contains(width!)) else { return }
+        composition.gridWidth = width; saveComposition()
+    }
     func resetComposition() { composition = ScreenComposition(); saveComposition() }
     func applyPreset(_ preset: CanvasPreset) { composition = ScreenComposition.preset(preset, ids: visibleIDs); saveComposition() }
     private func saveComposition() { if persistArrangement, let data = try? JSONEncoder().encode(composition) { UserDefaults.standard.set(data, forKey: "StillScreenComposition") } }
@@ -74,8 +79,14 @@ final class NativePluginCenter: ObservableObject {
     }
     func move(_ id: NativePluginID, by delta: Int) {
         guard let index = visibleIDs.firstIndex(of: id), visibleIDs.indices.contains(index + delta) else { return }
-        let neighbor = visibleIDs[index + delta]
-        if delta < 0 { move(id, before: neighbor) } else { move(neighbor, before: id) }
+        reorderVisible(id, over: visibleIDs[index + delta])
+    }
+    func reorderVisible(_ id: NativePluginID, over target: NativePluginID) {
+        guard id != target, let source = visibleIDs.firstIndex(of: id), let destination = visibleIDs.firstIndex(of: target) else { return }
+        var updated = order.filter { $0 != id }
+        guard let index = updated.firstIndex(of: target) else { return }
+        updated.insert(id, at: index + (destination > source ? 1 : 0)); order = updated
+        if persistArrangement { UserDefaults.standard.set(order.map(\.rawValue), forKey: "StillNativePluginOrder") }
     }
     var visibleCards: [NativePluginCard] { installed.filter { configurations[$0]?.enabled == true && configurations[$0]?.visible == true }.compactMap { cards[$0]?.current(now: Date()) } }
     var agentsEnabled: Bool { configurations[.agents]?.enabled == true }

@@ -67,6 +67,19 @@ enum NativePluginRuntimeProbe {
                     if let image = renderer.nsImage, let tiff = image.tiffRepresentation, let bitmap = NSBitmapImageRep(data: tiff), let png = bitmap.representation(using: .png, properties: [:]) { try png.write(to: directory.appendingPathComponent("canvas-\(preset.rawValue)-\(Int(viewport.width)).png")) }
                 }
             }
+            center.setLayout(.grid)
+            presentation.composition = center.composition
+            let gridCards = center.visibleCards
+            checks["gridIncludesEveryVisibleModule"] = gridCards.count == center.visibleIDs.count
+            for count in [min(4, gridCards.count), gridCards.count] {
+                presentation.nativeCards = Array(gridCards.prefix(count))
+                for viewport in [CGSize(width: 1024, height: 768), CGSize(width: 1512, height: 982), CGSize(width: 1920, height: 1080), CGSize(width: 2560, height: 1440)] {
+                    let renderer = ImageRenderer(content: CurtainView(presentation: presentation, authenticate: {}, evidenceRender: true).frame(width: viewport.width, height: viewport.height).environment(\.colorScheme, .dark))
+                    renderer.scale = 1
+                    if let image = renderer.nsImage, let tiff = image.tiffRepresentation, let bitmap = NSBitmapImageRep(data: tiff), let png = bitmap.representation(using: .png, properties: [:]) { try png.write(to: directory.appendingPathComponent("grid-\(count)-\(Int(viewport.width)).png")) }
+                }
+            }
+            presentation.nativeCards = gridCards
             for composition in ["corner", "rail", "canvas"] {
                 presentation.widgetLayout = composition
                 let renderer = ImageRenderer(content: CurtainView(presentation: presentation, authenticate: {}, evidenceRender: true).frame(width: 1920, height: 1080).environment(\.colorScheme, .dark))
