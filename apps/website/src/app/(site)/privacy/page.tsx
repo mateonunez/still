@@ -5,7 +5,7 @@ const content: ArticleContent = {
   title: 'A quieter screen. A clear boundary.',
   description:
     'How the Still website and current native development app handle privacy, authentication and local preferences.',
-  eyebrow: 'PRIVACY · OCTOBER 4, 2026',
+  eyebrow: 'PRIVACY · OCTOBER 5, 2026',
   lead: 'Still is being built around local preferences and system-owned authentication.',
   sections: [
     {
@@ -14,15 +14,19 @@ const content: ArticleContent = {
     },
     {
       title: 'In the development app.',
-      text: 'The current app stores appearance and inactivity preferences locally. It reads elapsed input time when inactivity activation is enabled, without recording what you type. It does not collect agent conversations, desktop screenshots or activity content. Explicit developer probes can write local diagnostic receipts.',
+      text: 'The current app stores appearance, inactivity and selected sources locally. It reads elapsed input time when inactivity activation is enabled, without recording what you type. It does not capture desktop screenshots during normal use. Explicit developer probes can write local diagnostic receipts.',
     },
     {
       title: 'Authentication belongs to macOS.',
       text: 'Touch ID and Mac-password authentication are handled by the system. Still does not receive or store the account password in a custom form.',
     },
     {
-      title: 'Future capabilities need new decisions.',
-      text: 'Agent awareness is future scope, intended for optional status and usage metadata. No provider integration is active. Privacy information will be updated as real product behavior changes.',
+      title: 'Agent information is optional.',
+      text: 'The development app can connect account quota through your installed Codex client or Claude Code status line. Activity requires separate opt-in local hooks. Their input may transiently contain prompts and tool content; the native helper discards that content, stores only anonymous event states and does not open referenced transcripts. Attention signals are temporary, not verified pending approvals. Decisions remain in the original client; Codex hook trust stays under your control.',
+    },
+    {
+      title: 'Local packages have a clear boundary.',
+      text: 'Importing a template or metadata package does not connect a source. Still validates its manifest, renders approved cards and runs no package code. A local metadata producer must be started separately and retains its own system permissions. Disabling it in Still removes its connection and displayed facts; it does not revoke that external program’s system access. There is no hosted marketplace or public app release.',
     },
   ],
 };

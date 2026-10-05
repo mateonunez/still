@@ -9,6 +9,14 @@ const content: ArticleContent = {
   lead: 'A public notebook for an app taking shape. Development progress is not a release announcement.',
   sections: [
     {
+      title: 'A small library. A clear contract.',
+      text: 'The development app now has a native Appearance, Sources and Library Hub. Local declarative packages use a versioned manifest and validated metadata; templates never connect a source. A developer validator and starter packages are prepared. Still renders the cards and runs no imported code; a hosted marketplace remains future scope.',
+    },
+    {
+      title: 'Optional agent signals.',
+      text: 'Native Codex and Claude account-quota sources are available in the local candidate. Separate opt-in hooks project anonymous activity states, with client trust and real event delivery still under acceptance. Attention is advisory; approval decisions stay in the original client. First-activation Touch ID and gesture exposure remain open native findings.',
+    },
+    {
       title: 'Porcelain, in light and dark.',
       text: 'The initial direction pairs warm porcelain and deep plum with burgundy accents, Instrument Serif display typography and native system controls. More themes remain an idea for later.',
     },
