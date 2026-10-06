@@ -34,7 +34,7 @@ export default async function Image() {
         <span>to step away.</span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 22, color: '#C5B0B8' }}>
-        <span>A native privacy screen for Mac.</span>
+        <span>A calm screen for a working Mac.</span>
         <span>meet-still.app</span>
       </div>
     </div>,

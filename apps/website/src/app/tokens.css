@@ -27,3 +27,21 @@
   --activitySecondary: #dac3cb;
   --focus: #edbed0;
 }
+[data-theme="glass"] {
+  --background: #ece9f2;
+  --surface: #fcfaff;
+  --textPrimary: #2a2130;
+  --textSecondary: #685d72;
+  --accent: #702c43;
+  --onAccent: #fff7f1;
+  --focus: #84384f;
+}
+[data-theme="glass"][data-appearance="dark"] {
+  --background: #17141f;
+  --surface: #2c2737;
+  --textPrimary: #f5eff7;
+  --textSecondary: #c3b5ce;
+  --accent: #d9a8b8;
+  --onAccent: #321e26;
+  --focus: #edbed0;
+}

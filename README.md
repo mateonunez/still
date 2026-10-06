@@ -1,71 +1,67 @@
 <p align="center">
-  <img src="design/still-banner.svg" alt="Still — Step away. Keep the momentum." width="100%" />
+  <img src="design/still-banner.svg" alt="Still — A little space to step away." width="100%" />
 </p>
 
 # Still
 
-A calm screen for your Mac, with optional inactivity activation.
+**A calm screen for a working Mac.**
 
-**In development · Native macOS · Direct distribution · Next.js website**
+Cover your desktop. Keep your Mac awake. Bring only the details you want into view.
 
-[Meet Still](https://meet-still.app) · [Development field notes](https://meet-still.app/changelog)
+[Meet Still](https://meet-still.app) · [Native plugins](https://meet-still.app/plugins) · [Developer SDK](https://meet-still.app/developers) · [MIT license](LICENSE)
 
-Still creates a visual privacy curtain over the desktop. It does not replace the macOS security lock or guarantee that every third-party task continues processing. Porcelain is the initial design standard, with warm light/dark appearances and a burgundy identity. The configurable [mateonunez native collection](docs/guides/native-plugins.md) includes ten plugins: Agents (Codex/Claude), Build Watch, Deploy Watch, Task Watch, Mac Pulse, Next Up, World Clock, Quiet Timer, Weather and Spotify. A local declarative plugin SDK/importer and optional advisory agent activity hooks are implemented; a [public catalog](https://meet-still.app/plugins) and [developer SDK](https://meet-still.app/developers) are available; community submissions remain future scope. Porcelain and Glass are the two official native themes; see the [screen personalization guide](docs/guides/screen-personalization.md).
+**In development.** The source repository is private. There is no public native download, published npm package or working Homebrew install command yet.
 
-## Try the native preview
+## Your kind of quiet
+
+- **Porcelain and Glass.** Two official themes, each in light and dark, with licensed local fonts and native controls.
+- **A screen you compose.** Arrange the clock and widgets in adaptive Grid or continuous Free layout. Save your composition.
+- **Ten optional native plugins.** Agents (Codex and Claude), Build Watch, Deploy Watch, Task Watch, Mac Pulse, Next Up, World Clock, Quiet Timer, Weather and Spotify. Every source has its own configuration.
+- **An intentional return.** System-owned Touch ID where available, with Mac-password fallback in the macOS dialog.
+- **Keep-awake while covered.** Activate from the menu bar or after inactivity. Still releases its owned request on return or suspension; explicit sleep remains available.
+- **A foundation for builders.** Versioned declarative metadata and template contracts, starter resources and human/agent guides. Imported packages never execute code inside Still.
+
+Still is a visual privacy curtain, not the macOS security lock. Desktop gestures can expose windows in the development candidate. It does not pause apps itself or guarantee progress in every task. Use the system lock when you need to secure your session. [Behavior and limitations](docs/guides/pre-release-native-checks.md)
+
+## Run locally
+
+Requires Node 24, pnpm and Xcode/Swift for the native app.
 
 ```sh
-./scripts/build-macos.sh
-open out/Still.app
+./scripts/build-macos.sh debug Still-polish
+open "$(node scripts/native-candidate.mjs --path)"
 ```
 
-Manual curtain, Porcelain light/dark/system, a contextual menu and embedded Touch ID with system-password fallback are implemented. This is an ad-hoc signed development app; the authentication and desktop-mode acceptance checks remain open. See the [user guide](docs/guides/native-preview.md), [Phase 1 evidence](docs/verification/phase-01-native-curtain.md) and [interaction refinement](docs/verification/phase-01-interaction-refinement.md). The latest design candidate is `out/Still-design.app`; quit other Still instances before opening it. See [adaptive Grid and Free layouts](docs/verification/adaptive-native-grid.md).
+Quit other Still instances before opening a candidate. This builds an ad-hoc development `.app`, not a signed/notarized beta. [Native guide](docs/guides/native-preview.md) · [Exact-candidate handoff](docs/guides/beta-handoff.md)
 
-The candidate includes optional inactivity activation, disabled initially. The Mac stays awake automatically while the curtain is active; the display stays on until return or suspension. Independent timed awake/display controls remain hidden, with their implementation retained. macOS 26 uses native Liquid Glass controls with a solid privacy curtain and accessibility fallbacks. Read the [inactivity guide](docs/guides/idle-and-energy.md) and [latest refinement](docs/verification/phase-02-deferred-awake-and-spaces.md). Mission Control and trackpad desktop transitions remain known coverage limitations.
-
-## Explore the design
+For the Next.js website and local design illustrations:
 
 ```sh
+pnpm install
 pnpm dev
 ```
 
-Open [Porcelain Light](http://127.0.0.1:3000/preview?theme=porcelain&view=screen&appearance=light) or [Porcelain Dark](http://127.0.0.1:3000/preview?theme=porcelain&view=screen&appearance=dark). Switch appearance, inspect settings and preview the website. Other theme directions remain available for future collections.
+Visit `http://127.0.0.1:3000`. The local `/preview` illustrates designs with sample data; it is noindex and unavailable in production. Native UI and the browser illustration remain distinct.
 
-This is a disposable browser prototype. Authentication, activity and energy are simulated. It never locks the Mac, changes power settings, or reads agent conversations. The preview and production landing share the existing Next.js app; no Python server is required. Preview routes are local, noindex and unavailable on production.
+## Build on Still
 
-## Product and architecture
+Start with the [plugin developer guide](docs/guides/plugin-development.md), [native collection](docs/guides/native-plugins.md) or [public SDK](https://meet-still.app/developers). The catalog documents built-in plugins; community publishing, remote installers and automatic updates are future work.
 
-| Area | Direction | Current state |
-| --- | --- | --- |
-| Mac app | SwiftUI + AppKit, OS-owned authentication, scoped power controls | Local `.app` built; structural checks pass; native interaction acceptance pending |
-| Appearance | Porcelain, burgundy, light/dark/system | Interactive design preview with local licensed fonts |
-| Website | Next.js App Router, typed content/SEO, local fonts | Live on [meet-still.app](https://meet-still.app); GitHub-connected Vercel builds |
-| Distribution | Signed/notarized app download; evaluate Homebrew cask | No release, hosted package or usable install command |
-| Plugins and agents | Ten configurable native plugins; separate declarative SDK | Live sources exercised locally; Calendar consent, fresh-install source revocation and physical acceptance pending; no approval actions |
+[Contributing](CONTRIBUTING.md) · [Developer practices](docs/development/practices.md) · [Architecture](docs/architecture.md) · [Roadmap](docs/roadmap.md)
 
-## Workspace map
-
-- [Development status](docs/development/README.md) · [developer practices](docs/development/practices.md)
-- [Roadmap](docs/roadmap.md) · [Product strategy](docs/product-strategy.md) · [decisions](docs/decisions.md) · [architecture](docs/architecture.md)
-- [Brand fundamentals](docs/brand-fundamentals.md) · [design contract](DESIGN.md) · [canonical tokens](design/tokens.json)
-- [Native feasibility](docs/research/macos-feasibility.md) · [direct distribution](docs/distribution.md)
-- [Next.js website plan](docs/website-plan.md) · [launch strategy](docs/launch-strategy.md)
-- [Website/hosting guide](docs/guides/website-and-hosting.md) · [delivery evidence](docs/verification/phase-04-website-and-hosting.md)
-- [Widgets and plugins](docs/plugins-and-widgets.md) · [Plugin developer guide](docs/guides/plugin-development.md) · [Agent awareness](docs/agent-awareness.md) · [prototype notes](prototypes/NOTES.md)
-
-## Verify the workspace
+## Verify
 
 ```sh
 pnpm check
-pnpm build
 pnpm typecheck
 pnpm check:brand
+pnpm build
 ```
 
-Palette roles are checked from the source tokens. Bundled font files include licenses and [provenance hashes](design/fonts/manifest.json). No system-wide font installation or font CDN is needed.
+Source targets macOS 14+; Apple Silicon runtime checks and Intel cross-compilation are separate evidence. The final support matrix is not announced. [Compatibility research](docs/research/macos-compatibility.md) · [Verification reports](docs/verification/pre-beta-refinement.md)
 
-## Project status
+## License and credits
 
-Source is private under [mateonunez/still](https://github.com/mateonunez/still). The public Next.js site is hosted by the personal [Vercel project](https://vercel.com/mmateonunez/still). Native acceptance, Developer ID signing, pricing and public app release remain separate steps. There is no App Store release planned.
+Original code and documentation are [MIT licensed](LICENSE). Bundled Instrument Serif and Inter retain their SIL Open Font Licenses; preserve [third-party notices](THIRD_PARTY_NOTICES.md).
 
-Development requires Node 24/pnpm and Xcode/Swift for native builds. Verification tools use Node; Python is not required. See the [preview guide](docs/guides/design-preview.md).
+Made by [Mateo Nunez](https://mateonunez.co). Still is distributed directly; no Mac App Store release is planned.

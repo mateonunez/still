@@ -37,6 +37,9 @@ export default function DeveloperPage() {
         </a>
         <a href="/llms-full.txt">Agent guide</a>
         <a href="/plugins/catalog.json">JSON catalog</a>
+        <a href="/sdk/LICENSE" download>
+          MIT license
+        </a>
       </nav>
       <section>
         <h2>A manifest. A separate producer.</h2>

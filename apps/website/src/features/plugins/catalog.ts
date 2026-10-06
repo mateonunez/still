@@ -6,7 +6,7 @@ const details: Record<string, Details> = {
     summary: 'Codex and Claude, together. Account quota and optional activity at a glance.',
     source: 'Installed Codex and Claude Code clients.',
     setup:
-      'Enable Agents. Discover installed clients, then connect quota and activity separately in Settings → Agents. Codex hooks require client trust.',
+      'Enable Agents. Discover installed clients, then connect quota and activity separately in Settings → Agents. Codex hooks require client trust. Activity is a separate signal: work observations expire after two minutes without a new event; silence does not mean the agent stopped.',
     privacy:
       'No conversations or credentials. Hooks discard prompt/tool content and store anonymous, expiring states. Attention is advisory; decisions stay in the original client.',
     category: 'Work',

@@ -30,7 +30,7 @@ const content: ArticleContent = {
     },
     {
       title: 'Can I download it now?',
-      text: 'A public app download is not available. The local development preview is being tested before signing, notarization and distribution. Compatibility and pricing will be published with a verified release.',
+      text: 'A public app download is not available. The native candidate is being tested before signing, notarization and distribution. The end-user beta will list verified compatibility and known limitations. Original code and documentation are MIT licensed; source access remains private during development.',
     },
   ],
 };

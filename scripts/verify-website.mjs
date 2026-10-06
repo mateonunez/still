@@ -16,6 +16,7 @@ const paths = [
   '/changelog',
   '/plugins',
   '/developers',
+  '/license',
   ...manifests.map((plugin) => `/plugins/${plugin.slug}`),
 ];
 const origin = 'https://meet-still.app';
@@ -105,6 +106,8 @@ for (const [source, resource] of [
   ['examples/plugins/local-signals.stillplugin/manifest.json', '/sdk/local-signals/manifest.json'],
   ['examples/plugins/porcelain-rail.stillplugin/manifest.json', '/sdk/porcelain-rail/manifest.json'],
   ['examples/plugins/publish-sample.mjs', '/sdk/publish-sample.mjs'],
+  ['LICENSE', '/license.txt'],
+  ['LICENSE', '/sdk/LICENSE'],
 ]) {
   assert.equal(
     await (await fetchRoute(resource)).text(),

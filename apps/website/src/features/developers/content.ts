@@ -1,7 +1,11 @@
 export const developerSections = [
   {
+    title: 'MIT licensed. Ready to build on.',
+    text: 'Still’s original code, schemas and starter resources use the MIT license. Preserve the copyright and license notice when sharing copies. Bundled fonts retain their own licenses. Source access remains private during development; the public SDK resources do not imply a public app download or package publication.',
+  },
+  {
     title: 'Two extension paths.',
-    text: 'The ten native plugins are reviewed, compiled modules shipped with Still. Their catalog/configuration uses schema version 2. The public local SDK uses declarative schema/protocol version 1 for metadata and Porcelain templates. These contracts are different; a manifest does not install executable code. Still does not run imported packages or start a metadata producer.',
+    text: 'The ten native plugins are reviewed, compiled modules shipped with Still. Their catalog/configuration uses schema version 2. The public local SDK uses declarative schema/protocol version 1 for metadata and Porcelain templates. The native screen supports Porcelain and Glass, while the v1 imported-template contract remains Porcelain-only. These contracts are different; a manifest does not install executable code. Still does not run imported packages or start a metadata producer.',
   },
   {
     title: 'Start with a small package.',

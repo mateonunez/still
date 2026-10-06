@@ -11,9 +11,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/changelog',
     '/plugins',
     '/developers',
+    '/license',
     ...plugins.map((plugin) => `/plugins/${plugin.slug}`),
   ].map((path) => ({
     url: `${site.origin}${path}`,
-    lastModified: new Date('2026-10-05T00:00:00Z'),
+    lastModified: new Date(
+      [
+        '/',
+        '/how-it-works',
+        '/download',
+        '/support',
+        '/license',
+        '/changelog',
+        '/developers',
+        '/plugins/agents',
+      ].includes(path)
+        ? '2026-10-06T00:00:00Z'
+        : '2026-10-05T00:00:00Z',
+    ),
   }));
 }

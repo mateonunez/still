@@ -14,7 +14,7 @@ const content: ArticleContent = {
     },
     {
       title: 'A curtain, when you choose.',
-      text: 'Still lives in the menu bar. Show it manually, or choose a period of inactivity. Porcelain covers the desktop in warm light or deep-plum dark. After returning, a fresh inactivity interval begins.',
+      text: 'Still lives in the menu bar. Show it manually, or choose a period of inactivity. Pick warm Porcelain or softly lit Glass, each in light or dark. After returning, a fresh inactivity interval begins.',
     },
     {
       title: 'A familiar way back.',

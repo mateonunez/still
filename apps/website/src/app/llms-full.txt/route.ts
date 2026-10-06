@@ -7,7 +7,7 @@ export function GET() {
     `Native macOS visual privacy curtain, not the macOS security lock. In development; no public app download or guaranteed supported hardware matrix.`,
     developerIntro,
     ...developerSections.map((section) => `## ${section.title}\n${section.text}`),
-    `## Resources\nhttps://meet-still.app/sdk/plugin-manifest-v1.schema.json\nhttps://meet-still.app/sdk/plugin-snapshot-v1.schema.json\nhttps://meet-still.app/sdk/local-signals/manifest.json\nhttps://meet-still.app/sdk/porcelain-rail/manifest.json\nhttps://meet-still.app/sdk/publish-sample.mjs\nhttps://meet-still.app/plugins/catalog.json`,
+    `## Resources\nhttps://meet-still.app/sdk/plugin-manifest-v1.schema.json\nhttps://meet-still.app/sdk/plugin-snapshot-v1.schema.json\nhttps://meet-still.app/sdk/local-signals/manifest.json\nhttps://meet-still.app/sdk/porcelain-rail/manifest.json\nhttps://meet-still.app/sdk/publish-sample.mjs\nhttps://meet-still.app/plugins/catalog.json\nhttps://meet-still.app/license\nhttps://meet-still.app/sdk/LICENSE`,
     `## Native collection`,
     ...plugins.map(
       (plugin) =>

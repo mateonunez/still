@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { site } from '@/content/site';
 import { Mark } from './mark';
 
 export function Header() {
@@ -13,7 +14,7 @@ export function Header() {
         <Link href="/plugins">Plugins</Link>
         <Link href="/developers">Developers</Link>
         <Link className="nav-pill" href="/download">
-          In development <span aria-hidden="true">↗</span>
+          Beta status <span aria-hidden="true">↗</span>
         </Link>
       </nav>
     </header>
@@ -27,8 +28,8 @@ export function Footer() {
           <Mark />
           Still<span className="wordmark-dot">.</span>
         </Link>
-        <p>Made with care, for the moments between.</p>
-        <a href="https://mateonunez.co">A personal project by Mateo Nunez ↗</a>
+        <p>{site.tagline}</p>
+        <a href="https://mateonunez.co">Made by Mateo Nunez ↗</a>
       </div>
       <nav aria-label="Footer navigation">
         <Link href="/plugins">Plugins</Link>
@@ -36,8 +37,9 @@ export function Footer() {
         <Link href="/support">Support</Link>
         <Link href="/privacy">Privacy</Link>
         <Link href="/changelog">Changelog</Link>
+        <Link href="/license">MIT license</Link>
       </nav>
-      <span className="footer-note">Native macOS · Coming into focus</span>
+      <span className="footer-note">Native macOS · MIT licensed · In development</span>
     </footer>
   );
 }

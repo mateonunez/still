@@ -20,12 +20,14 @@ const feature = join(root, 'apps/website/src/features/plugins');
 await mkdir(feature, { recursive: true });
 await writeFile(join(feature, 'native-manifests.json'), `${JSON.stringify(manifests, null, 2)}\n`);
 const publicRoot = join(root, 'apps/website/public/sdk');
+await copyFile(join(root, 'LICENSE'), join(root, 'apps/website/public/license.txt'));
 for (const [source, destination] of [
   ['schemas/plugin-manifest-v1.schema.json', 'plugin-manifest-v1.schema.json'],
   ['schemas/plugin-snapshot-v1.schema.json', 'plugin-snapshot-v1.schema.json'],
   ['examples/plugins/local-signals.stillplugin/manifest.json', 'local-signals/manifest.json'],
   ['examples/plugins/porcelain-rail.stillplugin/manifest.json', 'porcelain-rail/manifest.json'],
   ['examples/plugins/publish-sample.mjs', 'publish-sample.mjs'],
+  ['LICENSE', 'LICENSE'],
 ]) {
   await mkdir(join(publicRoot, destination, '..'), { recursive: true });
   await copyFile(join(root, source), join(publicRoot, destination));

@@ -11,7 +11,7 @@ const display = localFont({
 const inter = localFont({ src: '../../public/fonts/InterVariable.woff2', variable: '--font-ui', display: 'swap' });
 export const metadata: Metadata = {
   metadataBase: new URL(site.origin),
-  title: { default: 'Still — A calm privacy screen for Mac', template: '%s · Still' },
+  title: { default: 'Still — A calm screen and keep-awake app for Mac', template: '%s · Still' },
   description: site.description,
   applicationName: 'Still',
 };

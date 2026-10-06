@@ -5,16 +5,20 @@ const content: ArticleContent = {
   title: 'Small steps. Thoughtful details.',
   description:
     'Still development field notes: Porcelain, native authentication, inactivity and current desktop coverage work.',
-  eyebrow: 'FIELD NOTES · OCTOBER 5, 2026',
+  eyebrow: 'FIELD NOTES · OCTOBER 6, 2026',
   lead: 'A public notebook for an app taking shape. Development progress is not a release announcement.',
   sections: [
+    {
+      title: 'One voice. An MIT foundation.',
+      text: 'The product story now centers on “A little space to step away.” The website explains the everyday workflow, keeps beta availability clear and publishes the MIT license alongside font notices. Compatibility targets include macOS 14+ and both architectures; real older-system and Intel acceptance remain open. The beta is being prepared for end users, not a fixed small cohort.',
+    },
     {
       title: 'Ten native plugins. One quiet screen.',
       text: 'The development app now includes the mateonunez collection: Agents, Build Watch, Deploy Watch, Task Watch, Mac Pulse, Next Up, World Clock, Quiet Timer, Weather and Spotify. Each source has its own configuration. Spotify playback has been confirmed in the native candidate; broader source, permission and failure cases remain under acceptance.',
     },
     {
       title: 'Make room, across the screen.',
-      text: 'A full-screen editor positions the clock and native widgets, with grid snapping, size choices and saved layouts. General, Appearance, Agents and Plugins now share one Settings window. Collision handling, varied display geometries and accessibility still need refinement.',
+      text: 'A full-screen editor positions the clock and native widgets, with adaptive Grid, continuous Free placement and saved layouts. General, Appearance, Agents and Plugins now share one Settings window. Collision handling, varied display geometries and accessibility still need refinement.',
     },
     {
       title: 'A public foundation for builders.',
@@ -30,7 +34,7 @@ const content: ArticleContent = {
     },
     {
       title: 'Porcelain, in light and dark.',
-      text: 'The initial direction pairs warm porcelain and deep plum with burgundy accents, Instrument Serif display typography and native system controls. More themes remain an idea for later.',
+      text: 'The initial direction pairs warm porcelain and deep plum with burgundy accents, Instrument Serif display typography and native system controls. Glass is now the second official native theme, with Still-owned scenery and within-window content materials. Both themes support light and dark appearances; physical material and accessibility acceptance remain in progress.',
     },
     {
       title: 'A native beginning.',

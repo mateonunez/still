@@ -1,14 +1,22 @@
 'use client';
 
 import { useState } from 'react';
+import { site } from '@/content/site';
 import { Mark } from './mark';
 
 export function Preview() {
   const [appearance, setAppearance] = useState<'light' | 'dark'>('dark');
+  const [theme, setTheme] = useState<'porcelain' | 'glass'>('porcelain');
   return (
-    <section className="preview-section" id="preview" aria-label="Porcelain design preview">
+    <section className="preview-section" id="preview" aria-label="Still theme illustration">
       <div className="preview-top">
-        <span className="eyebrow">PORCELAIN, BY STILL</span>
+        <fieldset className="appearance-picker" aria-label="Preview theme">
+          {(['porcelain', 'glass'] as const).map((value) => (
+            <button type="button" key={value} aria-pressed={theme === value} onClick={() => setTheme(value)}>
+              {value === 'porcelain' ? 'Porcelain' : 'Glass'}
+            </button>
+          ))}
+        </fieldset>
         <fieldset className="appearance-picker" aria-label="Preview appearance">
           {(['light', 'dark'] as const).map((mode) => (
             <button type="button" key={mode} aria-pressed={appearance === mode} onClick={() => setAppearance(mode)}>
@@ -17,16 +25,38 @@ export function Preview() {
           ))}
         </fieldset>
       </div>
-      <div className="screen" data-appearance={appearance}>
+      <div className="screen" data-theme={theme} data-appearance={appearance}>
         <div className="screen-brand">
           <Mark />
           <span>Still</span>
-          <span className="screen-theme">PORCELAIN</span>
+          <span className="screen-theme">{theme.toUpperCase()}</span>
         </div>
+        <aside className="screen-widgets" aria-label="Sample widgets">
+          <div className="screen-widget">
+            <div className="screen-widget-heading">
+              <strong>Agents</strong>
+              <span>Sample</span>
+            </div>
+            <p>Codex · Weekly quota 42%</p>
+            <p>Claude · Activity observed</p>
+          </div>
+          <div className="screen-widget">
+            <div className="screen-widget-heading">
+              <strong>World Clock</strong>
+              <span>Sample</span>
+            </div>
+            <p>
+              Milan <span>20:24</span>
+            </p>
+            <p>
+              New York <span>14:24</span>
+            </p>
+          </div>
+        </aside>
         <div className="screen-time">
           <p>SUNDAY, OCTOBER 4</p>
           <span>20:24</span>
-          <h2>A little space to step away.</h2>
+          <p className="screen-message">{site.tagline}</p>
         </div>
         <div className="screen-return">
           <svg aria-hidden="true" viewBox="0 0 32 32" fill="none">
@@ -41,7 +71,10 @@ export function Preview() {
         </div>
         <div className="screen-edge">YOUR DESKTOP CAN WAIT.</div>
       </div>
-      <p className="preview-caption">An interactive design preview. Native app in development.</p>
+      <p className="preview-caption" aria-live="polite">
+        {theme === 'glass' ? 'Glass: soft light and native materials.' : 'Porcelain: warm tones and quiet typography.'}{' '}
+        A web illustration with sample widgets, not a native screenshot. App in development.
+      </p>
     </section>
   );
 }

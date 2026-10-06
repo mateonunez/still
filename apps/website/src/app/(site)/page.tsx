@@ -3,22 +3,22 @@ import { pageMetadata, site } from '@/content/site';
 import { Preview } from '@/features/home/preview';
 import { plugins } from '@/features/plugins/catalog';
 
-export const metadata = pageMetadata('Still — A calm privacy screen for Mac', site.description, '/');
+export const metadata = pageMetadata('Still — A calm screen and keep-awake app for Mac', site.description, '/');
 const benefits = [
   [
     '01',
-    'A quieter kind of screen.',
-    'Warm porcelain. Deep burgundy. A little breathing room, in light or dark. Beautiful enough to leave on.',
+    'A screen that feels like yours.',
+    'Warm Porcelain or softly lit Glass. Light or dark. Arrange your clock and widgets across the screen, with room to breathe.',
   ],
   [
     '02',
-    'Made to feel like your Mac.',
-    'A native menu-bar app, with system-owned Touch ID and Mac-password authentication. Familiar, intentional, yours.',
+    'Keep the Mac awake.',
+    'While Still is active, it requests that your Mac and display stay awake. Show it from the menu bar or after a period of inactivity.',
   ],
   [
     '03',
-    'Step away on your terms.',
-    'Show Still when you choose, or after inactivity. Your Mac and display stay awake while covered. System-owned authentication brings you back.',
+    'A familiar way back.',
+    'Return with Touch ID on supported hardware or your Mac password in the system dialog. Authentication stays with macOS.',
   ],
 ] as const;
 
@@ -39,30 +39,29 @@ export default function Home() {
             <span className="status-dot" /> A NATIVE PRIVACY SCREEN FOR MAC
           </p>
           <h1>
-            Step away.
+            A little space
             <br />
-            <em>Stay in flow.</em>
+            <em>to step away.</em>
           </h1>
           <p className="hero-description">
-            A beautiful screen for the moments between.
-            <br className="desktop-break" /> Cover your desktop. Keep a little of your world in view.
+            Cover your desktop. Keep your Mac awake.
+            <br className="desktop-break" /> Bring only the details you want into view.
           </p>
           <div className="hero-actions">
             <a className="button-primary" href="#preview">
               Explore Still <span aria-hidden="true">↓</span>
             </a>
-            <Link className="text-link" href="/how-it-works">
-              Meet the idea <span aria-hidden="true">↗</span>
+            <Link className="text-link" href="/download">
+              Beta status <span aria-hidden="true">↗</span>
             </Link>
           </div>
-          <p className="hero-footnote">Native macOS. Thoughtfully private. In development.</p>
+          <p className="hero-footnote">Native macOS · MIT licensed · In development</p>
         </div>
         <div className="hero-aside">
           <div className="orb" aria-hidden="true" />
           <p className="aside-caption">
             A pause for your screen.
-            <br />
-            Room for everything else.
+            <br />A little of your world in view.
           </p>
           <span className="aside-index" aria-hidden="true">
             STILL / 001
@@ -78,9 +77,32 @@ export default function Home() {
           always need an audience.
         </h2>
         <p>
-          Still is a visual privacy curtain: an elegant surface over your desktop, with an intentional return. It
-          doesn’t pause your apps itself, and it doesn’t replace the macOS security lock.
+          A build is running. A track is playing. You’re taking a moment. Still gives your desktop a calmer face, with
+          just the details you choose. It covers the screen without pausing your apps itself.
         </p>
+      </section>
+      <section className="workflow" aria-labelledby="workflow-title">
+        <div className="workflow-heading">
+          <p className="eyebrow">THREE SMALL STEPS</p>
+          <h2 id="workflow-title">Make it yours. Then step away.</h2>
+        </div>
+        <ol>
+          <li>
+            <span className="benefit-number">01</span>
+            <h3>Choose your quiet.</h3>
+            <p>Pick a theme. Connect the widgets you need. Arrange them in Grid or Free layout.</p>
+          </li>
+          <li>
+            <span className="benefit-number">02</span>
+            <h3>Show Still.</h3>
+            <p>Use the menu bar, or let an inactivity interval bring Still into view.</p>
+          </li>
+          <li>
+            <span className="benefit-number">03</span>
+            <h3>Come back.</h3>
+            <p>Use system authentication to return. Still releases its keep-awake request.</p>
+          </li>
+        </ol>
       </section>
       <section className="benefits" aria-label="What makes Still different">
         {benefits.map(([number, title, text]) => (
@@ -99,8 +121,8 @@ export default function Home() {
           Room for quiet.
         </h2>
         <p>
-          Move and resize native widgets in a full-screen editor. Follow your agents, a build, your next event or the
-          music playing nearby. Connect only the sources you choose.
+          Ten optional native plugins, each with its own settings. Keep an eye on agent quota and recent signals, a
+          build, your next event or Spotify playback. Move and resize the modules across your screen.
         </p>
         <div className="product-extension-links">
           {plugins.map((plugin) => (
@@ -113,18 +135,51 @@ export default function Home() {
           Explore the native collection ↗
         </Link>
       </section>
+      <section className="home-questions" aria-labelledby="questions-title">
+        <p className="eyebrow">A FEW THINGS TO KNOW</p>
+        <h2 id="questions-title">Quiet, with clear boundaries.</h2>
+        <details>
+          <summary>Does Still lock my Mac?</summary>
+          <p>
+            Still is a visual privacy curtain, not the macOS security lock. Desktop and Mission Control gestures can
+            expose windows in the development candidate. Use the system lock when you need to secure your session.
+          </p>
+        </details>
+        <details>
+          <summary>Will my work keep running?</summary>
+          <p>
+            Still does not pause your apps and requests that the Mac stay awake while covered. Task progress depends on
+            each app and its connection. Closing the lid, manual Sleep and system overrides remain available.
+          </p>
+        </details>
+        <details>
+          <summary>What do the agent widgets read?</summary>
+          <p>
+            Optional account quota and recent anonymous activity signals from configured Codex and Claude sources. They
+            do not display conversations or decide approvals. Connect only what you want.
+          </p>
+        </details>
+        <details>
+          <summary>Can I try the beta?</summary>
+          <p>
+            The beta is being prepared for end users. There is no public app download yet.{' '}
+            <Link href="/download">See availability and compatibility</Link>, or{' '}
+            <Link href="/changelog">follow development</Link>.
+          </p>
+        </details>
+      </section>
       <section className="closing">
-        <p className="eyebrow">A SMALL APP. A CONSIDERED BEGINNING.</p>
+        <p className="eyebrow">BUILT FOR THE MOMENTS BETWEEN</p>
         <h2>
-          Still is coming
+          Your next pause.
           <br />
-          <em>into focus.</em>
+          <em>A little more yours.</em>
         </h2>
-        <p>We’re refining the native experience, one thoughtful detail at a time.</p>
-        <Link className="button-primary" href="/changelog">
-          Follow the field notes <span aria-hidden="true">↗</span>
+        <p>Still is in development. Explore the screen today; follow its path to an end-user beta.</p>
+        <Link className="button-primary" href="/download">
+          See beta status <span aria-hidden="true">↗</span>
         </Link>
-        <p className="closing-note">Porcelain. Ten configurable native plugins. A considered path to beta.</p>
+        <p className="closing-note">Porcelain and Glass · Ten native plugins · MIT licensed</p>
       </section>
     </main>
   );

@@ -1,12 +1,12 @@
 # Still — brand fundamentals
 
-Working name: Still. Established 2026-10-04. Brand direction: Porcelain, shifted from olive to burgundy. Domain, trademark clearance, final app icon and bundle identity are not established.
+Product name: Still. Established 2026-10-04; copy refreshed 2026-10-06. Porcelain leads with burgundy; Glass is the second official native theme. The selected domain is `meet-still.app`. Trademark clearance and release bundle identity remain separate final checks.
 
 ## Character
 
 Still is calm, deliberate and personal. The name expresses a visual pause while the computer can continue working. Use generous space, warm materials, confident serif typography and small, precise controls. Burgundy adds warmth and identity; avoid saturating the entire screen or introducing ornamental gradients into the standard theme.
 
-Working wordmark: `Still` in Instrument Serif Regular. The two-stroke pause mark in the preview is an exploratory supporting motif, not the final app icon.
+Wordmark: `Still` in Instrument Serif Regular. The supporting symbol is the open ring and dot used by the website and native menu bar. Keep its silhouette consistent across the favicon and repository banner; packaging a final app icon remains separate work.
 
 ## Palette
 
@@ -32,7 +32,7 @@ node scripts/generate-website-tokens.mjs
 node scripts/check-contrast.mjs
 ```
 
-Generated CSS is a prototype artifact. The native app and Next.js site will consume the same semantic roles through platform-specific mappings.
+Generated CSS feeds the Next.js site and preview. The native app consumes the same semantic roles through its platform mapping. Preserve the canonical source when refining either surface.
 
 ## Typography
 
@@ -47,16 +47,16 @@ Instrument Serif and Inter are distributed under SIL Open Font License terms by 
 
 Write natural English, with short sentences and concrete benefits. Prefer “Cover screen,” “Return to desktop,” “Keep Mac awake,” and “Needs your attention.” Avoid productivity hype, defensive legal language in the hero, invented testimonials and promises of universal task continuation.
 
-Hero: **Step away. Keep the momentum.**
+Brand line and hero: **A little space to step away.**
 
-Supporting sentence: **A calm screen for your Mac, with simple keep-awake controls and optional activity at a glance.**
+Supporting sentence: **Cover your desktop. Keep your Mac awake. Bring only the details you want into view.**
 
 Security explanation: **Still covers your desktop for visual privacy. Use the macOS system lock when you need to secure your session.**
 
-SEO descriptor: **Still — a calm screen and keep-awake app for Mac.** The brand name alone is too broad to explain the product in a search result.
+SEO descriptor: **Still — a calm screen and keep-awake app for Mac.** The brand name alone is too broad to explain the product in a search result. The [copy contract](marketing/brand-and-copy.md) defines message hierarchy, availability wording and license claims.
 
 ## Brand applications
 
-Use the same name, visual roles and primary message across the app, landing, README, release notes and future installer. Marketing screenshots must show the build being shipped. Keep agent-awareness and marketplace concepts clearly separate from available features.
+Use the same name, visual roles and primary message across the app, landing, README, release notes and future installer. Marketing screenshots must show the build being shipped. Label web illustrations and sample data. The native plugin catalog and SDK are distinct from future community publishing or a remote marketplace.
 
 The repository should feel edited: an original banner, concise product explanation, real preview, working instructions, architecture map and accurate status. Do not add fabricated build badges, stars, downloads, pricing, license claims, sponsor links or install commands for packages that do not exist.
