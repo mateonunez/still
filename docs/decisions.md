@@ -5,7 +5,7 @@ Prepared for joint review. Recommendations are not approvals.
 | ID | Question | Recommendation | Status |
 | --- | --- | --- | --- |
 | D01 | Ambient screen or OS-equivalent security? | Private, elegant screen while the Mac continues working; preserve an honest boundary and native-lock access | Selected ambient screen on 2026-10-04 |
-| D02 | Default visual direction? | Porcelain as the initial standard, with light and dark appearances | Selected on 2026-10-04; other themes retained for future collections |
+| D02 | Default visual direction? | Porcelain as the initial standard, with light and dark appearances | Porcelain selected on 2026-10-04; Glass selected as the second official theme on 2026-10-06; other themes retained for future collections |
 | D03 | First release activity scope? | Hidden by default; selected app names/counts, session-local recent events | Decision pending |
 | D04 | Authentication scope? | Embedded system Touch ID + Mac password in the system dialog; no app PIN/custom password | Selected this combination on 2026-10-04; implemented refinement, hardware acceptance pending |
 | D05 | Energy concept? | Automatic display/system-awake request while covered; retain hidden timed/display controls | Curtain default selected on 2026-10-05; display stays on while covered; prolonged screen-saver acceptance pending |

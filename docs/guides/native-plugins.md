@@ -101,3 +101,7 @@ Choose **Arrangement → Grid** for equal-width columns, aligned row starts and 
 Leave **Automatic columns** on to adapt to the current main display. Turn it off to use the continuous **Preferred column width** slider; this is a grid-wide preference, not a fixed size category. Resize handles and per-module widths belong to Free mode. Drag a module onto another highlighted module to reorder; release in empty space to keep the order. Directional buttons move within the visible grid order, including a whole-row step vertically. The clock stays in its dedicated region in Grid.
 
 New scenes/reset use Grid. Existing saved scenes remain Free; switching modes retains free positions and widths. No source or visibility is enabled by switching modes. A dense scene may exceed a small display's content area: the editor reports crowding instead of overlapping grid cells. Review [grid evidence](../verification/adaptive-native-grid.md) before treating interaction smoothness as accepted.
+
+### Current editor and Glass theme
+
+The current design candidate is `out/Still-design.app`. It supersedes the earlier editor interaction described above: the gallery adds connected widgets, Adjust owns sizing/details/presets, Appearance owns themes/scenery, and Grid uses native live insertion. See [current personalization instructions](screen-personalization.md) and [phase evidence](../verification/glass-and-contextual-editor.md).

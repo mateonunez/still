@@ -37,3 +37,7 @@ The ten-plugin public catalog, detail pages, canonical schema downloads, starter
 ## Responsive canvas and native hardening
 
 Balanced, Focus and Dashboard presets use measured module sizes in a viewport owned by each panel. The editor follows the same macOS main display as the curtain. The current candidate removes the initial four-card visibility cap; presets include all selected native modules and actual geometric crowding is reported. Disabled native sources stay hidden. Password cancel/retry returns to the main display; presentation requests remain owned through the system dialog. An owned fifteen-second local activity renewal candidate complements display-awake assertions. Activation/password gesture exposure and one-hour screensaver prevention are not yet physically verified. See [phase evidence](verification/main-display-canvas-and-native-hardening.md).
+
+## Glass and scene personalization
+
+Porcelain and Glass are the two official native themes. A contextual editor, widget gallery, system Grid drag previews/live insertion, continuous Free movement, clock typography and per-module details are built in the local design candidate. Native interaction/material/privacy/accessibility acceptance remains open; see [evidence](verification/glass-and-contextual-editor.md) and [guide](guides/screen-personalization.md). Signed/notarized beta remains deferred.
