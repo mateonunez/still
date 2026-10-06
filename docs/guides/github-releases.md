@@ -16,7 +16,7 @@ For the end-user beta, retain the personal Developer ID, hardened runtime, helpe
 - [Apple: Developer ID](https://developer.apple.com/developer-id/)
 - [Apple: Safely open apps on your Mac](https://support.apple.com/en-us/102445)
 
-Verified 2026-10-06. No release was created as part of this assessment.
+Verified 2026-10-06. The initial assessment did not create a release; delivery evidence follows below.
 
 ## Semantic preview releases
 
@@ -26,8 +26,12 @@ The preview packager projects the numeric base into CFBundleShortVersionString a
 
 1. Update VERSION and document changes and known limits.
 2. Run checks, commit and push main, and wait for successful Verify CI.
-3. Create and push the matching annotated tag: `git tag -a v0.1.0-preview.1 -m "Still 0.1.0-preview.1"`, then `git push origin v0.1.0-preview.1`.
+3. Create and push the matching annotated tag: validate with `node scripts/preview-version.mjs`, then use `git tag -a "v$(cat VERSION)" -m "Still $(cat VERSION)"` and `git push origin "v$(cat VERSION)"`.
 4. The Preview release workflow verifies the tag/version, runs checks, builds both architectures, combines and verifies all four executables, ad-hoc signs the app and publishes a GitHub prerelease with ZIP, SHA256SUMS and PREVIEW.md.
 5. Test the downloaded artifact on a separate Mac. Automated cross-compilation is not Intel runtime acceptance or clean-install acceptance.
 
-No release is triggered on ordinary main pushes. Published tags/assets are not overwritten; corrections get a new preview version. Local packaging uses `./scripts/package-preview.sh v0.1.0-preview.1`, requires a clean source tree and refuses to reuse an existing output directory. Artifacts live under ignored out/releases; interactive candidates and their manifest are untouched. No signing secrets or employer identity are used.
+No release is triggered on ordinary main pushes. Published tags/assets are not overwritten; corrections get a new preview version. Local packaging uses `./scripts/package-preview.sh "v$(cat VERSION)"`, requires a clean source tree and refuses to reuse an existing output directory. Artifacts live under ignored out/releases; interactive candidates and their manifest are untouched. No signing secrets or employer identity are used.
+
+## First delivered preview
+
+[0.1.0-preview.2](https://github.com/mateonunez/still/releases/tag/v0.1.0-preview.2) was published on 2026-10-06. All three assets were downloaded and inspected: matching ZIP checksum, universal app/helpers, numeric and prerelease version fields, MIT resource and valid ad-hoc bundle signature. This did not launch the app or certify Gatekeeper/clean-Mac installation. See [delivery evidence](../verification/preview-releases.md).

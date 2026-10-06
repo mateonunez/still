@@ -10,7 +10,7 @@ Cover your desktop. Keep your Mac awake. Bring only the details you want into vi
 
 [Meet Still](https://meet-still.app) · [Native plugins](https://meet-still.app/plugins) · [Developer SDK](https://meet-still.app/developers) · [MIT license](LICENSE)
 
-**In development.** The source repository is private. There is no public native download, published npm package or working Homebrew install command yet.
+**Experimental preview.** [0.1.0-preview.2](https://github.com/mateonunez/still/releases/tag/v0.1.0-preview.2) provides a universal Mac archive, checksum and known limits. It is ad-hoc signed, not Developer ID signed or notarized. The repository remains private; download access follows repository access. No public native download, published npm package or working Homebrew install command exists yet. [Preview release guide](docs/guides/github-releases.md)
 
 ## Your kind of quiet
 
