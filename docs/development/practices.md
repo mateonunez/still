@@ -193,3 +193,7 @@ Keep a finite IOKit lifecycle diagnostic separate from elapsed screen-saver acce
 ## Brand and license delivery
 
 Keep the product message and actual availability aligned across page copy, search/social metadata, README and agent documentation. Publish one factual category descriptor; do not add fabricated ratings, urgency or working download actions. A permissive license does not imply public source access or released binaries. The root LICENSE is the canonical MIT text; public license/SDK copies are generated and verified against it. Retain third-party font notices independently, including in native resources. Static build HTML and an offline review artifact do not establish served headers, hydration or interactive accessibility.
+
+## Experimental release packaging
+
+Keep VERSION and its tag identical; validate before building and never interpolate an unchecked tag into commands. Use separate artifact directories, fail on dirty source or existing output, verify each architecture and helper signature, and keep experimental metadata separate from numeric bundle versions. Preview tags publish prereleases only after checks. Preserve published assets/tags and issue a new version for corrections. A successful release workflow does not certify downloaded-app acceptance or automatic updates.

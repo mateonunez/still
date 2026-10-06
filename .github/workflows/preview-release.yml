@@ -1,0 +1,55 @@
+name: Preview release
+on:
+  push:
+    tags: ['v*-preview.*']
+permissions:
+  contents: read
+concurrency:
+  group: preview-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  preview:
+    runs-on: macos-26
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - name: Verify version and source
+        env:
+          PREVIEW_TAG: ${{ github.ref_name }}
+        run: |
+          node scripts/preview-version.mjs "$PREVIEW_TAG"
+          node --test scripts/test/*.mjs
+          corepack enable
+          corepack prepare pnpm@10.32.1 --activate
+          pnpm install --frozen-lockfile --registry=https://registry.npmjs.org/
+          pnpm check
+          pnpm --filter @mateonunez/still-plugins test
+          pnpm check:brand
+          pnpm build
+          pnpm typecheck
+          swift test --package-path packages/SessionKit
+          swift test --package-path packages/StillWidgets
+          swift test --package-path packages/StillPluginKit
+          swift test --package-path packages/StillNativePlugins
+          swift test --package-path apps/macos
+      - name: Package universal experimental preview
+        env:
+          PREVIEW_TAG: ${{ github.ref_name }}
+        run: ./scripts/package-preview.sh "$PREVIEW_TAG"
+      - name: Publish GitHub prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIEW_TAG: ${{ github.ref_name }}
+        run: |
+          version="$(cat VERSION)"
+          gh release create "$PREVIEW_TAG" \
+            "out/releases/$version/Still-$version-universal.zip" \
+            "out/releases/$version/SHA256SUMS" \
+            "out/releases/$version/PREVIEW.md" \
+            --verify-tag --prerelease --latest=false \
+            --title "Still $version — Experimental preview" \
+            --notes-file "out/releases/$version/PREVIEW.md"
