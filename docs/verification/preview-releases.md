@@ -10,3 +10,5 @@
 - Developer ID, notarization and final release identity remain deferred. No repository visibility change is part of preview automation.
 
 The exact workflow run and release assets are available from the matching v-prefixed tag in GitHub. Publication and clean-download testing must be observed separately; an implemented workflow alone is not delivery evidence.
+
+The v0.1.0-preview.1 attempt passed checks and compiled both architectures, but failed before publication because lipo -verify_arch interpreted the trailing file path as an architecture. The input now precedes that operation. The corrected command was exercised against a real local universal binary containing both compiled slices; no mock. The failed tag is retained and the next attempt is 0.1.0-preview.2. No assets were published for preview.1.

@@ -25,7 +25,7 @@ for still_executable in Still StillClaudeBridge StillAgentBridge StillSpotifyBri
   still_arm="$(swift build --package-path apps/macos -c release --triple arm64-apple-macosx14.0 --scratch-path "$still_output/build-arm64" --show-bin-path)"
   still_intel="$(swift build --package-path apps/macos -c release --triple x86_64-apple-macosx14.0 --scratch-path "$still_output/build-x86_64" --show-bin-path)"
   lipo -create "$still_arm/$still_executable" "$still_intel/$still_executable" -output "$still_app/Contents/MacOS/$still_executable"
-  lipo -verify_arch arm64 x86_64 "$still_app/Contents/MacOS/$still_executable"
+  lipo "$still_app/Contents/MacOS/$still_executable" -verify_arch arm64 x86_64
   codesign --force --sign - "$still_app/Contents/MacOS/$still_executable"
 done
 cp apps/macos/Resources/Info.plist "$still_app/Contents/Info.plist"
