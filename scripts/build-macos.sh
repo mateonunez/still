@@ -3,8 +3,8 @@ set -euo pipefail
 still_root="${0:A:h:h}"
 configuration="${1:-debug}"
 application_name="${2:-Still}"
-if [[ "$application_name" != Still && "$application_name" != Still-preview && "$application_name" != Still-canvas ]]; then
-  print -u2 'App output must be Still, Still-preview or Still-canvas under out/.'
+if [[ "$application_name" != Still && "$application_name" != Still-preview && "$application_name" != Still-canvas && "$application_name" != Still-glass && "$application_name" != Still-design ]]; then
+  print -u2 'App output must be Still, Still-preview, Still-canvas, Still-glass or Still-design under out/.'
   exit 2
 fi
 if [[ "$configuration" != debug && "$configuration" != release ]]; then
@@ -12,13 +12,23 @@ if [[ "$configuration" != debug && "$configuration" != release ]]; then
   exit 2
 fi
 still_app="$still_root/out/$application_name.app"
-if ps -axo comm | rg -F -x "$still_app/Contents/MacOS/Still" >/dev/null; then
-  print -u2 "Quit $application_name before rebuilding it. No running app was replaced."
-  exit 1
+if [[ -e "$still_app" ]]; then
+  if ! still_processes="$(ps -axo comm)"; then
+    print -u2 "Cannot inspect running apps; refusing to replace $application_name."
+    exit 1
+  fi
+  if print -r -- "$still_processes" | rg -F -x "$still_app/Contents/MacOS/Still" >/dev/null; then
+    print -u2 "Quit $application_name before rebuilding it. No running app was replaced."
+    exit 1
+  fi
 fi
 node "$still_root/scripts/generate-native-tokens.mjs"
-swift build --package-path "$still_root/apps/macos" -c "$configuration"
-still_bin="$(swift build --package-path "$still_root/apps/macos" -c "$configuration" --show-bin-path)"
+still_swift_options=()
+[[ -z "${STILL_SWIFT_CACHE_PATH:-}" ]] || still_swift_options+=(--cache-path "$STILL_SWIFT_CACHE_PATH")
+[[ -z "${STILL_SWIFT_SCRATCH_PATH:-}" ]] || still_swift_options+=(--scratch-path "$STILL_SWIFT_SCRATCH_PATH")
+[[ "${STILL_SWIFT_DISABLE_SANDBOX:-0}" != 1 ]] || still_swift_options+=(--disable-sandbox)
+swift build "${still_swift_options[@]}" --package-path "$still_root/apps/macos" -c "$configuration"
+still_bin="$(swift build "${still_swift_options[@]}" --package-path "$still_root/apps/macos" -c "$configuration" --show-bin-path)"
 # Only rebuild our generated app bundle; no installed application is modified.
 mkdir -p "$still_app/Contents/MacOS" "$still_app/Contents/Resources"
 cp "$still_bin/Still" "$still_app/Contents/MacOS/Still.new"

@@ -46,8 +46,9 @@ struct ScreenCanvasView: View {
     var reorder: (String, String) -> Void = { _, _ in }
     var reportCrowding: (Bool) -> Void = { _ in }
     var reservedFooter: CGFloat = 230
+    @State private var gridDrag: String?
+    @State private var gridLastTarget: String?
     @State private var dragging: String?
-    @State private var dropTarget: String?
     @State private var translation: CGSize = .zero
     @State private var renderedFrames: [String: CGRect] = [:]
     @State private var dragOrigin: CGPoint?
@@ -63,18 +64,12 @@ struct ScreenCanvasView: View {
                 MeasuredCanvasLayout(reservedFooter: reservedFooter, frozenFrames: frozenFrames, mode: composition.effectiveLayout, gridWidth: composition.gridWidth) {
                     let clockWidth = liveWidth("clock", index: 0, viewport: geometry.size.width)
                     module("clock", index: 0, canvas: geometry.size, width: clockWidth) {
-                        TimelineView(.periodic(from: .now, by: 1)) { timeline in
-                            VStack(spacing: 14) {
-                                Text(timeline.date.formatted(.dateTime.weekday(.wide).month(.wide).day()).uppercased()).font(.system(size: 11, weight: .medium)).tracking(3).foregroundStyle(palette.secondary)
-                                Text(timeline.date, format: .dateTime.hour().minute()).font(.custom("InstrumentSerif-Regular", size: min(180, clockWidth * 0.36, geometry.size.height * (composition.effectiveLayout == .grid ? 0.09 : 0.18)))).monospacedDigit().minimumScaleFactor(0.7).lineLimit(1)
-                                Text("A little space to step away.").font(.custom("InstrumentSerif-Regular", size: geometry.size.width < 1150 ? 20 : 24)).foregroundStyle(palette.secondary)
-                            }.foregroundStyle(palette.primary)
-                        }
+                        StillClockFace(palette: palette, size: min(180, clockWidth * 0.36, geometry.size.height * (composition.effectiveLayout == .grid ? 0.09 : 0.18)), messageSize: geometry.size.width < 1150 ? 20 : 24)
                     }
                     ForEach(Array(cards.enumerated()), id: \.element.id) { index, card in
                         let width = liveWidth(card.id.rawValue, index: index, viewport: geometry.size.width)
                         module(card.id.rawValue, index: index, canvas: geometry.size, width: width) {
-                            NativePluginCardView(card: card, palette: palette, width: width, showDetails: false, taskLimit: 1)
+                            NativePluginCardView(card: card, palette: palette, width: width, showDetails: composition.placement(card.id.rawValue, index: index).showsDetails, taskLimit: composition.placement(card.id.rawValue, index: index).showsDetails ? 4 : 1)
                         }
                     }
                 }
@@ -98,12 +93,9 @@ struct ScreenCanvasView: View {
         }
         return composition.placement(id, index: index).resolvedWidth(viewport: viewport, clock: id == "clock")
     }
-    private func nearestModule(to point: CGPoint, excluding id: String) -> String? {
-        CanvasGridGeometry.insertionTarget(at: point, frames: renderedFrames, excluding: id)
-    }
     private func module<Content: View>(_ id: String, index: Int, canvas: CGSize, width: CGFloat, @ViewBuilder content: () -> Content) -> some View {
         content().frame(width: width)
-            .padding(5).overlay(RoundedRectangle(cornerRadius: 22).stroke(editing && (selection == id || dropTarget == id) ? palette.accent : .clear, lineWidth: 2))
+            .padding(5).overlay(RoundedRectangle(cornerRadius: 22).stroke(editing && selection == id ? palette.accent : .clear, lineWidth: 2))
             .contentShape(Rectangle())
             .background { GeometryReader { proxy in Color.clear.preference(key: CanvasFrames.self, value: [id: proxy.frame(in: .named("still.canvas"))]) } }
             .layoutValue(key: CanvasIdentity.self, value: id)
@@ -112,29 +104,21 @@ struct ScreenCanvasView: View {
             .layoutValue(key: CanvasOffset.self, value: dragging == id ? translation : .zero)
             .onTapGesture { if editing { selection = id } }
             .gesture(DragGesture(minimumDistance: 3, coordinateSpace: .named("still.canvas")).onChanged { value in
-                guard editing, resizing == nil, composition.effectiveLayout == .free || id != "clock" else { return }
+                guard editing, resizing == nil, composition.effectiveLayout == .free else { return }
                 if dragging == nil, let frame = renderedFrames[id] {
                     dragOrigin = CGPoint(x: frame.midX, y: frame.midY)
-                    if composition.effectiveLayout == .grid { frozenFrames = renderedFrames }
+                    frozenFrames = renderedFrames
                 }
                 selection = id; dragging = id; translation = value.translation
-                if composition.effectiveLayout == .grid, let origin = dragOrigin {
-                    let point = CGPoint(x: origin.x + value.translation.width, y: origin.y + value.translation.height)
-                    dropTarget = nearestModule(to: point, excluding: id)
-                }
             }.onEnded { value in
-                guard editing, resizing == nil, composition.effectiveLayout == .free || id != "clock" else { return }
-                if composition.effectiveLayout == .grid {
-                    if let dropTarget { reorder(id, dropTarget) }
-                    dragging = nil; translation = .zero; dragOrigin = nil; dropTarget = nil; frozenFrames = [:]
-                    return
-                }
+                guard editing, resizing == nil, composition.effectiveLayout == .free else { return }
                 var updated = composition.placement(id, index: index)
                 let origin = dragOrigin ?? CGPoint(x: updated.x * canvas.width, y: updated.y * canvas.height)
                 updated.x = (origin.x + value.translation.width) / canvas.width
                 updated.y = (origin.y + value.translation.height) / canvas.height
-                place(id, updated.fitted()); dragging = nil; translation = .zero; dragOrigin = nil
-            }, including: editing ? .all : .none)
+                place(id, updated.fitted()); dragging = nil; translation = .zero; dragOrigin = nil; frozenFrames = [:]
+            }, including: editing && composition.effectiveLayout == .free ? .all : .none)
+            .modifier(CanvasGridDrag(id: id, enabled: editing && composition.effectiveLayout == .grid && id != "clock", source: $gridDrag, lastTarget: $gridLastTarget, select: { selection = id }, reorder: reorder))
             .accessibilityElement(children: .combine)
             .accessibilityLabel(id == "clock" ? "Clock" : NativePluginID(rawValue: id)?.title ?? id)
             .accessibilityAddTraits(editing ? .isButton : [])
@@ -171,87 +155,131 @@ struct ScreenEditorView: View {
     @State private var crowded = false
     @State private var adjustingWidth = false
     @State private var editorWidth: CGFloat = 1440
+    @State private var showGallery = false
+    @State private var showAppearance = false
+    @State private var showInspector = false
     @Environment(\.colorScheme) private var scheme
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.colorSchemeContrast) private var contrast
-    private var palette: PorcelainPalette { presentation.appearance == .light || (presentation.appearance == .system && scheme == .light) ? .light : .dark }
+    private var palette: PorcelainPalette { presentation.theme.palette(dark: presentation.appearance == .dark || (presentation.appearance == .system && scheme == .dark)) }
     private var grid: Bool { center.composition.effectiveLayout == .grid }
     private var selectedIndex: Int { center.visibleIDs.firstIndex(where: { $0.rawValue == selection }) ?? 0 }
     private var selectedPlacement: CanvasPlacement { center.composition.placement(selection, index: selectedIndex) }
+    private var selectedTitle: String { selection == "clock" ? "Clock" : NativePluginID(rawValue: selection)?.title ?? "Widget" }
 
     var body: some View {
         ZStack {
-            palette.background.ignoresSafeArea()
+            StillSceneBackground(theme: presentation.theme, palette: palette)
             canvas
             VStack {
                 header
                 Spacer()
-                toolbar
-                Text("The return controls keep their own space. Changes are saved on this Mac.").font(.system(size: 11)).foregroundStyle(palette.secondary).padding(.bottom, 20)
-                if crowded { Text("This screen needs more room. Reduce widths or remove a widget.").font(.system(size: 12)).foregroundStyle(palette.secondary).padding(.bottom, 16) }
-                if !center.issue.isEmpty { Text(center.issue).font(.system(size: 12)).foregroundStyle(palette.secondary).padding(.bottom, 16) }
+                selectionBar
+                status.padding(.bottom, 20)
             }.foregroundStyle(palette.primary).tint(palette.accent)
-        }.background { GeometryReader { proxy in Color.clear.onAppear { editorWidth = proxy.size.width }.onChange(of: proxy.size.width) { _, width in editorWidth = width } } }
-        .onExitCommand(perform: finish)
+        }
+        .environment(\.stillTheme, presentation.theme)
+        .preferredColorScheme(presentation.appearance == .system ? nil : presentation.appearance == .dark ? .dark : .light)
+        .background { GeometryReader { proxy in Color.clear.onAppear { editorWidth = proxy.size.width }.onChange(of: proxy.size.width) { _, width in editorWidth = width } } }
+        .onChange(of: center.visibleIDs) { _, ids in if selection != "clock", !ids.contains(where: { $0.rawValue == selection }) { selection = "clock" } }
+        .sheet(isPresented: $showGallery) { gallery }
+        .onExitCommand { if showAppearance || showInspector { showAppearance = false; showInspector = false } else { finish() } }
     }
     private var canvas: some View {
-        ScreenCanvasView(cards: center.visibleCards, composition: center.composition, palette: palette, editing: true, adjustingWidth: adjustingWidth, selection: $selection, place: center.place, reorder: reorder, reportCrowding: { crowded = $0 })
+        ScreenCanvasView(cards: center.visibleCards, composition: center.composition, palette: palette, editing: true, adjustingWidth: adjustingWidth, selection: $selection, place: center.place, reorder: reorder, reportCrowding: { crowded = $0 }, reservedFooter: 155)
     }
     private var header: some View {
-        HStack {
-            Text("Make room for what matters.").font(.custom("InstrumentSerif-Regular", size: 30))
+        HStack(spacing: 14) {
+            Label("Edit screen", systemImage: "rectangle.3.group").font(.system(size: 15, weight: .semibold))
             Spacer()
-            Text(grid ? "Aligned columns · Drop on a card to reorder" : "Drag to move · Pull the handle to resize").font(.system(size: 12)).foregroundStyle(palette.secondary)
+            Picker("Arrangement", selection: Binding(get: { center.composition.effectiveLayout }, set: { center.setLayout($0) })) {
+                Text("Grid").tag(CanvasLayoutMode.grid); Text("Free").tag(CanvasLayoutMode.free)
+            }.pickerStyle(.segmented).frame(width: 140)
+            Button { showAppearance = true } label: { Label("Appearance", systemImage: "paintpalette") }.stillControl()
+                .popover(isPresented: $showAppearance) { SceneAppearanceControls(presentation: presentation).padding(24).frame(width: 310) }
+            Button { showGallery = true } label: { Label("Add widget", systemImage: "plus") }.stillControl()
             Button("Done", action: finish).stillControl(prominent: true).keyboardShortcut(.defaultAction)
-        }.padding(28)
+        }.padding(24)
     }
-    private var toolbar: some View {
-        VStack(spacing: 14) { primaryControls; Divider(); sizingControls }
-            .frame(maxWidth: 820).controlSize(.small).padding(16).background { toolbarSurface }
-            .padding(.horizontal, 24).padding(.bottom, 32)
+    private var selectionBar: some View {
+        HStack(spacing: 16) {
+            Picker("Selected module", selection: $selection) {
+                Text("Clock").tag("clock"); ForEach(center.visibleIDs) { Text($0.title).tag($0.rawValue) }
+            }.labelsHidden().frame(width: 150)
+            Divider().frame(height: 20)
+            Button { showInspector = true } label: { Label("Adjust", systemImage: "slider.horizontal.3") }.buttonStyle(.borderless)
+                .popover(isPresented: $showInspector) { inspector.padding(24).frame(width: 320) }
+            movementControls
+            if selection != "clock" {
+                Button(role: .destructive) { removeSelection() } label: { Image(systemName: "minus.circle") }.buttonStyle(.borderless).accessibilityLabel("Remove \(selectedTitle)")
+            }
+        }.padding(14).background { toolbarSurface }.fixedSize().padding(.bottom, 14)
     }
     @ViewBuilder private var toolbarSurface: some View {
-        if reduceTransparency || contrast == .increased { RoundedRectangle(cornerRadius: 22).fill(palette.surface) }
-        else if #available(macOS 26.0, *) { RoundedRectangle(cornerRadius: 22).fill(.clear).glassEffect(.regular, in: RoundedRectangle(cornerRadius: 22)) }
-        else { RoundedRectangle(cornerRadius: 22).fill(.regularMaterial) }
+        if reduceTransparency || contrast == .increased { RoundedRectangle(cornerRadius: 24).fill(palette.surface) }
+        else if #available(macOS 26.0, *) { RoundedRectangle(cornerRadius: 24).fill(.clear).glassEffect(.regular, in: RoundedRectangle(cornerRadius: 24)) }
+        else { RoundedRectangle(cornerRadius: 24).fill(.regularMaterial) }
     }
-    private var primaryControls: some View {
-        HStack(spacing: 12) {
-            Picker("Arrangement", selection: Binding(get: { center.composition.effectiveLayout }, set: { center.setLayout($0) })) { Text("Grid").tag(CanvasLayoutMode.grid); Text("Free").tag(CanvasLayoutMode.free) }.pickerStyle(.segmented).labelsHidden().frame(width: 120)
-            Menu("Presets") { ForEach(CanvasPreset.allCases, id: \.self) { preset in Button(preset.title) { center.applyPreset(preset) } } }.disabled(grid)
-            Menu("Add widget") { ForEach(center.installed.filter { center.configurations[$0]?.enabled == true && center.configurations[$0]?.visible != true }) { id in Button(id.title) { center.setVisible(id, true); selection = id.rawValue } } }
-            Picker("Selected module", selection: $selection) { Text("Clock").tag("clock"); ForEach(center.visibleIDs) { Text($0.title).tag($0.rawValue) } }.labelsHidden().frame(width: 175)
-            Spacer(minLength: 8)
-            Button("Remove") { if let id = NativePluginID(rawValue: selection) { center.setVisible(id, false); selection = "clock" } }.disabled(selection == "clock")
-            Button("Reset layout") { center.resetComposition() }
+    private var status: some View {
+        Text(crowded ? "Not all modules fit. Try narrower columns or fewer widgets." : grid ? "Drag widgets to reorder. Select a module to adjust it." : "Drag to move. Pull a selected module’s handle to resize.")
+            .font(.system(size: 12)).foregroundStyle(palette.secondary)
+    }
+    private var inspector: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            Text(selectedTitle).font(.system(size: 20, weight: .semibold))
+            if selection == "clock" { ClockAppearanceControls() }
+            else { Toggle("Show source details", isOn: Binding(get: { selectedPlacement.showsDetails }, set: { value in var p = selectedPlacement; p.showsDetails = value; center.place(selection, p) })).toggleStyle(.switch) }
+            if grid && selection != "clock" { gridSizing } else { freeSizing }
+            Text(grid ? "Grid aligns rows automatically. Module height follows its content." : "Width is continuous. Height follows content.").font(.system(size: 12)).foregroundStyle(.secondary)
+            Divider()
+            Menu("Reset arrangement") {
+                Button("Reset layout") { center.resetComposition() }
+                ForEach(CanvasPreset.allCases, id: \.self) { preset in Button(preset.title) { center.applyPreset(preset) } }
+            }.stillControl()
         }
     }
-    private var sizingControls: some View {
-        HStack(spacing: 16) {
-            if grid { gridSizing } else { freeSizing }
-            movementControls
-            Spacer(minLength: 8)
-            Text(grid ? "Rows fit content" : "Height fits content").font(.system(size: 11)).foregroundStyle(palette.secondary)
-        }
+    private var gallery: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            HStack { Text("Widget gallery").font(.system(size: 24, weight: .semibold)); Spacer(); Button("Done") { showGallery = false }.keyboardShortcut(.cancelAction) }
+            Text("Choose a connected widget. Configure sources and permissions in Settings → Plugins.").font(.system(size: 13)).foregroundStyle(.secondary)
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 210))], spacing: 16) {
+                    ForEach(center.installed) { id in galleryItem(id) }
+                }
+            }
+        }.padding(28).frame(width: 620, height: 510)
+    }
+    private func galleryItem(_ id: NativePluginID) -> some View {
+        let enabled = center.configurations[id]?.enabled == true
+        let visible = center.configurations[id]?.visible == true
+        return Button {
+            center.setVisible(id, true); selection = id.rawValue; showGallery = false
+        } label: {
+            VStack(alignment: .leading, spacing: 12) {
+                Label(id.title, systemImage: id.symbol).font(.system(size: 14, weight: .semibold))
+                Text(visible ? "Already on your screen" : enabled ? "Add to screen" : "Connect in Settings first").font(.system(size: 11)).foregroundStyle(.secondary)
+            }.frame(maxWidth: .infinity, minHeight: 75, alignment: .leading).padding(14)
+        }.buttonStyle(.bordered).disabled(!enabled || visible)
     }
     @ViewBuilder private var gridSizing: some View {
-        Toggle("Automatic columns", isOn: Binding(get: { center.composition.gridWidth == nil }, set: { center.setGridWidth($0 ? nil : 280) })).toggleStyle(.switch).controlSize(.small)
+        Toggle("Automatic columns", isOn: Binding(get: { center.composition.gridWidth == nil }, set: { center.setGridWidth($0 ? nil : 280) })).toggleStyle(.switch)
         if let width = center.composition.gridWidth {
-            Slider(value: Binding(get: { width }, set: { center.setGridWidth($0) }), in: 180...600, onEditingChanged: { adjustingWidth = $0 }) { Text("Preferred column width") }.frame(width: 120)
+            Slider(value: Binding(get: { width }, set: { center.setGridWidth($0) }), in: 180...600, onEditingChanged: { adjustingWidth = $0 }) { Text("Preferred column width") }
         }
     }
     @ViewBuilder private var freeSizing: some View {
-        Toggle("Automatic", isOn: Binding(get: { selectedPlacement.width == nil }, set: { automatic in var p = selectedPlacement; p.width = automatic ? nil : p.resolvedWidth(viewport: editorWidth, clock: selection == "clock"); center.place(selection, p) })).toggleStyle(.switch).controlSize(.small).help("Adapt width to this display. Height always follows content.")
+        Toggle("Automatic width", isOn: Binding(get: { selectedPlacement.width == nil }, set: { automatic in var p = selectedPlacement; p.width = automatic ? nil : p.resolvedWidth(viewport: editorWidth, clock: selection == "clock"); center.place(selection, p) })).toggleStyle(.switch)
         if selectedPlacement.width != nil {
             let maximum = min(600, max(180, editorWidth * (selection == "clock" ? 0.55 : 0.32)))
-            Slider(value: Binding(get: { selectedPlacement.resolvedWidth(viewport: editorWidth, clock: selection == "clock") }, set: { value in var p = selectedPlacement; p.width = value; center.place(selection, p) }), in: 180...maximum, onEditingChanged: { adjustingWidth = $0 }) { Text("Module width") }.frame(width: 120).accessibilityLabel("Selected module width")
+            Slider(value: Binding(get: { selectedPlacement.resolvedWidth(viewport: editorWidth, clock: selection == "clock") }, set: { value in var p = selectedPlacement; p.width = value; center.place(selection, p) }), in: 180...maximum, onEditingChanged: { adjustingWidth = $0 }) { Text("Module width") }
         }
     }
     private var movementControls: some View {
         ForEach([("Left", -1.0, 0.0, "arrow.left"), ("Up", 0.0, -1.0, "arrow.up"), ("Down", 0.0, 1.0, "arrow.down"), ("Right", 1.0, 0.0, "arrow.right")], id: \.0) { name, x, y, symbol in
-            Button { move(x, y) } label: { Image(systemName: symbol) }.accessibilityLabel("Move selected module \(name.lowercased())").disabled(grid && selection == "clock")
+            Button { move(x, y) } label: { Image(systemName: symbol) }.buttonStyle(.borderless).accessibilityLabel("Move selected module \(name.lowercased())").disabled(grid && selection == "clock")
         }
     }
+    private func removeSelection() { if let id = NativePluginID(rawValue: selection) { center.setVisible(id, false); selection = "clock"; showInspector = false } }
     private func reorder(_ source: String, _ target: String) {
         if let source = NativePluginID(rawValue: source), let target = NativePluginID(rawValue: target) { center.reorderVisible(source, over: target) }
     }
@@ -260,6 +288,38 @@ struct ScreenEditorView: View {
             guard let id = NativePluginID(rawValue: selection) else { return }
             let columns = CanvasGridGeometry(viewport: CGSize(width: editorWidth, height: 900), preferredWidth: center.composition.gridWidth).columns(count: center.visibleIDs.count)
             center.move(id, by: Int(x) + Int(y) * columns)
-        } else { var p = selectedPlacement; p.x += x / 100; p.y += y / 100; center.place(selection, p.fitted()) }
+        } else {
+            var p = selectedPlacement; p.x += x * 0.025; p.y += y * 0.025; center.place(selection, p.fitted())
+        }
+    }
+}
+
+struct ClockAppearanceControls: View {
+    @AppStorage("StillClockStyle") private var style = StillClockStyle.serif.rawValue
+    @AppStorage("StillShowDate") private var date = true
+    @AppStorage("StillShowTagline") private var tagline = true
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Picker("Clock type", selection: $style) { ForEach(StillClockStyle.allCases, id: \.self) { Text($0.title).tag($0.rawValue) } }.pickerStyle(.segmented)
+            Toggle("Show date", isOn: $date).toggleStyle(.switch)
+            Toggle("Show message", isOn: $tagline).toggleStyle(.switch)
+        }
+    }
+}
+
+struct SceneAppearanceControls: View {
+    @ObservedObject var presentation: CurtainPresentation
+    @AppStorage("StillBackdrop") private var backdrop = StillBackdropStyle.aurora.rawValue
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            Text("Your kind of quiet").font(.system(size: 20, weight: .semibold))
+            Picker("Theme", selection: $presentation.theme) { ForEach(StillTheme.allCases, id: \.self) { Text($0.title).tag($0) } }.pickerStyle(.segmented)
+                .onChange(of: presentation.theme) { _, value in UserDefaults.standard.set(value.rawValue, forKey: "StillTheme") }
+            Picker("Appearance", selection: $presentation.appearance) { ForEach(StillAppearance.allCases, id: \.self) { Text($0.title).tag($0) } }.pickerStyle(.segmented)
+                .onChange(of: presentation.appearance) { _, value in UserDefaults.standard.set(value.rawValue, forKey: "StillAppearance") }
+            if presentation.theme == .glass {
+                Picker("Backdrop", selection: $backdrop) { ForEach(StillBackdropStyle.allCases, id: \.self) { Text($0.title).tag($0.rawValue) } }.pickerStyle(.segmented)
+            }
+        }
     }
 }

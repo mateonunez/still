@@ -38,6 +38,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
            let appearance = StillAppearance(rawValue: saved) {
             presentation.appearance = appearance
         }
+        if let saved = UserDefaults.standard.string(forKey: "StillTheme"), let theme = StillTheme(rawValue: saved) { presentation.theme = theme }
         NotificationCenter.default.addObserver(
             self, selector: #selector(displaysChanged),
             name: NSApplication.didChangeScreenParametersNotification, object: nil
@@ -398,7 +399,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         let activeScreen = screens.first(where: { ($0.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value == mainID }) ?? screens.first
         for screen in screens {
             let panel = CurtainPanel(contentRect: screen.frame, styleMask: [.borderless], backing: .buffered, defer: false)
-            panel.title = "Still — Porcelain"
+            panel.title = "Still — \(presentation.theme.title)"
             panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary, .ignoresCycle, .canJoinAllApplications]
             panel.isOpaque = true
             panel.backgroundColor = .windowBackgroundColor

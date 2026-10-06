@@ -21,6 +21,7 @@ final class CurtainPresentation: ObservableObject {
     @Published var widgetLayout = "corner"
     @Published var widgetSide = "right"
     @Published var composition = ScreenComposition()
+    @Published var theme: StillTheme = .porcelain
     @Published var appearance: StillAppearance = .system
 }
 
@@ -45,7 +46,7 @@ struct CurtainView: View {
     private var palette: PorcelainPalette {
         let dark = presentation.appearance == .dark ||
             (presentation.appearance == .system && colorScheme == .dark)
-        return dark ? .dark : .light
+        return presentation.theme.palette(dark: dark)
     }
 
     var body: some View {
@@ -56,9 +57,11 @@ struct CurtainView: View {
                     StillMarkView().frame(width: 26, height: 26).foregroundStyle(palette.accent).accessibilityHidden(true)
                     Text("Still is on your main display.").font(.system(size: 13)).foregroundStyle(palette.secondary)
                     Button("Go to main display", action: focusPrimaryDisplay).stillControl().keyboardShortcut(.defaultAction)
-                }.frame(maxWidth: .infinity, maxHeight: .infinity).background(palette.background).ignoresSafeArea()
+                }.frame(maxWidth: .infinity, maxHeight: .infinity).background { StillSceneBackground(theme: presentation.theme, palette: palette) }.ignoresSafeArea()
             }
-        }.onExitCommand(perform: cancelAuthentication)
+        }.environment(\.stillTheme, presentation.theme)
+            .preferredColorScheme(presentation.appearance == .system ? nil : presentation.appearance == .dark ? .dark : .light)
+            .onExitCommand(perform: cancelAuthentication)
     }
 
     private var primaryBody: some View {
@@ -71,7 +74,7 @@ struct CurtainView: View {
                         .accessibilityHidden(true)
                     Text("Still").font(.custom("InstrumentSerif-Regular", size: 32))
                     Spacer()
-                    Text("PORCELAIN").font(.system(size: 11, weight: .semibold))
+                    Text(presentation.theme.title.uppercased()).font(.system(size: 11, weight: .semibold))
                         .tracking(3).foregroundStyle(palette.secondary)
                 }
                 if presentation.widgetLayout != "canvas", geometry.size.width < 1250 || geometry.size.height < 700 {
@@ -96,23 +99,9 @@ struct CurtainView: View {
                 }
                 Spacer()
                 if presentation.widgetLayout != "canvas" {
-                TimelineView(.periodic(from: .now, by: 1)) { timeline in
-                    VStack(spacing: 18) {
-                        Text(timeline.date.formatted(.dateTime.weekday(.wide).month(.wide).day()).uppercased())
-                            .font(.system(size: 12, weight: .medium)).tracking(3)
-                            .foregroundStyle(palette.secondary)
-                        Text(timeline.date, format: .dateTime.hour().minute())
-                            .font(.custom("InstrumentSerif-Regular", size: min(geometry.size.width * 0.18, 204)))
-                            .monospacedDigit()
-                            .accessibilityLabel("Current time")
-                            .accessibilityValue(timeline.date.formatted(.dateTime.hour().minute()))
-                        Text("A little space to step away.")
-                            .font(.custom("InstrumentSerif-Regular", size: 32))
-                            .foregroundStyle(palette.secondary)
-                    }
+                StillClockFace(palette: palette, size: min(geometry.size.width * 0.18, 204), messageSize: 32)
                     .padding(.leading, presentation.widgetLayout == "rail" && presentation.widgetSide == "left" && geometry.size.width >= 1250 ? 340 : 0)
                     .padding(.trailing, presentation.widgetLayout == "rail" && presentation.widgetSide == "right" && geometry.size.width >= 1250 ? 340 : 0)
-                }
                 }
                 Spacer()
                 if geometry.size.width >= 1250, geometry.size.height >= 700, presentation.widgetLayout == "corner", hasModules {

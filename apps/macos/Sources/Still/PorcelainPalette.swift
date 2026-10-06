@@ -29,4 +29,24 @@ struct PorcelainPalette {
         onAccent: Color(red: 50 / 255.0, green: 30 / 255.0, blue: 38 / 255.0),
         focus: Color(red: 237 / 255.0, green: 190 / 255.0, blue: 208 / 255.0)
     )
+
+    static let glassLight = PorcelainPalette(
+        background: Color(red: 236 / 255.0, green: 233 / 255.0, blue: 242 / 255.0),
+        surface: Color(red: 252 / 255.0, green: 250 / 255.0, blue: 255 / 255.0),
+        primary: Color(red: 42 / 255.0, green: 33 / 255.0, blue: 48 / 255.0),
+        secondary: Color(red: 104 / 255.0, green: 93 / 255.0, blue: 114 / 255.0),
+        accent: Color(red: 112 / 255.0, green: 44 / 255.0, blue: 67 / 255.0),
+        onAccent: Color(red: 255 / 255.0, green: 247 / 255.0, blue: 241 / 255.0),
+        focus: Color(red: 132 / 255.0, green: 56 / 255.0, blue: 79 / 255.0)
+    )
+
+    static let glassDark = PorcelainPalette(
+        background: Color(red: 23 / 255.0, green: 20 / 255.0, blue: 31 / 255.0),
+        surface: Color(red: 44 / 255.0, green: 39 / 255.0, blue: 55 / 255.0),
+        primary: Color(red: 245 / 255.0, green: 239 / 255.0, blue: 247 / 255.0),
+        secondary: Color(red: 195 / 255.0, green: 181 / 255.0, blue: 206 / 255.0),
+        accent: Color(red: 217 / 255.0, green: 168 / 255.0, blue: 184 / 255.0),
+        onAccent: Color(red: 50 / 255.0, green: 30 / 255.0, blue: 38 / 255.0),
+        focus: Color(red: 237 / 255.0, green: 190 / 255.0, blue: 208 / 255.0)
+    )
 }

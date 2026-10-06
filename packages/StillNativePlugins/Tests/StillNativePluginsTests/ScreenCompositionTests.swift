@@ -82,3 +82,15 @@ import Testing
         }
     }
 }
+
+@Test func moduleDetailsSurviveSizingAndLegacyLayoutsStayQuiet() throws {
+    var scene = ScreenComposition()
+    scene.placements["agents"] = CanvasPlacement(x: 0.32, y: 0.41, width: 318.25, showsDetails: true).fitted()
+    let decoded = try #require(ScreenComposition.decode(JSONEncoder().encode(scene)))
+    #expect(decoded.placement("agents").showsDetails)
+    #expect(decoded.placement("agents").width == 318.25)
+    let legacy = Data(#"{"version":1,"placements":{"agents":{"x":0.3,"y":0.4}}}"#.utf8)
+    #expect(ScreenComposition.decode(legacy)?.placement("agents").showsDetails == false)
+    let malformed = Data(#"{"version":1,"placements":{"agents":{"x":0.3,"y":0.4,"showsDetails":"yes"}}}"#.utf8)
+    #expect(ScreenComposition.decode(malformed) == nil)
+}

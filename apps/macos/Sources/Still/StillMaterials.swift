@@ -5,13 +5,15 @@ private struct StillControlStyle: ViewModifier {
     let prominent: Bool
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var contrast
     @Environment(\.controlActiveState) private var controlActiveState
-    private var palette: PorcelainPalette { colorScheme == .dark ? .dark : .light }
+    @Environment(\.stillTheme) private var theme
+    private var palette: PorcelainPalette { theme.palette(dark: colorScheme == .dark) }
 
     @ViewBuilder func body(content: Content) -> some View {
         if controlActiveState == .inactive {
             content.buttonStyle(.bordered).tint(palette.accent).foregroundStyle(palette.primary)
-        } else if #available(macOS 26.0, *), !reduceTransparency {
+        } else if #available(macOS 26.0, *), !reduceTransparency, contrast != .increased {
             if prominent {
                 content.buttonStyle(.glassProminent).tint(palette.accent).foregroundStyle(palette.onAccent)
             } else {

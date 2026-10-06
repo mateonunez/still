@@ -61,6 +61,15 @@ enum NativeEvidence {
                     to: directory.appendingPathComponent("secondary-\(appearance.rawValue).png")
                 )
             }
+            for appearance in [StillAppearance.light, .dark] {
+                let model = CurtainPresentation()
+                model.appearance = appearance; model.theme = .glass
+                try save(CurtainView(presentation: model, authenticate: {}, evidenceRender: true).frame(width: 1440, height: 900).environment(\.colorScheme, appearance == .dark ? .dark : .light), to: directory.appendingPathComponent("glass-\(appearance.rawValue).png"))
+                let widgets = WidgetCenter(persist: false)
+                let center = NativePluginCenter(widgets: widgets, persist: false)
+                try save(ScreenEditorView(center: center, presentation: model, finish: {}).frame(width: 1440, height: 900).environment(\.colorScheme, appearance == .dark ? .dark : .light), to: directory.appendingPathComponent("glass-editor-\(appearance.rawValue).png"))
+                center.stop(); widgets.stop()
+            }
             try save(GeneralSettingsView(controls: SessionControls(persist: false)).padding(32).frame(width: 560).stillServiceSurface(), to: directory.appendingPathComponent("preferences.png"))
             try save(WelcomeView(showStill: {}), to: directory.appendingPathComponent("welcome.png"))
             if let tiff = StillMark.menuImage(covered: false).tiffRepresentation,

@@ -33,8 +33,7 @@ struct UsageCardView: View {
         }
         .padding(compact ? 12 : 18).frame(width: 280, alignment: .leading)
         .foregroundStyle(palette.primary)
-        .background(palette.surface.opacity(0.96), in: RoundedRectangle(cornerRadius: 18))
-        .overlay(RoundedRectangle(cornerRadius: 18).stroke(palette.secondary.opacity(0.18), lineWidth: 1))
+        .background { StillCardSurface(palette: palette) }
     }
 }
 
@@ -68,8 +67,7 @@ struct ExtensionCardView: View {
             Text(card.detail).font(.system(size: 10)).foregroundStyle(palette.secondary).fixedSize(horizontal: false, vertical: true)
             if let observed = card.observedAt { Text("Observed \(observed.formatted(.relative(presentation: .numeric)))").font(.system(size: 9)).foregroundStyle(palette.secondary) }
         }.padding(16).frame(width: 280, alignment: .leading).foregroundStyle(palette.primary)
-            .background(palette.surface.opacity(0.96), in: RoundedRectangle(cornerRadius: 18))
-            .overlay(RoundedRectangle(cornerRadius: 18).stroke(palette.secondary.opacity(0.18), lineWidth: 1))
+            .background { StillCardSurface(palette: palette) }
             .accessibilityElement(children: .combine)
     }
 }
@@ -83,7 +81,7 @@ struct WidgetsHubView: View {
     let titlebarInset: CGFloat
     var editScreen: () -> Void = {}
     @Environment(\.colorScheme) private var colorScheme
-    private var palette: PorcelainPalette { colorScheme == .dark ? .dark : .light }
+    private var palette: PorcelainPalette { presentation.theme.palette(dark: colorScheme == .dark) }
     @State private var section = "general"
     private var cardCount: Int { nativePlugins.visibleIDs.count + (nativePlugins.agentsEnabled ? 0 : widgets.enabled.count + widgets.activityEnabled.count) + plugins.manifests.filter { plugins.enabled.contains($0.id) }.reduce(0) { $0 + $1.widgets.count } }
     private var sections: [(id: String, title: String, symbol: String, detail: String)] {
@@ -126,6 +124,7 @@ struct WidgetsHubView: View {
             }.frame(maxWidth: .infinity)
         }.padding(.top, titlebarInset).frame(minWidth: 780, minHeight: 570).foregroundStyle(palette.primary).tint(palette.accent).stillServiceSurface()
             .onAppear { if ProcessInfo.processInfo.arguments.contains("--plugins") { section = "library" } }
+            .environment(\.stillTheme, presentation.theme)
             .preferredColorScheme(presentation.appearance == .system ? nil : presentation.appearance == .dark ? .dark : .light)
     }
 
@@ -133,16 +132,17 @@ struct WidgetsHubView: View {
         VStack(alignment: .leading, spacing: 20) {
             TimelineView(.periodic(from: .now, by: 30)) { timeline in
                 VStack(spacing: 12) {
-                    Text("PORCELAIN").font(.system(size: 8, weight: .semibold)).tracking(3).foregroundStyle(palette.secondary)
+                    Text(presentation.theme.title.uppercased()).font(.system(size: 8, weight: .semibold)).tracking(3).foregroundStyle(palette.secondary)
                     Text(timeline.date.formatted(date: .omitted, time: .shortened)).font(.custom("InstrumentSerif-Regular", size: 64))
                     Text("A little space to step away.").font(.system(size: 11)).foregroundStyle(palette.secondary)
                     HStack(spacing: 10) { ForEach(widgets.cards) { card in Text(card.provider.title).font(.system(size: 10)).padding(8).background(palette.surface, in: Capsule()) } }
                 }.frame(maxWidth: .infinity).padding(.vertical, 35).background(palette.background, in: RoundedRectangle(cornerRadius: 22))
                     .overlay(RoundedRectangle(cornerRadius: 22).stroke(palette.secondary.opacity(0.15), lineWidth: 1))
             }
-            Text("COLOR & LIGHT").font(.system(size: 10, weight: .semibold)).tracking(1.5).foregroundStyle(palette.secondary)
-            Picker("Appearance", selection: $presentation.appearance) { ForEach(StillAppearance.allCases, id: \.self) { Text($0.title).tag($0) } }.pickerStyle(.segmented)
-                .onChange(of: presentation.appearance) { _, value in UserDefaults.standard.set(value.rawValue, forKey: "StillAppearance") }
+            SceneAppearanceControls(presentation: presentation)
+            ClockAppearanceControls()
+            Text("Glass uses native materials on an opaque Still background.").font(.system(size: 12)).foregroundStyle(palette.secondary)
+
             Divider()
             Text("COMPOSITION").font(.system(size: 10, weight: .semibold)).tracking(1.5).foregroundStyle(palette.secondary)
             Picker("Composition", selection: $widgets.layout) { Text("Quiet corner").tag("corner"); Text("Side rail").tag("rail"); Text("Custom canvas").tag("canvas") }.disabled(plugins.template != nil)

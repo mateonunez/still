@@ -22,17 +22,29 @@ const pairs = [
   ['onAccent', 'textSecondary', 3],
 ];
 let failed = false;
-for (const mode of ['light', 'dark']) {
-  for (const [foreground, background, minimum] of pairs) {
-    const [low, high] = [luminance(tokens[mode][foreground]), luminance(tokens[mode][background])].sort(
-      (a, b) => a - b,
-    );
-    const ratio = (high + 0.05) / (low + 0.05);
-    const passes = ratio >= minimum;
-    console.log(
-      `${passes ? 'PASS' : 'FAIL'} ${mode}: ${foreground} / ${background} = ${ratio.toFixed(2)}:1 (min ${minimum})`,
-    );
-    if (!passes) failed = true;
+for (const [name, theme] of [
+  ['porcelain', tokens],
+  ['glass', tokens.glass],
+]) {
+  for (const mode of ['light', 'dark']) {
+    for (const [foreground, background, minimum] of pairs) {
+      if (
+        name === 'glass' &&
+        ['accentHover', 'activityText', 'activitySurface', 'activitySecondary'].some(
+          (role) => role === foreground || role === background,
+        )
+      )
+        continue;
+      const [low, high] = [luminance(theme[mode][foreground]), luminance(theme[mode][background])].sort(
+        (a, b) => a - b,
+      );
+      const ratio = (high + 0.05) / (low + 0.05);
+      const passes = ratio >= minimum;
+      console.log(
+        `${passes ? 'PASS' : 'FAIL'} ${name} ${mode}: ${foreground} / ${background} = ${ratio.toFixed(2)}:1 (min ${minimum})`,
+      );
+      if (!passes) failed = true;
+    }
   }
 }
 if (failed) process.exitCode = 1;
