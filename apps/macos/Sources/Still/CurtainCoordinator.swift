@@ -474,8 +474,10 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     @objc private func about() {
         let alert = NSAlert()
         alert.messageText = "Still"
-        let candidate = Bundle.main.object(forInfoDictionaryKey: "StillCandidate") as? String ?? "Development"
-        alert.informativeText = "A calm screen for your Mac.\n\nVersion 0.1.0 · \(candidate)\nLocal development preview\n\nVisual privacy with system authentication and optional inactivity activation. Still does not replace the macOS security lock.\n\nInstrument Serif · SIL Open Font License."
+        let preview = Bundle.main.object(forInfoDictionaryKey: "StillPreviewVersion") as? String
+        let version = preview ?? Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Development"
+        let candidate = Bundle.main.object(forInfoDictionaryKey: "StillCandidate") as? String ?? "Experimental preview"
+        alert.informativeText = "A calm screen for your Mac.\n\nVersion \(version) · \(candidate)\nAd-hoc preview · Not notarized\n\nVisual privacy with system authentication and optional inactivity activation. Still does not replace the macOS security lock.\n\nInstrument Serif · SIL Open Font License."
         alert.addButton(withTitle: "Done")
         NSApp.activate(ignoringOtherApps: true)
         alert.runModal()
