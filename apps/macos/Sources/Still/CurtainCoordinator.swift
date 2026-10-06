@@ -12,7 +12,7 @@ private final class CurtainPanel: NSPanel {
 @MainActor
 final class CurtainCoordinator: NSObject, NSMenuDelegate {
     private var session = CurtainSession()
-    private let presentation = CurtainPresentation()
+    private let presentation = CurtainPresentation(appearanceDefaults: ProcessInfo.processInfo.arguments.contains("--evidence-directory") ? nil : .standard)
     private let authentication = AuthenticationService()
     private var panels: [NSPanel] = []
     private var statusItem: NSStatusItem?
@@ -34,11 +34,6 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
 
     override init() {
         super.init()
-        if let saved = UserDefaults.standard.string(forKey: "StillAppearance"),
-           let appearance = StillAppearance(rawValue: saved) {
-            presentation.appearance = appearance
-        }
-        if let saved = UserDefaults.standard.string(forKey: "StillTheme"), let theme = StillTheme(rawValue: saved) { presentation.theme = theme }
         NotificationCenter.default.addObserver(
             self, selector: #selector(displaysChanged),
             name: NSApplication.didChangeScreenParametersNotification, object: nil
@@ -479,7 +474,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
     @objc private func about() {
         let alert = NSAlert()
         alert.messageText = "Still"
-        alert.informativeText = "A calm screen for your Mac.\n\nVersion 0.1.0 · Local development preview\n\nVisual privacy with system authentication and optional inactivity activation. Still does not replace the macOS security lock.\n\nInstrument Serif · SIL Open Font License."
+        let candidate = Bundle.main.object(forInfoDictionaryKey: "StillCandidate") as? String ?? "Development"
+        alert.informativeText = "A calm screen for your Mac.\n\nVersion 0.1.0 · \(candidate)\nLocal development preview\n\nVisual privacy with system authentication and optional inactivity activation. Still does not replace the macOS security lock.\n\nInstrument Serif · SIL Open Font License."
         alert.addButton(withTitle: "Done")
         NSApp.activate(ignoringOtherApps: true)
         alert.runModal()

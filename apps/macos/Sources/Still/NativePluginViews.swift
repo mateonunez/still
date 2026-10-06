@@ -75,9 +75,8 @@ struct NativePluginLibraryView: View {
             HStack { VStack(alignment: .leading, spacing: 5) { Text("Made for Still.").font(.custom("InstrumentSerif-Regular", size: 28)); Text("mateonunez · Native collection · v0.1.0").font(.system(size: 11)).foregroundStyle(palette.secondary) }; Spacer(); Button("Discover sources") { center.discover() }.stillControl() }
             Text("Connect any plugin. Choose what to show and arrange it across your screen.").font(.system(size: 12)).foregroundStyle(palette.secondary)
             if !center.visibleIDs.isEmpty {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Arrange your curtain").font(.system(size: 14, weight: .semibold))
-                    Text("Drag a handle to reorder. Choose composition and position in Appearance.").font(.system(size: 11)).foregroundStyle(palette.secondary)
+                DisclosureGroup("Screen order") {
+                    Text("Drag to reorder, or arrange modules in Edit screen.").font(.system(size: 11)).foregroundStyle(palette.secondary).padding(.vertical, 8)
                     ForEach(center.visibleIDs) { id in
                         HStack(spacing: 12) {
                             Image(systemName: "line.3.horizontal").foregroundStyle(palette.secondary).padding(6).draggable(id.rawValue).accessibilityLabel("Drag \(id.title) to reorder")
@@ -98,8 +97,10 @@ struct NativePluginLibraryView: View {
                     HStack { Image(systemName: id.symbol).foregroundStyle(palette.accent).accessibilityHidden(true); Text(id.title).font(.system(size: 16, weight: .semibold)); Spacer(); Toggle("Enabled", isOn: Binding(get: { center.configurations[id]?.enabled == true }, set: { center.setEnabled(id, $0) })).toggleStyle(.switch).controlSize(.small).accessibilityLabel("Enable \(id.title)") }
                     Text(id.summary).font(.system(size: 12)).foregroundStyle(palette.secondary)
                     Toggle("Show on curtain", isOn: Binding(get: { center.configurations[id]?.visible == true }, set: { center.setVisible(id, $0) })).disabled(center.configurations[id]?.enabled != true)
-                    DisclosureGroup("Configure \(id.title)") { NativePluginSettingsView(id: id, center: center).padding(.top, 12) }
-                    if let card = center.cards[id] { NativePluginCardView(card: card.current(now: Date()), palette: palette) }
+                    DisclosureGroup("Configure \(id.title)") {
+                        NativePluginSettingsView(id: id, center: center).padding(.top, 12)
+                        if let card = center.cards[id] { NativePluginCardView(card: card.current(now: Date()), palette: palette).padding(.top, 12) }
+                    }
                 }.padding(18).frame(maxWidth: .infinity, alignment: .leading).background(palette.surface.opacity(0.65), in: RoundedRectangle(cornerRadius: 18))
             }
             if !center.issue.isEmpty { Text(center.issue).font(.system(size: 12)).foregroundStyle(palette.secondary).accessibilityLabel("Plugin status: \(center.issue)") }

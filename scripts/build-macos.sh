@@ -3,8 +3,8 @@ set -euo pipefail
 still_root="${0:A:h:h}"
 configuration="${1:-debug}"
 application_name="${2:-Still}"
-if [[ "$application_name" != Still && "$application_name" != Still-preview && "$application_name" != Still-canvas && "$application_name" != Still-glass && "$application_name" != Still-design ]]; then
-  print -u2 'App output must be Still, Still-preview, Still-canvas, Still-glass or Still-design under out/.'
+if [[ "$application_name" != Still && "$application_name" != Still-preview && "$application_name" != Still-canvas && "$application_name" != Still-glass && "$application_name" != Still-design && "$application_name" != Still-review && "$application_name" != Still-polish ]]; then
+  print -u2 'Unsupported development candidate name.'
   exit 2
 fi
 if [[ "$configuration" != debug && "$configuration" != release ]]; then
@@ -40,9 +40,12 @@ mv -f "$still_app/Contents/MacOS/StillAgentBridge.new" "$still_app/Contents/MacO
 cp "$still_bin/StillSpotifyBridge" "$still_app/Contents/MacOS/StillSpotifyBridge.new"
 mv -f "$still_app/Contents/MacOS/StillSpotifyBridge.new" "$still_app/Contents/MacOS/StillSpotifyBridge"
 cp "$still_root/apps/macos/Resources/Info.plist" "$still_app/Contents/Info.plist"
+plutil -insert StillCandidate -string "$application_name" "$still_app/Contents/Info.plist"
 cp "$still_root/design/fonts/InstrumentSerif-Regular.ttf" "$still_app/Contents/Resources/"
 cp "$still_root/design/fonts/InstrumentSerif-OFL.txt" "$still_app/Contents/Resources/"
+cp "$still_root/LICENSE" "$still_app/Contents/Resources/LICENSE"
 # Ad-hoc signing is a local development artifact, never a distributable release.
 codesign --force --sign - "$still_app"
 codesign --verify --deep --strict "$still_app"
+node "$still_root/scripts/native-candidate.mjs" --record "$application_name"
 print "Local development app: $still_app"

@@ -50,12 +50,8 @@ struct StillSceneBackground: View {
             palette.background
             if theme == .glass && !reduceTransparency && contrast != .increased {
                 GeometryReader { geometry in
-                    Ellipse().fill(palette.accent.opacity(backdrop == "mist" ? 0.05 : colorScheme == .dark ? 0.30 : 0.06))
-                        .frame(width: geometry.size.width * 0.8, height: geometry.size.height * 0.85)
-                        .blur(radius: 100).offset(x: -geometry.size.width * 0.25, y: -geometry.size.height * 0.3)
-                    Ellipse().fill((backdrop == "dusk" ? Color.orange : Color.indigo).opacity(colorScheme == .dark ? 0.16 : 0.04))
-                        .frame(width: geometry.size.width * 0.7, height: geometry.size.height * 0.7)
-                        .blur(radius: 110).offset(x: geometry.size.width * 0.5, y: geometry.size.height * 0.55)
+                    Rectangle().fill(RadialGradient(colors: [palette.accent.opacity(backdrop == "mist" ? 0.05 : colorScheme == .dark ? 0.22 : 0.06), .clear], center: UnitPoint(x: 0.08, y: 0.02), startRadius: 0, endRadius: max(geometry.size.width, geometry.size.height) * 0.75))
+                    Rectangle().fill(RadialGradient(colors: [(backdrop == "dusk" ? Color.orange : Color.indigo).opacity(colorScheme == .dark ? 0.14 : 0.04), .clear], center: UnitPoint(x: 0.95, y: 0.95), startRadius: 0, endRadius: max(geometry.size.width, geometry.size.height) * 0.65))
                 }
             }
         }.clipped().ignoresSafeArea().accessibilityHidden(true)

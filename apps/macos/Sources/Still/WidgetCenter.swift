@@ -31,9 +31,11 @@ final class WidgetCenter: ObservableObject {
     private var activityAfter = Date.distantPast
     private let logger = Logger(subsystem: "co.mateonunez.still.development", category: "usage")
     private var codexURL: URL?
+    private let sourceRoot: URL
 
-    init(persist: Bool = true, readOnlySources: Set<UsageProvider> = []) {
+    init(persist: Bool = true, readOnlySources: Set<UsageProvider> = [], readOnlyActivitySources: Set<UsageProvider> = [], sourceRoot: URL? = nil) {
         self.persist = persist
+        self.sourceRoot = sourceRoot ?? ClaudeBridgeInstaller.root
         codexURL = CodexUsageAdapter.locate()
         if persist {
             enabled = Set((UserDefaults.standard.stringArray(forKey: "StillWidgets") ?? []).compactMap(UsageProvider.init(rawValue:)))
@@ -42,7 +44,7 @@ final class WidgetCenter: ObservableObject {
             layout = saved == "canvas" ? "canvas" : saved == "rail" ? "rail" : "corner"
             side = UserDefaults.standard.string(forKey: "StillWidgetSide") == "left" ? "left" : "right"
             if let path = UserDefaults.standard.string(forKey: "StillCodexExecutable") { codexURL = URL(fileURLWithPath: path) }
-        } else { enabled = readOnlySources }
+        } else { enabled = readOnlySources; activityEnabled = readOnlyActivitySources }
         rebuild()
     }
 
@@ -118,7 +120,7 @@ final class WidgetCenter: ObservableObject {
     private func rebuild() {
         let now = Date()
         activityCards = UsageProvider.allCases.filter { activityEnabled.contains($0) }.map { provider in
-            let path = ClaudeBridgeInstaller.root.appendingPathComponent("activity/\(provider.rawValue).json")
+            let path = sourceRoot.appendingPathComponent("activity/\(provider.rawValue).json")
             let size = (try? FileManager.default.attributesOfItem(atPath: path.path)[.size] as? NSNumber)?.intValue ?? 0
             let data = size > 0 && size <= 65536 ? try? Data(contentsOf: path) : nil
             let value = data.flatMap { try? JSONDecoder().decode(ActivitySnapshot.self, from: $0) }
@@ -138,7 +140,7 @@ final class WidgetCenter: ObservableObject {
                 let current = snapshot.flatMap { $0.isUsable(now: now) ? $0 : nil }
                 return NativeWidgetCard(provider: provider, snapshot: current, status: current != nil ? "Account quota · live client" : (fetching ? "Connecting to Codex…" : codexIssue?.message ?? "Waiting for quota"))
             }
-            let path = ClaudeBridgeInstaller.root.appendingPathComponent("usage/claude.json")
+            let path = sourceRoot.appendingPathComponent("usage/claude.json")
             let size = (try? FileManager.default.attributesOfItem(atPath: path.path)[.size] as? NSNumber)?.intValue ?? 0
             guard size > 0, size <= 65536, let data = try? Data(contentsOf: path),
                   let value = try? JSONDecoder().decode(UsageSnapshot.self, from: data), value.provider == .claude else {

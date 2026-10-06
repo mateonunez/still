@@ -1,6 +1,6 @@
 # Still roadmap
 
-Updated 2026-10-05. Native development preview; no signed/notarized beta or public download. The Next.js site is live. Search Console setup was reported complete; indexing/rankings are not established.
+Updated 2026-10-06. Native development preview; no signed/notarized beta or public download. The Next.js site is live. Search Console setup was reported complete; indexing/rankings are not established.
 
 | Priority | Next milestone | Acceptance |
 | --- | --- | --- |
@@ -9,7 +9,7 @@ Updated 2026-10-05. Native development preview; no signed/notarized beta or publ
 | 3 | Live advisory agent activity | Client opt-in/trust/reload, parallel sessions, attention→progress, failure/interrupt/end/expiry and disconnect for Codex/Claude |
 | 4 | Native collection acceptance | Ten configurable modules implemented; complete Calendar consent and fresh-install Spotify revocation, plugin configuration/expiry/disable trials, template ordering and resource acceptance |
 | 5 | Beta readiness | Choose verified OS/hardware matrix; fresh installation/recovery/failure checks and native visuals |
-| 6 | Direct distribution, final gate | Release identity/license, Developer ID/hardened runtime/notarization, clean-Mac install, updates and verified download. Deferred until product acceptance. |
+| 6 | Direct distribution, final gate | Confirm release identity, Developer ID/hardened runtime/notarization, clean-Mac install, updates and verified download. MIT is selected; distribution remains deferred until product acceptance. |
 | 7 | Release website | Verified native visuals/version/compatibility/download, release notes, search coverage and performance |
 
 See [native collection evidence](verification/native-plugin-collection.md) for the ten-plugin implementation and current source states. Claude preserves bounded historical quota as Last reported without changing its observation time.
@@ -41,3 +41,7 @@ Balanced, Focus and Dashboard presets use measured module sizes in a viewport ow
 ## Glass and scene personalization
 
 Porcelain and Glass are the two official native themes. A contextual editor, widget gallery, system Grid drag previews/live insertion, continuous Free movement, clock typography and per-module details are built in the local design candidate. Native interaction/material/privacy/accessibility acceptance remains open; see [evidence](verification/glass-and-contextual-editor.md) and [guide](guides/screen-personalization.md). Signed/notarized beta remains deferred.
+
+## Refinement and signing review
+
+The latest candidate is `Still-polish`; a hash-verified build manifest removes ambiguous output selection. Theme persistence, visible agent-signal expiry, measured Free alignment, adaptive clock scale and progressive Settings disclosure are implemented. The website now illustrates Porcelain/Glass while imported v1 templates remain Porcelain-only. [Refinement evidence](verification/pre-beta-refinement.md) and the [beta handoff](guides/beta-handoff.md) record automated checks, blocked live reads and exact-candidate physical gates. Signing/notarization and public native distribution have not started.

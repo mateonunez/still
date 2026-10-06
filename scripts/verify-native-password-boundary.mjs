@@ -4,9 +4,13 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
+import { parseArgs } from 'node:util';
+import { nativeCandidates } from './native-candidate.mjs';
 
 // Observe while covered; answer only after returning, so Terminal focus cannot contaminate the trial.
-const app = resolve('out/Still-preview.app');
+const { values } = parseArgs({ options: { app: { type: 'string', default: 'Still-preview' } } });
+if (!nativeCandidates.includes(values.app)) throw new Error('Unsupported candidate');
+const app = resolve(`out/${values.app}.app`);
 const hash = createHash('sha256')
   .update(await readFile(`${app}/Contents/MacOS/Still`))
   .digest('hex');

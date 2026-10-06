@@ -56,15 +56,23 @@ struct ScreenCanvasView: View {
     @State private var resizeOrigin: CGFloat?
     @State private var resizeWidth: CGFloat?
     @State private var frozenFrames: [String: CGRect] = [:]
+    @State private var alignment: CanvasAlignment?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
+                if editing, dragging != nil, let alignment {
+                    let bounds = CanvasGeometry(viewport: geometry.size, reservedFooter: reservedFooter).contentBounds
+                    Path { path in
+                        if let x = alignment.verticalGuide { path.move(to: CGPoint(x: x, y: bounds.minY)); path.addLine(to: CGPoint(x: x, y: bounds.maxY)) }
+                        if let y = alignment.horizontalGuide { path.move(to: CGPoint(x: bounds.minX, y: y)); path.addLine(to: CGPoint(x: bounds.maxX, y: y)) }
+                    }.stroke(palette.accent.opacity(0.6), style: StrokeStyle(lineWidth: 1, dash: [4, 4])).allowsHitTesting(false).accessibilityHidden(true)
+                }
                 MeasuredCanvasLayout(reservedFooter: reservedFooter, frozenFrames: frozenFrames, mode: composition.effectiveLayout, gridWidth: composition.gridWidth) {
                     let clockWidth = liveWidth("clock", index: 0, viewport: geometry.size.width)
                     module("clock", index: 0, canvas: geometry.size, width: clockWidth) {
-                        StillClockFace(palette: palette, size: min(180, clockWidth * 0.36, geometry.size.height * (composition.effectiveLayout == .grid ? 0.09 : 0.18)), messageSize: geometry.size.width < 1150 ? 20 : 24)
+                        StillClockFace(palette: palette, size: min(180, clockWidth * 0.36, geometry.size.height * (composition.effectiveLayout == .grid ? max(0.09, 0.18 - Double(cards.count) * 0.009) : 0.18)), messageSize: geometry.size.width < 1150 ? 20 : 24)
                     }
                     ForEach(Array(cards.enumerated()), id: \.element.id) { index, card in
                         let width = liveWidth(card.id.rawValue, index: index, viewport: geometry.size.width)
@@ -109,14 +117,19 @@ struct ScreenCanvasView: View {
                     dragOrigin = CGPoint(x: frame.midX, y: frame.midY)
                     frozenFrames = renderedFrames
                 }
-                selection = id; dragging = id; translation = value.translation
+                selection = id; dragging = id
+                if let frame = frozenFrames[id] {
+                    let aligned = CanvasAlignment.resolve(frame: frame, translation: value.translation, others: frozenFrames.filter { $0.key != id }.map(\.value), bounds: CanvasGeometry(viewport: canvas, reservedFooter: reservedFooter).contentBounds)
+                    alignment = aligned
+                    translation = CGSize(width: aligned.center.x - frame.midX, height: aligned.center.y - frame.midY)
+                } else { translation = value.translation }
             }.onEnded { value in
                 guard editing, resizing == nil, composition.effectiveLayout == .free else { return }
                 var updated = composition.placement(id, index: index)
                 let origin = dragOrigin ?? CGPoint(x: updated.x * canvas.width, y: updated.y * canvas.height)
-                updated.x = (origin.x + value.translation.width) / canvas.width
-                updated.y = (origin.y + value.translation.height) / canvas.height
-                place(id, updated.fitted()); dragging = nil; translation = .zero; dragOrigin = nil; frozenFrames = [:]
+                updated.x = (origin.x + translation.width) / canvas.width
+                updated.y = (origin.y + translation.height) / canvas.height
+                place(id, updated.fitted()); dragging = nil; translation = .zero; dragOrigin = nil; frozenFrames = [:]; alignment = nil
             }, including: editing && composition.effectiveLayout == .free ? .all : .none)
             .modifier(CanvasGridDrag(id: id, enabled: editing && composition.effectiveLayout == .grid && id != "clock", source: $gridDrag, lastTarget: $gridLastTarget, select: { selection = id }, reorder: reorder))
             .accessibilityElement(children: .combine)
@@ -129,11 +142,11 @@ struct ScreenCanvasView: View {
                         .font(.system(size: 10, weight: .semibold)).foregroundStyle(palette.primary)
                         .frame(width: 30, height: 24).background(palette.surface, in: Capsule())
                         .overlay(Capsule().stroke(palette.accent, lineWidth: 1))
-                        .offset(x: 10, y: 10)
+                        .padding(3)
                         .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .named("still.canvas")).onChanged { value in
                             if resizing == nil { resizeOrigin = width; frozenFrames = renderedFrames }
                             resizing = id
-                            let maximum = min(600, max(180, canvas.width * (id == "clock" ? 0.55 : 0.32)))
+                            let maximum = min(600, max(180, canvas.width - 58))
                             resizeWidth = min(maximum, max(180, (resizeOrigin ?? width) + value.translation.width * 2))
                         }.onEnded { _ in
                             var updated = composition.placement(id, index: index)
@@ -194,12 +207,12 @@ struct ScreenEditorView: View {
             Spacer()
             Picker("Arrangement", selection: Binding(get: { center.composition.effectiveLayout }, set: { center.setLayout($0) })) {
                 Text("Grid").tag(CanvasLayoutMode.grid); Text("Free").tag(CanvasLayoutMode.free)
-            }.pickerStyle(.segmented).frame(width: 140)
+            }.pickerStyle(.segmented).labelsHidden().frame(width: 140)
             Button { showAppearance = true } label: { Label("Appearance", systemImage: "paintpalette") }.stillControl()
                 .popover(isPresented: $showAppearance) { SceneAppearanceControls(presentation: presentation).padding(24).frame(width: 310) }
             Button { showGallery = true } label: { Label("Add widget", systemImage: "plus") }.stillControl()
             Button("Done", action: finish).stillControl(prominent: true).keyboardShortcut(.defaultAction)
-        }.padding(24)
+        }.padding(.horizontal, 28).padding(.vertical, 22)
     }
     private var selectionBar: some View {
         HStack(spacing: 16) {
@@ -209,11 +222,11 @@ struct ScreenEditorView: View {
             Divider().frame(height: 20)
             Button { showInspector = true } label: { Label("Adjust", systemImage: "slider.horizontal.3") }.buttonStyle(.borderless)
                 .popover(isPresented: $showInspector) { inspector.padding(24).frame(width: 320) }
-            movementControls
+            Menu { movementControls } label: { Image(systemName: "arrow.up.and.down.and.arrow.left.and.right") }.menuStyle(.borderlessButton).fixedSize().accessibilityLabel("Move \(selectedTitle)")
             if selection != "clock" {
                 Button(role: .destructive) { removeSelection() } label: { Image(systemName: "minus.circle") }.buttonStyle(.borderless).accessibilityLabel("Remove \(selectedTitle)")
             }
-        }.padding(14).background { toolbarSurface }.fixedSize().padding(.bottom, 14)
+        }.padding(.horizontal, 18).padding(.vertical, 12).background { toolbarSurface }.fixedSize().padding(.bottom, 12)
     }
     @ViewBuilder private var toolbarSurface: some View {
         if reduceTransparency || contrast == .increased { RoundedRectangle(cornerRadius: 24).fill(palette.surface) }
@@ -270,7 +283,7 @@ struct ScreenEditorView: View {
     @ViewBuilder private var freeSizing: some View {
         Toggle("Automatic width", isOn: Binding(get: { selectedPlacement.width == nil }, set: { automatic in var p = selectedPlacement; p.width = automatic ? nil : p.resolvedWidth(viewport: editorWidth, clock: selection == "clock"); center.place(selection, p) })).toggleStyle(.switch)
         if selectedPlacement.width != nil {
-            let maximum = min(600, max(180, editorWidth * (selection == "clock" ? 0.55 : 0.32)))
+            let maximum = min(600, max(180, editorWidth - 58))
             Slider(value: Binding(get: { selectedPlacement.resolvedWidth(viewport: editorWidth, clock: selection == "clock") }, set: { value in var p = selectedPlacement; p.width = value; center.place(selection, p) }), in: 180...maximum, onEditingChanged: { adjustingWidth = $0 }) { Text("Module width") }
         }
     }
@@ -310,13 +323,25 @@ struct ClockAppearanceControls: View {
 struct SceneAppearanceControls: View {
     @ObservedObject var presentation: CurtainPresentation
     @AppStorage("StillBackdrop") private var backdrop = StillBackdropStyle.aurora.rawValue
+    @Environment(\.colorScheme) private var scheme
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text("Your kind of quiet").font(.system(size: 20, weight: .semibold))
-            Picker("Theme", selection: $presentation.theme) { ForEach(StillTheme.allCases, id: \.self) { Text($0.title).tag($0) } }.pickerStyle(.segmented)
-                .onChange(of: presentation.theme) { _, value in UserDefaults.standard.set(value.rawValue, forKey: "StillTheme") }
+            HStack(spacing: 12) {
+                ForEach(StillTheme.allCases, id: \.self) { theme in
+                    let palette = theme.palette(dark: presentation.appearance == .dark || (presentation.appearance == .system && scheme == .dark))
+                    Button { presentation.theme = theme } label: {
+                        VStack(alignment: .leading, spacing: 10) {
+                            ZStack {
+                                StillSceneBackground(theme: theme, palette: palette)
+                                Text("12:48").font(.custom("InstrumentSerif-Regular", size: 32)).foregroundStyle(palette.primary)
+                            }.frame(height: 78).clipShape(RoundedRectangle(cornerRadius: 12)).accessibilityHidden(true)
+                            HStack { Text(theme.title).font(.system(size: 12, weight: .medium)); Spacer(); Image(systemName: presentation.theme == theme ? "checkmark.circle.fill" : "circle").foregroundStyle(presentation.theme == theme ? palette.accent : palette.secondary) }
+                        }.padding(10).background(palette.surface.opacity(0.4), in: RoundedRectangle(cornerRadius: 16))
+                            .overlay(RoundedRectangle(cornerRadius: 16).stroke(presentation.theme == theme ? palette.accent : palette.secondary.opacity(0.2), lineWidth: presentation.theme == theme ? 2 : 1))
+                    }.buttonStyle(.plain).accessibilityLabel("\(theme.title) theme").accessibilityValue(presentation.theme == theme ? "Selected" : "Not selected")
+                }
+            }
             Picker("Appearance", selection: $presentation.appearance) { ForEach(StillAppearance.allCases, id: \.self) { Text($0.title).tag($0) } }.pickerStyle(.segmented)
-                .onChange(of: presentation.appearance) { _, value in UserDefaults.standard.set(value.rawValue, forKey: "StillAppearance") }
             if presentation.theme == .glass {
                 Picker("Backdrop", selection: $backdrop) { ForEach(StillBackdropStyle.allCases, id: \.self) { Text($0.title).tag($0.rawValue) } }.pickerStyle(.segmented)
             }

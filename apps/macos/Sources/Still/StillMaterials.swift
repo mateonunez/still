@@ -31,7 +31,8 @@ private struct StillServiceSurface: ViewModifier {
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.colorSchemeContrast) private var contrast
     @Environment(\.colorScheme) private var colorScheme
-    private var palette: PorcelainPalette { colorScheme == .dark ? .dark : .light }
+    @Environment(\.stillTheme) private var theme
+    private var palette: PorcelainPalette { theme.palette(dark: colorScheme == .dark) }
 
     @ViewBuilder func body(content: Content) -> some View {
         if reduceTransparency || contrast == .increased {

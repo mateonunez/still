@@ -21,8 +21,15 @@ final class CurtainPresentation: ObservableObject {
     @Published var widgetLayout = "corner"
     @Published var widgetSide = "right"
     @Published var composition = ScreenComposition()
-    @Published var theme: StillTheme = .porcelain
-    @Published var appearance: StillAppearance = .system
+    private let appearanceDefaults: UserDefaults?
+    @Published var theme: StillTheme = .porcelain { didSet { appearanceDefaults?.set(theme.rawValue, forKey: "StillTheme") } }
+    @Published var appearance: StillAppearance = .system { didSet { appearanceDefaults?.set(appearance.rawValue, forKey: "StillAppearance") } }
+
+    init(appearanceDefaults: UserDefaults? = nil) {
+        self.appearanceDefaults = appearanceDefaults
+        theme = appearanceDefaults?.string(forKey: "StillTheme").flatMap(StillTheme.init(rawValue:)) ?? .porcelain
+        appearance = appearanceDefaults?.string(forKey: "StillAppearance").flatMap(StillAppearance.init(rawValue:)) ?? .system
+    }
 }
 
 enum StillAppearance: String, CaseIterable {

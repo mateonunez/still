@@ -23,11 +23,11 @@ public struct CanvasPlacement: Codable, Equatable, Sendable {
         try values.encode(x, forKey: .x); try values.encode(y, forKey: .y); try values.encode(size, forKey: .size); try values.encode(width, forKey: .width); try values.encode(showsDetails, forKey: .showsDetails)
     }
     public func fitted() -> Self {
-        Self(x: min(0.92, max(0.08, x)), y: min(0.76, max(0.16, y)), size: size, width: width.map { min(600, max(180, $0)) }, showsDetails: showsDetails)
+        Self(x: min(1, max(0, x)), y: min(1, max(0, y)), size: size, width: width.map { min(600, max(180, $0)) }, showsDetails: showsDetails)
     }
     public func resolvedWidth(viewport: Double, clock: Bool = false) -> Double {
         let automatic = clock ? min(480, viewport * 0.38) : min(330, max(210, viewport * 0.22))
-        return min(width ?? automatic, max(180, viewport * (clock ? 0.55 : 0.32)))
+        return min(width ?? automatic, max(180, viewport - 58))
     }
     public func snapped() -> Self {
         Self(x: min(0.92, max(0.08, (x * 12).rounded() / 12)), y: min(0.76, max(0.16, (y * 8).rounded() / 8)), size: size, width: width, showsDetails: showsDetails)

@@ -1,6 +1,6 @@
 # Personalize your Still screen
 
-The current local design candidate is `out/Still-design.app`. Quit any other Still instance before opening this candidate:
+The current local design candidate is `out/Still-polish.app`. Quit any other Still instance before opening this candidate:
 
 ```sh
 open out/Still-design.app --args --editor
@@ -14,7 +14,7 @@ open out/Still-design.app --args --editor
 - **Widget details:** the inspector can show or hide source details for an individual module. Expanded Task Watch cards show up to four tasks; compact cards show one and a remaining-task count.
 - **Grid:** drag widgets using the native macOS drag preview. Passing over another widget rearranges the grid immediately. The clock keeps its own region. Adjust a widget to change the shared automatic-column/continuous-width preference.
 - **Free:** drag modules to position them. Resize the selected module with its handle or use Adjust → Module width. Height follows content. The other centers stay stable during pointer movement; fitting resumes on release.
-- **Keyboard:** the selection picker, directional buttons and width slider provide alternatives to dragging. Grid up/down moves across a row; Free buttons move by 2.5 percent of the viewport. Escape dismisses the active inspector or returns to Settings. Done returns to Settings.
+- **Keyboard:** the selection picker, movement menu and width slider provide alternatives to dragging. Grid up/down moves across a row; Free menu actions move by 2.5 percent of the viewport. Escape dismisses the active inspector or returns to Settings. Done returns to Settings.
 
 Changes are saved locally. A live Grid reorder is saved as it happens; canceling the native drag does not undo reorders already made. Switching Grid/Free preserves saved free coordinates and widths. Reset arrangement and presets are available in Adjust; applying a preset replaces the scene positions.
 
@@ -27,3 +27,5 @@ There is one main scene. Secondary displays remain opaque. Small screens can sti
 ## Try this candidate
 
 Check dragging, release/cancel, repeated reordering, continuous resizing, restart persistence, both themes in Light/Dark, accessibility preferences and multiple displays. Also repeat Touch ID/password and activation-time trackpad trials. Successful build/tests do not establish interaction smoothness, privacy coverage or release readiness.
+
+Free movement shows nearby edge/center alignment guides. Explicit widths can use the available viewport rather than a percentage-based card limit. Grid clock scale adapts to module count.

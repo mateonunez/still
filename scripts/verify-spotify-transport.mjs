@@ -5,10 +5,11 @@ import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { parseArgs, promisify } from 'node:util';
+import { nativeCandidates } from './native-candidate.mjs';
 import { outputDirectory, root } from './probe-support.mjs';
 
 const { values } = parseArgs({ options: { app: { type: 'string', default: 'Still-preview' } } });
-assert(['Still', 'Still-preview'].includes(values.app), 'Unsupported application');
+assert(nativeCandidates.includes(values.app), 'Unsupported application');
 const helper = join(root, `out/${values.app}.app/Contents/MacOS/StillSpotifyBridge`);
 const output = await outputDirectory(
   `out/verification/spotify-transport/${new Date().toISOString().replaceAll(':', '-')}`,

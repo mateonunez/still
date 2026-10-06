@@ -5,10 +5,11 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { parseArgs } from 'node:util';
+import { nativeCandidates } from './native-candidate.mjs';
 
 // Physical gestures/biometrics cannot be synthesized: preserve an explicit human verdict.
 const { values } = parseArgs({ options: { app: { type: 'string', default: 'Still' }, report: { type: 'string' } } });
-assert.ok(['Still', 'Still-preview'].includes(values.app), 'Unsupported candidate name');
+assert.ok(nativeCandidates.includes(values.app), 'Unsupported candidate name');
 const directory = resolve(`out/verification/interaction-trial/${values.app}`);
 let report;
 if (values.report) {

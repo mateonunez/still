@@ -39,7 +39,7 @@ struct UsageCardView: View {
 
 func activityTitle(_ state: String?) -> String {
     switch state {
-    case "working": "Working"
+    case "working": "Activity observed"
     case "attentionRequested": "Attention requested"
     case "completed": "Completed"
     case "interrupted": "Interrupted"
@@ -133,15 +133,13 @@ struct WidgetsHubView: View {
             TimelineView(.periodic(from: .now, by: 30)) { timeline in
                 VStack(spacing: 12) {
                     Text(presentation.theme.title.uppercased()).font(.system(size: 8, weight: .semibold)).tracking(3).foregroundStyle(palette.secondary)
-                    Text(timeline.date.formatted(date: .omitted, time: .shortened)).font(.custom("InstrumentSerif-Regular", size: 64))
-                    Text("A little space to step away.").font(.system(size: 11)).foregroundStyle(palette.secondary)
-                    HStack(spacing: 10) { ForEach(widgets.cards) { card in Text(card.provider.title).font(.system(size: 10)).padding(8).background(palette.surface, in: Capsule()) } }
-                }.frame(maxWidth: .infinity).padding(.vertical, 35).background(palette.background, in: RoundedRectangle(cornerRadius: 22))
+                    StillClockFace(palette: palette, size: 64, messageSize: 17)
+                }.frame(maxWidth: .infinity).padding(.vertical, 30).background { StillSceneBackground(theme: presentation.theme, palette: palette).clipShape(RoundedRectangle(cornerRadius: 22)) }
                     .overlay(RoundedRectangle(cornerRadius: 22).stroke(palette.secondary.opacity(0.15), lineWidth: 1))
             }
             SceneAppearanceControls(presentation: presentation)
             ClockAppearanceControls()
-            Text("Glass uses native materials on an opaque Still background.").font(.system(size: 12)).foregroundStyle(palette.secondary)
+            Text(presentation.theme == .glass ? "Soft light, native materials. Your desktop stays out of view." : "Warm tones, quiet typography. A little room to breathe.").font(.system(size: 12)).foregroundStyle(palette.secondary)
 
             Divider()
             Text("COMPOSITION").font(.system(size: 10, weight: .semibold)).tracking(1.5).foregroundStyle(palette.secondary)
@@ -185,10 +183,17 @@ struct WidgetsHubView: View {
                     if provider == .codex { Button("Choose Codex executable…") { widgets.chooseCodex() }.stillControl() }
                 }.font(.system(size: 11)).foregroundStyle(palette.secondary).padding(.top, 8)
             }
-            if let card = widgets.cards.first(where: { $0.provider == provider }) { UsageCardView(card: card, palette: palette, compact: true) }
-            if let card = widgets.activityCards.first(where: { $0.id == provider.rawValue + "-activity" }) { ExtensionCardView(card: card, palette: palette) }
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .top, spacing: 16) { sourceCards(provider) }
+                VStack(alignment: .leading, spacing: 16) { sourceCards(provider) }
+            }
             Divider()
         }
+    }
+
+    @ViewBuilder private func sourceCards(_ provider: UsageProvider) -> some View {
+        if let card = widgets.cards.first(where: { $0.provider == provider }) { UsageCardView(card: card, palette: palette, compact: true) }
+        if let card = widgets.activityCards.first(where: { $0.id == provider.rawValue + "-activity" }) { ExtensionCardView(card: card, palette: palette) }
     }
 
     private var librarySection: some View {

@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { open, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
+import { nativeCandidates } from './native-candidate.mjs';
 import { commandOutput, delay, outputDirectory, ownedProcess, root, stop } from './probe-support.mjs';
 
 const { values } = parseArgs({
@@ -12,7 +13,7 @@ const { values } = parseArgs({
     output: { type: 'string', default: 'out/verification/phase02' },
   },
 });
-if (!['Still', 'Still-preview'].includes(values.app)) throw new Error('Unsupported app name');
+if (!nativeCandidates.includes(values.app)) throw new Error('Unsupported app name');
 const executable = join(root, `out/${values.app}.app/Contents/MacOS/Still`);
 const executableSHA256 = createHash('sha256')
   .update(await readFile(executable))
@@ -50,6 +51,18 @@ try {
   if (probe.running()) throw new Error('Native energy probe exceeded 20 seconds');
   const exit = await probe.done;
   if (exit.error) throw exit.error;
+  if (exit.code !== 0)
+    throw new Error(
+      `Native energy probe exited without verified completion (code=${exit.code}, signal=${exit.signal ?? 'none'}). Inspect energy-launch.log; no endurance result was established.`,
+    );
+  try {
+    await readFile(join(output, 'energy.json'), 'utf8');
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+    throw new Error(
+      'Native energy probe produced no receipt. Inspect energy-launch.log; no endurance result was established.',
+    );
+  }
   const result = JSON.parse(await readFile(join(output, 'energy.json'), 'utf8'));
   result.checks ??= {};
   result.checks.pmsetShowsSystemRequest =

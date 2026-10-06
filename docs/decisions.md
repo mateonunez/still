@@ -11,8 +11,8 @@ Prepared for joint review. Recommendations are not approvals.
 | D05 | Energy concept? | Automatic display/system-awake request while covered; retain hidden timed/display controls | Curtain default selected on 2026-10-05; display stays on while covered; prolonged screen-saver acceptance pending |
 | D06 | Name and identity? | Still as the working product name; Porcelain with burgundy direction | Selected name and color direction; font/brand implementation prepared; name clearance not performed |
 | D07 | Distribution? | Native `.app`, direct signed/notarized distribution; evaluate Homebrew and terminal download | Selected direct distribution; App Store excluded |
-| D08 | Pricing/license? | Test willingness to pay; evaluate one-time license | Decision pending |
-| D09 | OS/hardware support? | Choose based on native experiment matrix | macOS 14 provisional deployment floor; only macOS 26.5.2 arm64 structurally verified |
+| D08 | Pricing/license? | MIT for original code/docs; evaluate commercial options separately | MIT selected 2026-10-06; price/payment model undecided; repository remains private |
+| D09 | OS/hardware support? | Evaluate macOS 14+ and both Apple Silicon/Intel, using the acceptance matrix | macOS 14 deployment floor; Intel app and all helpers cross-compiled on 2026-10-06; runtime evidence remains macOS 26.5.2 arm64; broader support not yet certified |
 | D10 | Remote repo visibility and workflow? | Private personal mateonunez/still; main bootstrap and CI | Selected private; repository created and pushed; broader branch protections remain undecided |
 | D12 | Website stack? | Next.js App Router with typed metadata | Implemented and hosted on personal mmateonunez/still Vercel project |
 | D13 | Product domain? | meet-still.app canonical; www redirects to apex | Configured; connected and HTTPS-verified |
@@ -22,5 +22,7 @@ Prepared for joint review. Recommendations are not approvals.
 Next step: exact-candidate physical trackpad, authentication, accessibility, power and live source acceptance using the [native checklist](guides/pre-release-native-checks.md). Native Liquid Glass controls and restrained service-window vibrancy use modern macOS materials; Porcelain coverage stays opaque. The Next.js website and direct app distribution are selected. OS/hardware support, pricing and release identity remain open.
 
 Local development uses `co.mateonunez.still.development`; `co.mateonunez.still` is the proposed release identity, to confirm before distribution. The website uses `meet-still.app`; this does not automatically change the app's identity.
+
+The beta is intended for opt-in end users, without an arbitrary small-cohort limit. Repository privacy remains unchanged. Compatibility targets, tested combinations and downloadable artifact availability remain distinct; see [compatibility research](research/macos-compatibility.md) and [beta preparation](development/private-beta-preparation.md).
 
 Native account quota widgets are implemented locally using Codex app-server and a Claude status-line bridge. D14 now has a constrained declarative v1; arbitrary runner/assets/actions and marketplace remain future scope. See [ADR 0007](adr/0007-native-account-quota-widgets.md) and [local evidence](verification/native-live-widgets.md).

@@ -5,6 +5,7 @@ import { open, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
+import { nativeCandidates } from './native-candidate.mjs';
 import { commandOutput, delay, outputDirectory, ownedProcess, root, stop, waitForFile } from './probe-support.mjs';
 
 async function worker(path) {
@@ -22,7 +23,7 @@ async function worker(path) {
 }
 
 async function verify(appName, directory) {
-  if (appName !== 'Still' && appName !== 'Still-preview') throw new Error('Unsupported app name');
+  if (!nativeCandidates.includes(appName)) throw new Error('Unsupported app name');
   const output = await outputDirectory(
     directory ?? (appName === 'Still-preview' ? 'out/verification/phase01-refinement' : 'out/verification/phase01'),
   );

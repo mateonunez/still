@@ -226,12 +226,16 @@ final class NativePluginCenter: ObservableObject {
             let quota = widgets.cards.first { $0.provider == client.provider }
             let windows = quota?.snapshot?.windows.map { "\($0.title) \(Int($0.usedPercent))%" }.joined(separator: " · ")
             let activity = widgets.activityCards.first { $0.id == client.provider.rawValue + "-activity" }
-            let signal = activity.flatMap { $0.state == "unknown" ? nil : activityTitle($0.state) }
+            let signal = activity.map { card in
+                if card.state == "unknown" { return "Activity · no recent signal" }
+                let count = (card.count ?? 0) > 1 ? " · \(card.count!) signals" : ""
+                return "\(activityTitle(card.state))\(count)"
+            }
             let reported = windows.map { value in
                 guard quota?.isLastReported == true, let observedAt = quota?.snapshot?.observedAt else { return value }
                 return "Last reported · \(value) · \(observedAt.formatted(.relative(presentation: .numeric)))"
             }
-            let value = [reported, signal].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " · ")
+            let value = [reported, signal].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: "\n")
             return MetricFact(client.provider.title, !value.isEmpty ? value : quota?.status ?? (client.executable == nil ? "Not installed" : "Installed · configure quota/activity"))
         }
         return NativePluginCard(.agents, payload: .agents(metrics), state: .ready, detail: "Local clients · attention is advisory", observedAt: Date())

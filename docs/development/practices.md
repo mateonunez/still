@@ -179,3 +179,17 @@ Keep Grid and Free as explicit, persisted modes. Old records without a mode rema
 ## Theme and editing layers
 
 Keep canonical theme colors in design/tokens.json and generate native palettes. Separate opaque Still scenery, within-window card materials and Liquid Glass controls. Do not wrap glass buttons in another custom glass effect. Respect appearance and accessibility preferences in each layer. Scene preferences must not be persisted as a side effect of constructing diagnostic presentation models. Keep gallery actions separate from source consent, and contextual inspector controls separate from scene geometry. Validate optional per-module preferences during migration and preserve them during fitting. Native drag callback behavior and perceived smoothness require interactive acceptance.
+
+## Exact-candidate acceptance
+
+Resolve the last successful build through native-candidate.mjs and retain the executable hash in observation reports. Source modifications after a build do not update the candidate. Appearance persistence belongs to the scene model with an optional injected store; fixtures must not write production preferences. Keep advisory-source silence visible and distinct from quota freshness. Use measured alignment tolerances rather than quantizing every Free drag. Offscreen NSHostingView exports can inspect arrangement, but cannot establish active glass, pointer behavior or consent; ImageRenderer cannot faithfully render all AppKit-backed controls. Keep live diagnostics opt-in and disabled in ordinary test runs. A preflight boolean is an owner report, not synthesized physical acceptance.
+
+## Beta preparation evidence
+
+For multi-team signing Macs, pin the release certificate fingerprint and expected Team ID in ignored project-local configuration. No first-match identity, account-name inference, global team default or alternative-team fallback is allowed. Verify the outer app and each executable helper against the expected team before notarization upload; a named Keychain profile is not itself team evidence.
+
+Keep a finite IOKit lifecycle diagnostic separate from elapsed screen-saver acceptance. A standalone probe that exits before producing a receipt is unverified; a host-run diagnostic does not prove the distributed app's launch or permission context. Record beta labels separately from numeric bundle versions, and keep proposed compatibility distinct from observed OS/architecture combinations.
+
+## Brand and license delivery
+
+Keep the product message and actual availability aligned across page copy, search/social metadata, README and agent documentation. Publish one factual category descriptor; do not add fabricated ratings, urgency or working download actions. A permissive license does not imply public source access or released binaries. The root LICENSE is the canonical MIT text; public license/SDK copies are generated and verified against it. Retain third-party font notices independently, including in native resources. Static build HTML and an offline review artifact do not establish served headers, hydration or interactive accessibility.

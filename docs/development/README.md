@@ -33,3 +33,9 @@ The latest candidate removes the global four-card limit and includes every selec
 The latest native canvas supports adaptive Grid and preserved Free scenes. Grid aligns tracks/content rows and supports native insertion reorder; it passes 37 targeted Swift tests and 19 source checks. Dense small-display overflow and interactive smoothness remain acceptance items. See [grid verification](../verification/adaptive-native-grid.md).
 
 The Glass/contextual-editor phase adds a second official theme, a widget gallery, native Grid drag sessions and persistent scene/module presentation controls. See [implementation](glass-and-contextual-editor.md) and [verification](../verification/glass-and-contextual-editor.md).
+
+The [pre-beta refinement](pre-beta-refinement.md) adds model-owned theme persistence, visible advisory-source expiry, measured Free alignment and an exact-candidate [beta handoff](../guides/beta-handoff.md). [Evidence](../verification/pre-beta-refinement.md) keeps offline exports, live-source results and physical acceptance separate.
+
+The [end-user beta preparation](private-beta-preparation.md) records release inputs, a macOS 14+/Apple Silicon and Intel compatibility target, and the remaining acceptance gates. Intel cross-compilation passed; older-system and Intel runtime acceptance remain open. No signing, notarization or beta distribution has been performed.
+
+The [brand and copy phase](marketing-and-license.md) aligns the product message, website workflow and repository materials, adds the MIT license and public license notices, and preserves the current development/availability boundary. [Verification](../verification/marketing-and-license.md) separates the built-site audit from browser and remote delivery.
