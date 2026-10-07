@@ -28,6 +28,8 @@ A scratch-store injection for PluginCenter keeps the new tests away from owner p
 
 ## Remaining acceptance
 
+Local candidate built successfully: `out/Still-polish.app`, clean source `7fee2ca7eb17d40bc525b0dc51b3bc0989e47d01`, executable SHA-256 `c1ab6ee1871258bbe339d5c3e8884467a3e6d7bd55ceb050b8400508d6fa3058`. The builder's ad-hoc signature check and candidate resolver passed. It was not launched; owner Still-review remained running. This is a development artifact, not a signed/notarized distribution release.
+
 The exact historical 99% episode remains unresolved. Reproduce it against an identified candidate and capture a matching CPU receipt/sample before attributing it to geometry feedback, a timer or this notification regression. Compare editor, Settings, curtain and menu-only states; then repeat with source configurations and after prolonged use. The current owner process retains old code, so its CPU cannot verify this correction.
 
 Use the [performance guide](../guides/native-performance.md). Ignored evidence is under `out/verification/cpu-layout/`: current sample/CPU receipt, failing/passing publication logs and test logs. Before/after runtime CPU, long-run stability, graphics energy and physical interaction are not yet verified.
