@@ -28,3 +28,13 @@ After quitting an older Still instance, open the hash-verified local candidate w
 5. Use the selection picker, movement menu and width slider with the keyboard. Repeat with Reduce Motion, Reduce Transparency and VoiceOver.
 
 No pointer recording, VoiceOver result, gesture-privacy trial, awake endurance or clean-Mac installation is established by this phase. Automatic Free collision fitting can still move modules at release in dense scenes; that interaction remains part of issue #1. No new public native preview release is published by these source changes.
+
+## Built candidate
+
+`./scripts/build-macos.sh debug Still-review` completed on macOS 26.5.2 (25F84), arm64. The build script verified the ad-hoc bundle signature. This is a local development candidate, not Developer ID signing or notarization.
+
+- Path: `out/Still-review.app`
+- Source: `203c0a79318bb8844124e27295d608f8650bb01e`, clean at build
+- Executable SHA-256: `4eee2da374398b47777364754a4c703a58a3603e9be9789b7a3d017e5ea4383e`
+- Candidate resolver verified the executable against the local manifest.
+- No interactive candidate was launched or replaced. Existing `Still-polish` remained running.
