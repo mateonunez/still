@@ -13,7 +13,7 @@ Prepared for joint review. Recommendations are not approvals.
 | D07 | Distribution? | Native `.app`, direct signed/notarized distribution; evaluate Homebrew and terminal download | Selected direct distribution; App Store excluded |
 | D08 | Pricing/license? | MIT for original code/docs; evaluate commercial options separately | MIT selected 2026-10-06; price/payment model undecided; public source selected 2026-10-07 |
 | D09 | OS/hardware support? | Evaluate macOS 14+ and both Apple Silicon/Intel, using the acceptance matrix | macOS 14 deployment floor; Intel app and all helpers cross-compiled on 2026-10-06; runtime evidence remains macOS 26.5.2 arm64; broader support not yet certified |
-| D10 | Remote repo visibility and workflow? | Private personal mateonunez/still; main bootstrap and CI | Initially private; public source selected 2026-10-07 with experimental previews; broader branch protections remain undecided |
+| D10 | Remote repo visibility and workflow? | Public personal mateonunez/still; main and semantic preview releases | Initially private; public source selected 2026-10-07 with experimental previews; broader branch protections remain undecided |
 | D12 | Website stack? | Next.js App Router with typed metadata | Implemented and hosted on personal mmateonunez/still Vercel project |
 | D13 | Product domain? | meet-still.app canonical; www redirects to apex | Configured; connected and HTTPS-verified |
 | D11 | Agent awareness timing? | Optional metadata-only Codex plugin before beta and distribution | Native quota implemented; opt-in advisory hook bridge built 2026-10-05; real client trust/delivery acceptance pending |

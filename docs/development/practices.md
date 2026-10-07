@@ -197,3 +197,7 @@ Keep the product message and actual availability aligned across page copy, searc
 ## Experimental release packaging
 
 Keep VERSION and its tag identical; validate before building and never interpolate an unchecked tag into commands. Use separate artifact directories, fail on dirty source or existing output, verify each architecture and helper signature, and keep experimental metadata separate from numeric bundle versions. Preview tags publish prereleases only after checks. Preserve published assets/tags and issue a new version for corrections. A successful release workflow does not certify downloaded-app acceptance or automatic updates.
+
+## Public launch media
+
+Public product assets need explicit provenance. A sequence of native view exports must stay labelled as such; never imply recorded authentication, pointer behavior or connected source data. Use scratch stores and inspect media for private information before tracking it. Provide captions/transcript, native playback controls and no autoplay. Verify the actual anonymous download against the release checksum after changing repository visibility. Check contrast on real CTA surfaces; generic link-container styles can override button backgrounds. Keep draft announcements separate from social publication.

@@ -1,6 +1,6 @@
 # Website and hosting
 
-The code repository is private: https://github.com/mateonunez/still. The intended public website is https://meet-still.app. Vercel project: https://vercel.com/mmateonunez/still, root apps/website, Node 24. Private source does not imply a private production website.
+The code repository is public: https://github.com/mateonunez/still. The intended public website is https://meet-still.app. Vercel project: https://vercel.com/mmateonunez/still, root apps/website, Node 24. The production site and preview downloads are public; Vercel preview environments remain noindex.
 
 From the workspace root:
 

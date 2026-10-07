@@ -19,3 +19,11 @@ Biome, TypeScript, Webpack production build, 19-page offline SEO/SDK inspection 
 Native export tooling uses Swift/AppKit; video encoding uses the existing ffmpeg development tool. Public files include only curated product images, showcase/captions/transcript and generated social artwork. Provenance and draft copy are in docs/marketing.
 
 Remote website delivery and browser observations are recorded separately after deployment. No clean-Mac installation, Gatekeeper, physical native interaction or screen-reader acceptance is inferred from these checks.
+
+## Remote delivery and browser checks
+
+Production deployment dpl_6aibXhSBtjJz1L7HAxFBKUcBaobe is READY on the personal mmateonunez/still project and aliased to meet-still.app. The indexable production HTTP verifier passed all 19 content routes, SDK/catalog/license, social image, media URLs and download targets. Both SHA256SUMS and the ZIP return HTTP 200 without authentication; downloaded ZIP SHA256 matches the published release.
+
+Chrome review observed the public landing, native-view video poster and download page. It found and corrected a CSS specificity conflict that hid the download label and missing display typography on the showcase heading. The fixed download was inspected at 390×844; the mobile home has clientWidth=scrollWidth=390. The temporary viewport was reset. These observations are not a complete keyboard/screen-reader or all-breakpoint acceptance.
+
+Product delivery commits: fd1a698 and 4874804. No social announcements or community messages were posted. Launch copy and media are ready for manual publication; the showcase is still explicitly an offscreen-view sequence. Native app release remains 0.1.0-preview.2 because this phase changes website/media and diagnostic exports, not the shipped app behavior.

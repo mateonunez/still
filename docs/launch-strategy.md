@@ -48,7 +48,7 @@ Selected a native app distributed directly, outside the Mac App Store. Prepare s
 
 ## License and commercial decisions
 
-Original code and documentation are MIT licensed as selected on 2026-10-06. Preserve notices in SDK assets and packaged apps; font licenses remain separate. Source repository visibility stays private during development. No payment, subscription or license-enforcement flow is implemented. Any future paid distribution or original collections require a separate decision and must respect the MIT grant and third-party terms.
+Original code and documentation are MIT licensed as selected on 2026-10-06. Preserve notices in SDK assets and packaged apps; font licenses remain separate. Source repository and experimental GitHub Releases are public as of 2026-10-07. No payment, subscription or license-enforcement flow is implemented. Any future paid distribution or original collections require a separate decision and must respect the MIT grant and third-party terms.
 
 ## Measurement
 
@@ -63,5 +63,5 @@ Track feedback on confusing controls, permission refusal, authentication failure
 - Accessible final UI, artwork provenance, permission and privacy documentation.
 - Signed installable beta, reliable update/recovery instructions, support contact.
 - Honest screenshots/demo from the release candidate.
-- MIT license notices; open decisions on price, release hosting and future update mechanisms. Repository visibility remains private.
+- MIT license notices; open decisions on price, release hosting and future update mechanisms. Public source and experimental downloads are available; signed-beta acceptance remains open.
 - Publication and release approval after a concrete candidate is reviewable.

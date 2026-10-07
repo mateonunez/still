@@ -6,7 +6,7 @@ Still's current builder produces an ad-hoc development app. It is not Developer 
 
 Apple may allow a user to approve an unidentified or unnotarized app through System Settings → Privacy & Security → Open Anyway. Availability depends on the warning and system policy; managed Macs may prohibit this. Do not instruct testers to disable Gatekeeper or remove quarantine attributes globally.
 
-The source repository is private. Its releases require repository read access, which also grants source access. For public binary downloads while preserving source privacy, a separate personally owned public distribution repository or another public asset host is a separate decision. Do not change visibility or publish a release implicitly.
+As of 2026-10-07, Still’s source repository and experimental releases are public. Downloads require no repository invitation. Private repositories otherwise restrict their releases to users with repository read access; MIT licensing alone does not change visibility.
 
 For the end-user beta, retain the personal Developer ID, hardened runtime, helper signing, notarization and clean-download acceptance gates. GitHub Releases remains a suitable delivery channel after those gates pass. Automatic updates are a separate feature.
 
