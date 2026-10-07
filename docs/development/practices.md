@@ -216,3 +216,7 @@ A system Grid drag should not persist order while hovering. Highlight the destin
 Resolve and inspect one immutable tree; install that same tree through the host's normative validator. CLI and Settings must share compatibility, review and receipt semantics. Never use JavaScript validation as an untracked approximation of Swift validation. Installation, configuration, connection, OS permission and visibility are independent states. Preserve configuration on failed updates and revoke consumption before removal.
 
 A catalog listing, version string or digest is not publisher authentication. Documentation, landing pages and posts must match the actual package publication and tested install path. Clearly label planned commands/features; gate launch copy on a real clean-install recording. Public channels have different readiness/participation requirements and should not share an indiscriminate launch blast.
+
+## Campaign delivery audit
+
+Compare the public release's peeled source commit with the candidate used in demonstrations. Validate a fresh anonymous archive, checksum, architectures and signatures separately from launch, permissions and physical interaction. Record channel rules and account eligibility independently; a platform recommendation does not establish posting access. Keep view counts, analytics script presence and customer installation as distinct observations. Preserve historical delivery notes with explicit current-state corrections.

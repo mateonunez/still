@@ -1,6 +1,6 @@
 # Still — public preview launch kit
 
-Prepared 2026-10-07. Draft posts for manual publication. No social messages or community submissions have been sent.
+Prepared 2026-10-07. This kit records launch copy and assets. Blog and X publication is documented in [campaign evidence](../verification/preview-campaign.md); HN, Product Hunt and other community submissions remain pending.
 
 ## One line
 

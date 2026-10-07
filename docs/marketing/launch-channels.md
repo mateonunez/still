@@ -41,3 +41,7 @@ Evaluate Mac utility communities for everyday use and developer communities for 
 | Other hubs | Fit research and useful technical material | Verified local rules and appropriate account access |
 
 [Primary-source channel research](../research/launch-channel-fit.md) · [Marketplace copy and recording brief](repository-marketplace.md).
+
+## Additional channel evidence and joint work
+
+Current [research](../research/additional-launch-channels.md) prioritizes r/macapps for practical Mac feedback, Swift Forums Community Showcase for technical contributions and personal-blog/Hashnode educational writing. The [collaboration guide](../guides/launch-collaboration.md) starts with artifact alignment and a real recording. Reddit eligibility/approval, channel rules and personal account access remain separate checks; no new posts/listings were sent. See the [delivery audit](../verification/delivery-and-channel-audit.md).

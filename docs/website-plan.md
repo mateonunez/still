@@ -4,6 +4,8 @@ Decision: the landing uses Next.js. The current HTML prototype remains a disposa
 
 Delivery update, 2026-10-04: private GitHub source and Vercel hosting are configured for meet-still.app. The Next.js target is implemented, with six product content routes and a labelled design preview. See [ADR 0005](adr/0005-personal-website-and-hosting.md), [hosting guide](guides/website-and-hosting.md) and [actual delivery evidence](verification/phase-04-website-and-hosting.md). The proposal below records the foundation; no public app installer is available.
 
+Current-state note, 2026-10-07: source and experimental ad-hoc preview downloads are public; the website has 20 canonical routes. The foundation below records the initial plan. Repository-first marketplace discovery is now requested scope under ADR 0011; remote installation and signed/notarized distribution remain pending.
+
 ## Proposed implementation
 
 Location: `apps/website/`, alongside `apps/macos/`. Use Next.js App Router with TypeScript and Server Components for content. Keep client code restricted to appearance selection, a theme preview and genuine interaction. Use pnpm, Node 24, Biome as the single formatter/linter, and Tailwind 4 with named semantic tokens. Pin compatible versions from the package registry when scaffolding; local reference versions are not an instruction to copy stale dependency pins.
