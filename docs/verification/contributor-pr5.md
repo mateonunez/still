@@ -40,4 +40,15 @@ Desktop-translucent Glass was a separate product change from CPU mitigation. The
 - Biome: 81 files passed. Whitespace/conflict-marker checks passed.
 - Ignored evidence: `out/verification/cpu-layout/pr5-*.log`.
 
-The owner interactive candidate was not stopped, rebuilt or replaced. New source/tests do not establish its running CPU. Historical near-one-core churn, prolonged stability and physical native acceptance remain open. The previous Still-polish build in [idle-publication evidence](idle-publication-cpu.md) is a historical pre-PR candidate until rebuilt from this integrated source.
+The owner interactive candidate was not stopped, rebuilt or replaced. New source/tests do not establish its running CPU. Historical near-one-core churn, prolonged stability and physical native acceptance remain open. The previous Still-polish build in [idle-publication evidence](idle-publication-cpu.md) remains a historical pre-PR candidate.
+
+
+## Integrated local candidate
+
+- Artifact: `out/Still-polish.app`, built successfully on 2026-10-07 at 14:27 UTC.
+- Source: `e802a81a775afe438e26ed32f4479fb5a55dac70`, clean at build time.
+- Executable SHA-256: `d8e607211a091fab052737e12a2e170c268549d93c7c4a114cd76f8be3f6ac76`.
+- Ad-hoc development signature; not notarized or intended for distribution.
+- Built but not launched. Existing interactive processes were preserved.
+
+After quitting the previous candidate normally, open `out/Still-polish.app` and exercise Settings, the editor and the curtain. Use the [performance guide](../guides/native-performance.md) to capture CPU for this exact running artifact, including a prolonged session. A short low-CPU sample alone cannot close the historical 25-hour report.
