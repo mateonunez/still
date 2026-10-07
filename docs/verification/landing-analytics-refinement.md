@@ -16,6 +16,6 @@ Local screenshots: `out/verification/marketing/native-gallery-desktop.png` and `
 
 ## Open evidence
 
-Production home and download were visited normally in the browser. Script presence is verified; accepted event delivery and dashboard reporting are not. The connected browser reached Vercel login, so dashboard data requires the owner's personal session. Do not claim visitors or conversions until observed. Existing content blockers were not changed.
+Production home and download were visited normally in the browser. Script presence was verified directly. The owner subsequently reported that data appears correctly in the Analytics dashboard; record this as owner-observed dashboard acceptance, not agent-inspected totals or conversions. Existing content blockers were not changed.
 
 No native hardware, authentication, prolonged awake or clean-install acceptance inferred from website checks. No automatic updates or community marketplace implemented in this phase.

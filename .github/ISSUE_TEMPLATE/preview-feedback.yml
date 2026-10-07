@@ -1,0 +1,57 @@
+name: Preview experience
+description: Share an installation result or feedback from using the experimental preview
+title: '[Preview] '
+body:
+  - type: markdown
+    attributes:
+      value: 'Thanks for trying Still. Report what you actually observed. Do not attach passwords, conversations, client logs, calendar titles or private desktop screenshots.'
+  - type: input
+    id: version
+    attributes:
+      label: Still version
+      description: Find it in About Still or in the downloaded release name.
+      placeholder: 0.1.0-preview.2
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: macOS 26.5.2
+    validations:
+      required: true
+  - type: dropdown
+    id: architecture
+    attributes:
+      label: Mac architecture
+      options:
+        - Apple Silicon
+        - Intel
+        - Not sure
+    validations:
+      required: true
+  - type: dropdown
+    id: installation
+    attributes:
+      label: Installation result
+      options:
+        - Opened successfully
+        - macOS blocked opening
+        - Opened but failed or crashed
+        - Built from source
+        - Not tested
+    validations:
+      required: true
+  - type: textarea
+    id: observations
+    attributes:
+      label: What did you try, and what happened?
+      description: Include display arrangement and affected plugin if relevant. Separate passing checks, failures and things you did not test. Give steps to reproduce any problem.
+      placeholder: 'Example: On one display, changed Porcelain to Glass and reopened Still. The theme persisted. Spotify and desktop gestures were not tested.'
+    validations:
+      required: true
+  - type: textarea
+    id: improvement
+    attributes:
+      label: What would make Still feel better?
+      description: Describe the moment or task rather than only a proposed implementation.

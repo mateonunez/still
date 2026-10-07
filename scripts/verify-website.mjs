@@ -11,6 +11,7 @@ const paths = [
   '/',
   '/how-it-works',
   '/download',
+  '/start',
   '/privacy',
   '/support',
   '/changelog',

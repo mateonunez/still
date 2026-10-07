@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Get started with the preview
+    url: https://meet-still.app/start
+    about: Installation, first configuration and recovery guidance
+  - name: Plugin SDK and authoring
+    url: https://meet-still.app/developers
+    about: Declarative templates, source boundaries and starter resources

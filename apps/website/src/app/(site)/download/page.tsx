@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { release } from '@/content/release';
 import { pageMetadata } from '@/content/site';
 
@@ -19,6 +20,11 @@ export default function DownloadPage() {
         <a href={release.notes}>Release notes and known limits ↗</a>
         <a href={release.checksum}>SHA256 checksums ↗</a>
       </nav>
+      <p>
+        <Link className="text-link" href="/start">
+          Already downloaded? Set up your first screen ↗
+        </Link>
+      </p>
       <section>
         <h2>A preview, with clear boundaries.</h2>
         <p>
@@ -73,6 +79,15 @@ export default function DownloadPage() {
           <a href={release.repository}>Read the source, report an issue or contribute on GitHub ↗</a>. Fonts retain
           their own licenses. No account or purchase is required.
         </p>
+      </section>
+      <section>
+        <h2>Help shape the next preview.</h2>
+        <p>
+          Opened successfully? Hit a problem? Both are useful. Share your Mac, version and the steps you actually tried.
+        </p>
+        <a className="button-primary" href={`${release.repository}/issues/new?template=preview-feedback.yml`}>
+          Share preview feedback ↗
+        </a>
       </section>
     </main>
   );

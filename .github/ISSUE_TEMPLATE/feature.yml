@@ -1,0 +1,22 @@
+name: Product or plugin idea
+description: Suggest a focused improvement, plugin or theme
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What moment should Still improve?
+      description: Describe the problem and who encounters it. Keep private account and project details out.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Include configuration, permissions and what should happen when a source is unavailable, if relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: How could we verify it?
+      description: Give a concrete example of success. Avoid assuming untested OS, hardware or service support.

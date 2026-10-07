@@ -10,6 +10,16 @@ Updated 2026-10-07. Public MIT source and experimental preview 0.1.0-preview.2; 
 
 Success is a reproducible installation or accepted behavior, not traffic or stars. No release date is promised. Use GitHub issues to turn observed feedback into focused work; retain signing as the final beta gate.
 
+## Active work
+
+| Work | Acceptance focus |
+| --- | --- |
+| [Native editor refinement #1](https://github.com/mateonunez/still/issues/1) | Continuous movement/resize, predictable editing, keyboard/accessibility and real interaction evidence |
+| [Installation and compatibility #2](https://github.com/mateonunez/still/issues/2) | Fresh launch, architecture/OS matrix, manual replacement and recovery |
+| [Plugin source reliability #3](https://github.com/mateonunez/still/issues/3) | Calendar/Spotify consent and revocation, agent freshness, source absence and reconnect |
+
+The [first-use guide](https://meet-still.app/start) and [preview feedback form](https://github.com/mateonunez/still/issues/new?template=preview-feedback.yml) connect actual user experience to this work. Analytics dashboard delivery was reported working; visit metrics remain separate from installation and product acceptance.
+
 | Priority | Next milestone | Acceptance |
 | --- | --- | --- |
 | 1 | Physical desktop privacy | Exact-candidate slow/fast/partial three-finger swipes, Mission Control, multiple displays and recovery; document any exposed frame. Public API restrictions do not prove gesture coverage. |

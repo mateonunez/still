@@ -35,6 +35,7 @@ export function Footer() {
         <Link href="/plugins">Plugins</Link>
         <Link href="/developers">Developers</Link>
         <Link href="/support">Support</Link>
+        <Link href="/start">Get started</Link>
         <Link href="/privacy">Privacy</Link>
         <Link href="/changelog">Changelog</Link>
         <Link href="/license">MIT license</Link>

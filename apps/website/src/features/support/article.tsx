@@ -4,6 +4,7 @@ export type ArticleContent = {
   description: string;
   eyebrow: string;
   lead: string;
+  links?: readonly { label: string; href: string }[];
   sections: readonly { title: string; text: string }[];
 };
 export function Article({ content }: { content: ArticleContent }) {
@@ -12,6 +13,15 @@ export function Article({ content }: { content: ArticleContent }) {
       <p className="eyebrow">{content.eyebrow}</p>
       <h1>{content.title}</h1>
       <p className="article-lead">{content.lead}</p>
+      {content.links && (
+        <nav className="download-actions" aria-label="Support resources">
+          {content.links.map((link) => (
+            <Link className="text-link" key={link.href} href={link.href}>
+              {link.label} ↗
+            </Link>
+          ))}
+        </nav>
+      )}
       {content.sections.map((section) => (
         <section key={section.title}>
           <h2>{section.title}</h2>
