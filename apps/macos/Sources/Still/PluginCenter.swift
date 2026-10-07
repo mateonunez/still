@@ -23,10 +23,11 @@ final class PluginCenter: ObservableObject {
     @Published private(set) var selectedTemplate: String?
     private var sessions: [String: PluginSession] = [:]
     private let persist: Bool
-    private let store = PluginStore(root: ClaudeBridgeInstaller.root.appendingPathComponent("plugins"))
+    private let store: PluginStore
     var template: PluginManifest? { manifests.first { $0.id == selectedTemplate } }
 
-    init(persist: Bool = true) {
+    init(persist: Bool = true, root: URL? = nil) {
+        store = PluginStore(root: root ?? ClaudeBridgeInstaller.root.appendingPathComponent("plugins"))
         self.persist = persist; manifests = store.list()
         if persist {
             selectedTemplate = UserDefaults.standard.string(forKey: "StillTemplate")

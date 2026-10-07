@@ -228,3 +228,7 @@ Share package validation between read-only discovery and import. Repository inde
 ## Repository transport isolation
 
 Read an immutable Git tree without checkout or repository execution. Keep transport checks separate from native compatibility; do not recreate Swift manifest rules in JavaScript. Omit inherited Git configuration, credentials and session environment; reject auth-bearing locators and print stable errors instead of raw remote diagnostics. Record commit and scope in discovery reports without calling them install receipts. State sampled disk limits honestly and preserve hard resource isolation as a separate acceptance gate. Tests must resolve executable fixtures relative to their files, not assume pnpm's working directory.
+
+## Polling and view invalidation
+
+Publish source projections only when their values change. Keep real observation/expiry timestamps; do not fabricate observation time for local derived projections just to signal a tick. Polling, source freshness and view invalidation are independent concerns. Test the actual ObservableObject subscribers across repeated ticks, new data and suspension. Identify the process/binary and measure CPU-time deltas separately from stack sampling; notification counts cannot certify CPU improvement or long-run stability. Use isolated stores for fixtures and preserve owner app processes.

@@ -114,7 +114,7 @@ final class WidgetCenter: ObservableObject {
     }
 
     func stop() { cancel(); snapshot = nil; cards = [] }
-    private func cancel() { generation = UUID(); task?.cancel(); task = nil; fetching = false }
+    private func cancel() { generation = UUID(); task?.cancel(); task = nil; if fetching { fetching = false } }
     private func save() { if persist { UserDefaults.standard.set(enabled.map(\.rawValue).sorted(), forKey: "StillWidgets") } }
 
     private func rebuild() {

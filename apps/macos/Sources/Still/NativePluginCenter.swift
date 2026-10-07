@@ -179,35 +179,38 @@ final class NativePluginCenter: ObservableObject {
             if requestingSpotify { cancelSpotifyAuthorization() }
             if !suspended { for id in installed { cancel(id) }; taskReceipt = nil; taskRevision = 0; rotateTasks() }
             suspended = true
-            for id in installed where configurations[id]?.enabled == true { publish(\.cards[id], NativePluginCard(id, state: .paused, detail: "Source paused")) }
+            for id in installed where configurations[id]?.enabled == true { publish(NativePluginCard(id, state: .paused, detail: "Source paused")) }
             return
         }
         if suspended { lastFetch = [:] }; suspended = false
         for id in installed where configurations[id]?.enabled == true {
             guard let config = configurations[id] else { continue }
-            if let deadline = deadlines[id], ProcessInfo.processInfo.systemUptime >= deadline { cards[id] = NativePluginCard(id, state: .unavailable, detail: "Source data expired. Refresh or check its connection."); deadlines[id] = nil }
-            if let value = cards[id] { publish(\.cards[id], value.current(now: Date())) }
+            if let deadline = deadlines[id], ProcessInfo.processInfo.systemUptime >= deadline { publish(NativePluginCard(id, state: .unavailable, detail: "Source data expired. Refresh or check its connection.")); deadlines[id] = nil }
+            if let value = cards[id] { publish(value.current(now: Date())) }
             guard fetching[id] == nil, Date().timeIntervalSince(lastFetch[id] ?? .distantPast) >= id.refreshSeconds else { continue }
             lastFetch[id] = Date()
             switch id {
-            case .agents: cards[id] = agentsCard()
-            case .worldClock: cards[id] = NativePluginCard(id, payload: .clocks(config.settings.clocks), state: .ready, detail: "Local time zones", observedAt: Date())
-            case .quietTimer: cards[id] = NativePluginCard(id, payload: .timer(deadline: timerDeadline), state: .ready, detail: "Local timer · no automatic return", observedAt: Date())
-            case .macPulse: cards[id] = pulse.read(config.settings)
-            case .nextUp: cards[id] = calendar.read(config.settings)
-            case .taskWatch: cards[id] = taskCard()
+            case .agents: publish(agentsCard())
+            case .worldClock: publish(NativePluginCard(id, payload: .clocks(config.settings.clocks), state: .ready, detail: "Local time zones"))
+            case .quietTimer: publish(NativePluginCard(id, payload: .timer(deadline: timerDeadline), state: .ready, detail: "Local timer · no automatic return"))
+            case .macPulse: publish(pulse.read(config.settings))
+            case .nextUp: publish(calendar.read(config.settings))
+            case .taskWatch: publish(taskCard())
             default:
                 let generation = UUID(); generations[id] = generation
-                if cards[id] == nil { cards[id] = NativePluginCard(id, state: .refreshing, detail: "Connecting to source…") }
+                if cards[id] == nil { publish(NativePluginCard(id, state: .refreshing, detail: "Connecting to source…")) }
                 fetching[id] = Task { [weak self] in
                     let card = await Self.fetch(id, settings: config.settings)
                     guard let self, !Task.isCancelled, self.generations[id] == generation, !self.suspended, self.configurations[id]?.enabled == true else { return }
-                    self.fetching[id] = nil; self.cards[id] = card
+                    self.fetching[id] = nil; self.publish(card)
                     self.deadlines[id] = card.expiresAt.map { ProcessInfo.processInfo.systemUptime + min(1800, max(0, $0.timeIntervalSinceNow)) }
                     if card.state != .ready { self.logger.info("source_state plugin=\(id.rawValue, privacy: .public) state=\(card.state.rawValue, privacy: .public)") }
                 }
             }
         }
+    }
+    private func publish(_ card: NativePluginCard) {
+        publish(\.cards[card.plugin], card)
     }
     func stop() { cancelSpotifyAuthorization(); for id in installed { cancel(id) }; cards = [:]; timerDeadline = nil; taskReceipt = nil; rotateTasks() }
     private func cancel(_ id: NativePluginID) { generations[id] = UUID(); fetching[id]?.cancel(); fetching[id] = nil }
@@ -238,7 +241,7 @@ final class NativePluginCenter: ObservableObject {
             let value = [reported, signal].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: "\n")
             return MetricFact(client.provider.title, !value.isEmpty ? value : quota?.status ?? (client.executable == nil ? "Not installed" : "Installed · configure quota/activity"))
         }
-        return NativePluginCard(.agents, payload: .agents(metrics), state: .ready, detail: "Local clients · attention is advisory", observedAt: Date())
+        return NativePluginCard(.agents, payload: .agents(metrics), state: .ready, detail: "Local clients · attention is advisory")
     }
     private static func fetch(_ id: NativePluginID, settings: NativePluginSettings) async -> NativePluginCard {
         if id == .weather { return await WeatherPluginSource.read(settings) }
