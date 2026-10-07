@@ -20,13 +20,8 @@ public struct PluginStore: Sendable {
     public func importPackage(_ source: URL) throws -> PluginManifest {
         let fm = FileManager.default
         guard list().count < 32 else { throw PluginError.conflict }
-        let values = try source.resourceValues(forKeys: [.isDirectoryKey, .isSymbolicLinkKey])
-        guard values.isDirectory == true, values.isSymbolicLink != true, source.pathExtension == "stillplugin" else { throw PluginError.unsafeFile }
-        let files = try fm.contentsOfDirectory(at: source, includingPropertiesForKeys: [.isRegularFileKey, .isSymbolicLinkKey])
-        guard !files.isEmpty, files.allSatisfy({ ["manifest.json", "README.md", "LICENSE"].contains($0.lastPathComponent) }) else { throw PluginError.unsafeFile }
-        for file in files { _ = try readBounded(file, limit: file.lastPathComponent == "manifest.json" ? 32768 : 65536) }
-        let data = try readBounded(source.appendingPathComponent("manifest.json"), limit: 32768)
-        let manifest = try PluginManifest.decode(data).get()
+        let manifest = try Self.inspectPackage(source)
+        let data = try JSONEncoder().encode(manifest)
         let destination = root.appendingPathComponent(manifest.id)
         guard !fm.fileExists(atPath: destination.path) else { throw PluginError.conflict }
         try fm.createDirectory(at: root, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
@@ -38,6 +33,17 @@ public struct PluginStore: Sendable {
         try fm.setAttributes([.posixPermissions: 0o600], ofItemAtPath: staging.appendingPathComponent("manifest.json").path)
         try fm.moveItem(at: staging, to: destination)
         return manifest
+    }
+
+    /// The same normative package checks used by import, without storage or connection writes.
+    public static func inspectPackage(_ source: URL) throws -> PluginManifest {
+        let fm = FileManager.default
+        let values = try source.resourceValues(forKeys: [.isDirectoryKey, .isSymbolicLinkKey])
+        guard values.isDirectory == true, values.isSymbolicLink != true, source.pathExtension == "stillplugin" else { throw PluginError.unsafeFile }
+        let files = try fm.contentsOfDirectory(at: source, includingPropertiesForKeys: [.isRegularFileKey, .isSymbolicLinkKey])
+        guard !files.isEmpty, files.allSatisfy({ ["manifest.json", "README.md", "LICENSE"].contains($0.lastPathComponent) }) else { throw PluginError.unsafeFile }
+        for file in files { _ = try readBounded(file, limit: file.lastPathComponent == "manifest.json" ? 32768 : 65536) }
+        return try PluginManifest.decode(readBounded(source.appendingPathComponent("manifest.json"), limit: 32768)).get()
     }
 
     public func connect(_ manifest: PluginManifest) throws -> PluginConnection {

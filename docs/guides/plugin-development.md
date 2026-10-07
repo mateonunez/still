@@ -21,7 +21,24 @@ swift run --package-path packages/StillPluginKit still-plugin validate examples/
 swift test --package-path packages/StillPluginKit
 ```
 
-The CLI validates in a private scratch directory and removes it afterwards; it does not enable a source or run the package. Import through **Settings → Plugins → Import package…**. Installation and connection are separate actions.
+The CLI validates without writing a package store; it does not enable a source or run the package. Import through **Settings → Plugins → Import package…**. Installation and connection are separate actions.
+
+## Inspect a local repository
+
+```sh
+swift run --package-path packages/StillPluginKit still-plugin inspect examples/plugins
+swift run --package-path packages/StillPluginKit still-plugin inspect examples/plugins --json
+```
+
+Discovery is local and read-only. Provide one `.stillplugin` directory, or a repository containing the optional [repository index](../../schemas/plugin-repository-v1.schema.json):
+
+```json
+{ "schemaVersion": 1, "packages": ["plugins/example.stillplugin"] }
+```
+
+Index paths are unique, relative, at most eight components and 256 UTF-8 bytes, and must remain inside the repository without symbolic links. An index selects exactly its entries; without one, discovery scans immediate `.stillplugin` children of the root and its `plugins` folder only. Limits: 32 packages, 128 immediate directory entries per scanned folder, 32 KiB index. The native package validator is shared by inspection and import. Index JSON Schema describes the shape; `RepositoryDiscovery` is normative for filesystem and UTF-8 constraints.
+
+JSON includes `schemaVersion`, overall `compatible`, candidates with relative `path`, compatibility, validated manifest or error code, and empty `actionsTaken`. Zero candidates or any incompatible candidate returns exit status 1; invalid CLI syntax returns 2. Swift build diagnostics go to stderr. Duplicate package IDs are incompatible. Unsupported index versions fail explicitly. No repository hooks, package code, permission grants, source connection or host installation occurs. This is not an HTTPS fetcher, public npx package or Settings repository installer; those remain pending.
 
 ## Manifest contract
 
@@ -33,7 +50,7 @@ Both `schemaVersion` and `protocolVersion` are integer 1. IDs use a lowercase re
 - `kind: metadata`: provider `local`; its required Porcelain template descriptor does not apply a composition. Declared capabilities are `quota` and/or `agentActivity`.
 - `widgets`: one to four unique widget IDs, each with a declared kind and compatible provider. Every widget kind must occur in capabilities.
 
-Unknown keys fail validation. Commands, URLs, arbitrary UI, credentials, custom settings and theme assets are not supported fields. The host clock and return/authentication cannot be replaced. Four optional cards is the global display/connection budget; the library holds at most 32 packages. Duplicate package IDs are rejected; upgrades are not yet supported.
+Unknown keys fail validation. Commands, URLs, arbitrary UI, credentials, custom settings and theme assets are not supported fields. The host clock and return/authentication cannot be replaced. Four optional imported v1 cards is the display/connection budget for this protocol, separate from the native canvas collection; the library holds at most 32 packages. Duplicate package IDs are rejected; upgrades are not yet supported.
 
 ## Produce metadata
 

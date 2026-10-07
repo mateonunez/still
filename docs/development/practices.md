@@ -220,3 +220,7 @@ A catalog listing, version string or digest is not publisher authentication. Doc
 ## Campaign delivery audit
 
 Compare the public release's peeled source commit with the candidate used in demonstrations. Validate a fresh anonymous archive, checksum, architectures and signatures separately from launch, permissions and physical interaction. Record channel rules and account eligibility independently; a platform recommendation does not establish posting access. Keep view counts, analytics script presence and customer installation as distinct observations. Preserve historical delivery notes with explicit current-state corrections.
+
+## Local package discovery
+
+Share package validation between read-only discovery and import. Repository indexes select bounded relative paths; reject linked ancestors and traversal before reading candidate manifests. Report candidate errors without masking repository-level failures. Empty discovery and duplicate IDs cannot produce an overall compatible result. Machine output includes compatibility and actions taken; diagnostics stay separate. Treat a local working tree as mutable, without inventing commit provenance or receipt guarantees.

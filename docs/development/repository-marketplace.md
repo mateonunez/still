@@ -1,6 +1,6 @@
 # Repository-first plugin marketplace
 
-Status: product and engineering proposal, 2026-10-07. Repository installation is not implemented or published. This phase defines the experience and delivery sequence; it does not expand the executable runtime or publish an npm package.
+Status: product and engineering proposal, with local read-only discovery implemented 2026-10-07. Repository installation is not implemented or published. The native CLI inspects local repository indexes/packages with shared import validation and machine-readable compatibility. HTTPS transport, Settings review and receipts remain pending. This does not expand the executable runtime or publish an npm package. See [local discovery guide](../guides/plugin-development.md#inspect-a-local-repository).
 
 ## Product principle
 
