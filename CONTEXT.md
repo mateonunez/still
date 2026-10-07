@@ -4,7 +4,7 @@ Still is a personal native macOS privacy curtain in development. Porcelain is th
 
 An active curtain automatically prevents idle system sleep until return, suspension or quit. The curtain-owned display assertion also prevents idle display sleep; explicit sleep and OS overrides remain available. Independent timed awake controls remain retained and hidden. First-party opt-in Codex and Claude account-quota widgets and a native customization Hub are implemented locally. StillPluginKit v1 provides declarative local import, explicitly connected metadata sources, constrained templates and host-rendered cards. Optional native hooks project advisory agent activity; no authoritative pending approvals or decisions. Theme collections and a hosted marketplace remain future scope. A design preview is an illustration, not native runtime or compatibility evidence.
 
-The public website origin is https://meet-still.app. The code repository is private under mateonunez. Next.js serves product/support content; macOS uses SwiftUI/AppKit. Public website delivery does not release the development app.
+The public website origin is https://meet-still.app. The MIT source repository is public under mateonunez. Next.js serves product/support content; macOS uses SwiftUI/AppKit. Public website delivery does not release the development app.
 
 ## Extension vocabulary
 
@@ -24,3 +24,10 @@ The public website origin is https://meet-still.app. The code repository is priv
 
 - Grid: host-owned adaptive columns and content-sized rows; native visible order determines placement, with a dedicated clock region.
 - Free: continuous user placements/widths, with measured collision fitting. Saved Free positions survive switching to Grid.
+
+- Repository source: a Git/local locator and requested ref, resolved to an immutable tree before package review.
+- Compatible package: accepted by the host protocol/rendering contract; a repository listing does not establish compatibility.
+- Install receipt: proposed origin/commit/package/digest record, separate from connection and snapshot state.
+- Public catalog: discovery/curation, not mandatory authorization for direct repository distribution.
+
+Repository-first CLI/Settings discovery and reviewed installation are planned scope. Current imports remain local/declarative; remote installation and npm publication are not yet available. See ADR 0011.

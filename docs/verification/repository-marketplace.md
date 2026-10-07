@@ -18,3 +18,9 @@ Biome checked 77 files; TypeScript and the production website build passed. The 
 The public npm lookup for `@mateonunez/still-plugins` returned HTTP 404 from registry.npmjs.org; no public package availability or scope ownership is claimed. GitHub issue #4 tracks the first discovery slice and follow-on install work. Accurate `swift` and `plugins` topics were added while preserving existing repository metadata.
 
 HN/Product Hunt/GitHub channel recommendations use [official guidance](../research/launch-channel-fit.md). Marketing drafts are not published submissions; HN requires maker-written/manual participation. No leaderboard placement, votes, native conversion or install success is claimed.
+
+## Production observation
+
+Source commit `3053ee104378a883a710c21953fea4b8b57598e7` was pushed to main. Vercel produced a Ready production deployment at `https://still-qsu3exgbl-mmateonunez.vercel.app`; the canonical site showed the new catalog/developer copy. Production verification passed all 20 canonical routes, index/follow, sitemap and share image.
+
+Chrome inspection confirmed the new repository-first section and its Build for Still link. Catalog and developer pages each had one H1 and a 390-point document/scroll width, without horizontal overflow. The temporary responsive override was reset. Screenshot: `out/verification/repository-marketplace/catalog-desktop.png`. These observations verify web content/navigation only, not native repository installation.
