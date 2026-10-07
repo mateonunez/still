@@ -112,3 +112,23 @@ Test unsupported versions, unknown/private fields, oversized files, symlinks, un
 ## Repository distribution roadmap
 
 Repository-first discovery and reviewed CLI/Settings installation are planned. Continue using the supported local package format; no remote installer or public npm command is available yet. See [repository workflow](repository-plugins.md) and [implementation issue](https://github.com/mateonunez/still/issues/4).
+
+## Inspect public HTTPS repositories from the workspace
+
+The private workspace CLI now reads public Git repositories and delegates compatibility to the native Swift validator. Node 24, Git and Swift are required; no npm publication is implied.
+
+```sh
+node packages/still-plugins/src/cli.mjs inspect examples/plugins --json
+node packages/still-plugins/src/cli.mjs inspect https://github.com/mateonunez/still.git --ref main --path examples/plugins --json
+node packages/still-plugins/src/cli.mjs inspect https://github.com/mateonunez/still.git --ref main --path examples/plugins/local-signals.stillplugin --json
+```
+
+`--path` selects a relative repository folder or package. `--ref` defaults to HEAD and accepts bounded ASCII revision names or commit IDs; it is unavailable for local directories. The returned `source` records the HTTPS URL, requested reference, resolved commit and selected package root. Candidates are read from that commit even if the branch later moves. This report is not an installation receipt or publisher verification.
+
+HTTPS URLs cannot contain credentials, query strings or fragments. Supply canonical URLs: redirects are refused. Private authentication, SSH and alternative transports are unsupported in this slice. Git operates in an isolated temporary bare repository without inherited user/system configuration, credential helpers, interactive prompts or checkout. Raw object reads do not invoke repository filters, submodules, LFS smudging or package code. Unrelated content is not projected into the inspection folder. Temporary files are removed after validation or failure.
+
+Transport rejects linked/executable package entries and submodules. Output is bounded to 4 MiB per child; the tree report to 10,000 entries; projection to 96 files/6 MiB, plus the 32 KiB index. Package manifests retain the 32 KiB limit; other projected files are at most 64 KiB. Native validation still rejects unsupported filenames and manifests. Fetch has a 30-second timeout, object commands share a 90-second deadline, and the native validator has a separate 60-second timeout. The 64 MiB fetched-repository disk limit is sampled every 100 ms and checked again after fetch; it may overshoot and is not a hard network/disk quota. Large monorepos can fail the conservative transport limits even when a small package itself is valid.
+
+JSON failure output carries an error code, `compatible: false` and empty `actionsTaken`, without raw Git diagnostics or auth-bearing input. The Node wrapper returns 1 on failure. This is read-only discovery: no receipt, host package, permission, source connection or screen module is created. Settings repository review, installation/update transactions, a bundled validator for npm distribution and hard resource-isolation acceptance remain pending.
+
+Implementation references: [Git fetch](https://git-scm.com/docs/git-fetch), [Git configuration](https://git-scm.com/docs/git-config), [Git tree inspection](https://git-scm.com/docs/git-ls-tree). [Verified cases and boundaries](../verification/https-repository-discovery.md).

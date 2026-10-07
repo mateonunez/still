@@ -1,6 +1,6 @@
 # Repository-first plugin marketplace
 
-Status: product and engineering proposal, with local read-only discovery implemented 2026-10-07. Repository installation is not implemented or published. The native CLI inspects local repository indexes/packages with shared import validation and machine-readable compatibility. HTTPS transport, Settings review and receipts remain pending. This does not expand the executable runtime or publish an npm package. See [local discovery guide](../guides/plugin-development.md#inspect-a-local-repository).
+Status: product and engineering proposal, with local and public HTTPS read-only discovery implemented 2026-10-07. Repository installation is not implemented or published. The native CLI inspects local repository indexes/packages with shared import validation; the workspace Node CLI resolves HTTPS sources to a commit and delegates compatibility to that validator. Settings review, receipts, hard transport-resource acceptance and public CLI packaging remain pending. This does not expand the executable runtime or publish an npm package. See [discovery guide](../guides/plugin-development.md#inspect-public-https-repositories-from-the-workspace) and [transport evidence](../verification/https-repository-discovery.md).
 
 ## Product principle
 

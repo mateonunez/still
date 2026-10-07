@@ -224,3 +224,7 @@ Compare the public release's peeled source commit with the candidate used in dem
 ## Local package discovery
 
 Share package validation between read-only discovery and import. Repository indexes select bounded relative paths; reject linked ancestors and traversal before reading candidate manifests. Report candidate errors without masking repository-level failures. Empty discovery and duplicate IDs cannot produce an overall compatible result. Machine output includes compatibility and actions taken; diagnostics stay separate. Treat a local working tree as mutable, without inventing commit provenance or receipt guarantees.
+
+## Repository transport isolation
+
+Read an immutable Git tree without checkout or repository execution. Keep transport checks separate from native compatibility; do not recreate Swift manifest rules in JavaScript. Omit inherited Git configuration, credentials and session environment; reject auth-bearing locators and print stable errors instead of raw remote diagnostics. Record commit and scope in discovery reports without calling them install receipts. State sampled disk limits honestly and preserve hard resource isolation as a separate acceptance gate. Tests must resolve executable fixtures relative to their files, not assume pnpm's working directory.
