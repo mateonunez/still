@@ -72,25 +72,26 @@ final class SessionControls: ObservableObject {
             platformIssue = "macOS ended an awake request. Start a new session when ready."
         }
         refresh()
-        guard idleMinutes > 0 else { idleIssue = ""; return false }
-        guard let anyInput = CGEventType(rawValue: UInt32.max) else { idleIssue = "Inactivity signal unavailable"; return false }
+        guard idleMinutes > 0 else { publish(\.idleIssue, ""); return false }
+        guard let anyInput = CGEventType(rawValue: UInt32.max) else { publish(\.idleIssue, "Inactivity signal unavailable"); return false }
         let age = CGEventSource.secondsSinceLastEventType(.combinedSessionState, eventType: anyInput)
-        guard age.isFinite, age >= 0 else { idleIssue = "Inactivity signal unavailable"; return false }
-        idleIssue = ""
+        guard age.isFinite, age >= 0 else { publish(\.idleIssue, "Inactivity signal unavailable"); return false }
+        publish(\.idleIssue, "")
         return idle.shouldActivate(inputAge: age, now: clock.now, alreadyCovered: alreadyCovered, sessionAvailable: sessionAvailable)
     }
 
     private func refresh() {
         publish(\.running, energy.isRunning)
         publish(\.issue, energy.failure?.message ?? platformIssue)
+        let status: String
         if running {
             let minutes = max(1, Int(ceil(energy.remaining / 60)))
-            energyStatus = "Awake session · \(minutes)m left"
-            if energy.owned[.display] != nil { energyStatus += " · displays on" }
+            status = "Awake session · \(minutes)m left" + (energy.owned[.display] != nil ? " · displays on" : "")
         } else if !energy.owned.isEmpty {
-            energyStatus = "Ending awake requests…"
+            status = "Ending awake requests…"
         } else {
-            energyStatus = "Normal sleep behavior"
+            status = "Normal sleep behavior"
         }
+        publish(\.energyStatus, status)
     }
 }

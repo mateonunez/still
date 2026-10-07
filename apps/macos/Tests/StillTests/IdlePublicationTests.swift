@@ -69,3 +69,13 @@ import Testing
     withExtendedLifetime(observer) { #expect(updates == 0) }
     center.stop(); widgets.stop()
 }
+
+@Test @MainActor func unchangedSessionTickDoesNotInvalidateObservers() {
+    let controls = SessionControls(persist: false)
+    _ = controls.tick(alreadyCovered: false, sessionAvailable: true)
+    var updates = 0
+    let observer = controls.objectWillChange.sink { updates += 1 }
+    for _ in 0..<100 { _ = controls.tick(alreadyCovered: false, sessionAvailable: true) }
+    withExtendedLifetime(observer) { #expect(updates == 0) }
+    #expect(controls.energyStatus == "Normal sleep behavior")
+}

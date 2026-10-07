@@ -232,3 +232,7 @@ Read an immutable Git tree without checkout or repository execution. Keep transp
 ## Polling and view invalidation
 
 Publish source projections only when their values change. Keep real observation/expiry timestamps; do not fabricate observation time for local derived projections just to signal a tick. Polling, source freshness and view invalidation are independent concerns. Test the actual ObservableObject subscribers across repeated ticks, new data and suspension. Identify the process/binary and measure CPU-time deltas separately from stack sampling; notification counts cannot certify CPU improvement or long-run stability. Use isolated stores for fixtures and preserve owner app processes.
+
+## Contributor performance patches
+
+Review performance changes separately from visual/product changes. Preserve opaque privacy scenery even when materials or window sizing are refined. When equality fixes overlap, retain both the shared publisher and stable projection semantics; synthesized equality cannot help if every poll invents a timestamp. Test actual observers and meaningful transitions after integration. Keep immutable PR/source references, conflict resolutions, CI and runtime CPU evidence separate.

@@ -1,7 +1,7 @@
 import AppKit
 import SwiftUI
 
-/// Porcelain is opaque scenery; Glass blurs the desktop underneath unless Reduce Transparency or Increase Contrast is on.
+/// Themes change Still-owned scenery, never the desktop underneath the curtain.
 enum StillTheme: String, CaseIterable {
     case porcelain, glass
     var title: String { rawValue.capitalized }
@@ -10,9 +10,6 @@ enum StillTheme: String, CaseIterable {
         case .porcelain: dark ? .dark : .light
         case .glass: dark ? .glassDark : .glassLight
         }
-    }
-    @MainActor var isTranslucent: Bool {
-        self == .glass && !NSWorkspace.shared.accessibilityDisplayShouldReduceTransparency && !NSWorkspace.shared.accessibilityDisplayShouldIncreaseContrast
     }
 }
 
@@ -50,15 +47,13 @@ struct StillSceneBackground: View {
     @Environment(\.colorSchemeContrast) private var contrast
     var body: some View {
         ZStack {
+            palette.background
             if theme == .glass && !reduceTransparency && contrast != .increased {
-                // Glass shows the desktop through a heavy blur; the tint keeps text contrast in light and dark.
-                StillBackdropMaterial()
-                palette.background.opacity(colorScheme == .dark ? 0.45 : 0.4)
                 GeometryReader { geometry in
                     Rectangle().fill(RadialGradient(colors: [palette.accent.opacity(backdrop == "mist" ? 0.05 : colorScheme == .dark ? 0.22 : 0.06), .clear], center: UnitPoint(x: 0.08, y: 0.02), startRadius: 0, endRadius: max(geometry.size.width, geometry.size.height) * 0.75))
                     Rectangle().fill(RadialGradient(colors: [(backdrop == "dusk" ? Color.orange : Color.indigo).opacity(colorScheme == .dark ? 0.14 : 0.04), .clear], center: UnitPoint(x: 0.95, y: 0.95), startRadius: 0, endRadius: max(geometry.size.width, geometry.size.height) * 0.65))
                 }
-            } else { palette.background }
+            }
         }.clipped().ignoresSafeArea().accessibilityHidden(true)
     }
 }
@@ -101,18 +96,6 @@ struct StillClockFace: View {
             }.foregroundStyle(palette.primary)
         }
     }
-}
-
-/// Blurs whatever is behind the window; only Glass uses it, and only when transparency is allowed.
-private struct StillBackdropMaterial: NSViewRepresentable {
-    func makeNSView(context: Context) -> NSVisualEffectView {
-        let view = NSVisualEffectView()
-        view.material = .fullScreenUI
-        view.blendingMode = .behindWindow
-        view.state = .active
-        return view
-    }
-    func updateNSView(_ view: NSVisualEffectView, context: Context) {}
 }
 
 /// Explicitly sample this window's Still scenery, never behind-window desktop pixels.
