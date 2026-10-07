@@ -3,7 +3,7 @@ import OSLog
 import StillWidgets
 import StillPluginKit
 
-struct NativeWidgetCard: Identifiable {
+struct NativeWidgetCard: Identifiable, Equatable {
     let provider: UsageProvider
     let snapshot: UsageSnapshot?
     let status: String
@@ -119,7 +119,7 @@ final class WidgetCenter: ObservableObject {
 
     private func rebuild() {
         let now = Date()
-        activityCards = UsageProvider.allCases.filter { activityEnabled.contains($0) }.map { provider in
+        let activity = UsageProvider.allCases.filter { activityEnabled.contains($0) }.map { provider in
             let path = sourceRoot.appendingPathComponent("activity/\(provider.rawValue).json")
             let size = (try? FileManager.default.attributesOfItem(atPath: path.path)[.size] as? NSNumber)?.intValue ?? 0
             let data = size > 0 && size <= 65536 ? try? Data(contentsOf: path) : nil
@@ -134,7 +134,8 @@ final class WidgetCenter: ObservableObject {
             let count = attention > 0 ? attention : working > 0 ? working : failed > 0 ? failed : interrupted > 0 ? interrupted : completed
             return ExtensionCard(id: provider.rawValue + "-activity", title: provider.title, kind: .agentActivity, quota: nil, observedAt: records.map(\.observedAt).max(), state: state, detail: suspended ? "Source paused" : records.isEmpty ? "No recent events · activity unavailable" : "Advisory hook signal · not pending approvals", count: count, isSample: false)
         }
-        cards = UsageProvider.allCases.filter { enabled.contains($0) }.map { provider in
+        publish(\.activityCards, activity)
+        let next = UsageProvider.allCases.filter { enabled.contains($0) }.map { provider in
             if suspended { return NativeWidgetCard(provider: provider, snapshot: nil, status: "Source paused") }
             if provider == .codex {
                 let current = snapshot.flatMap { $0.isUsable(now: now) ? $0 : nil }
@@ -152,5 +153,6 @@ final class WidgetCenter: ObservableObject {
             }
             return NativeWidgetCard(provider: provider, snapshot: value, status: "Client-reported quota · status line")
         }
+        publish(\.cards, next)
     }
 }

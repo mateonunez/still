@@ -160,16 +160,15 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         widgets.tick(available: !sleeping && userSessionActive)
         plugins.tick(available: !sleeping && userSessionActive)
         nativePlugins.tick(available: !sleeping && userSessionActive)
-        presentation.nativeCards = nativePlugins.visibleCards
+        presentation.publish(\.nativeCards, nativePlugins.visibleCards)
         let template = plugins.template
-        presentation.widgetCards = widgets.cards.filter { card in template == nil || template!.widgets.contains { $0.kind == .quota && $0.provider.rawValue == card.provider.rawValue } }
-        if nativePlugins.agentsEnabled { presentation.widgetCards = [] }
+        presentation.publish(\.widgetCards, nativePlugins.agentsEnabled ? [] : widgets.cards.filter { card in template == nil || template!.widgets.contains { $0.kind == .quota && $0.provider.rawValue == card.provider.rawValue } })
         let activity = widgets.activityCards.filter { card in template == nil || template!.widgets.contains { $0.kind == .agentActivity && card.id == $0.provider.rawValue + "-activity" } }
-        presentation.extensionCards = (nativePlugins.agentsEnabled ? [] : activity) + plugins.cards
+        presentation.publish(\.extensionCards, (nativePlugins.agentsEnabled ? [] : activity) + plugins.cards)
         if let template, widgets.layout != template.template.layout.rawValue { widgets.layout = template.template.layout.rawValue }
-        presentation.widgetLayout = widgets.layout
-        presentation.widgetSide = widgets.side
-        presentation.composition = nativePlugins.composition
+        presentation.publish(\.widgetLayout, widgets.layout)
+        presentation.publish(\.widgetSide, widgets.side)
+        presentation.publish(\.composition, nativePlugins.composition)
         let activate = controls.tick(alreadyCovered: session.isRequested, sessionAvailable: !sleeping && userSessionActive)
         energyMenuItem?.title = controls.running ? controls.energyStatus : "Keep Mac awake"
         if activate, editorWindow?.isVisible != true { cover() }
@@ -196,7 +195,9 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         window.minSize = NSSize(width: 780, height: 600)
         window.title = "Still Settings"; window.titlebarAppearsTransparent = true
         window.isReleasedWhenClosed = false; window.isOpaque = false; window.backgroundColor = .clear
-        window.contentView = NSHostingView(rootView: WidgetsHubView(controls: controls, widgets: widgets, plugins: plugins, nativePlugins: nativePlugins, presentation: presentation, titlebarInset: window.frame.height - window.contentLayoutRect.height, editScreen: { [weak self] in self?.showScreenEditor() })); window.center()
+        let host = NSHostingView(rootView: WidgetsHubView(controls: controls, widgets: widgets, plugins: plugins, nativePlugins: nativePlugins, presentation: presentation, titlebarInset: window.frame.height - window.contentLayoutRect.height, editScreen: { [weak self] in self?.showScreenEditor() }))
+        host.sizingOptions = [.minSize] // Intrinsic sizing re-measured the whole hub on every published tick
+        window.contentView = host; window.center()
         widgetsWindow = window; NSApp.activate(ignoringOtherApps: true); window.makeKeyAndOrderFront(nil)
     }
 
