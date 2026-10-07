@@ -1,6 +1,6 @@
 # Contributing to Still
 
-Still is in development and the repository currently requires access. The public [SDK](https://meet-still.app/developers) and [plugin catalog](https://meet-still.app/plugins) are available without repository access. There is no community submission or package-publishing service yet.
+Still is in development and the source repository is public. The public [SDK](https://meet-still.app/developers) and [plugin catalog](https://meet-still.app/plugins) are available without repository access. There is no community submission or package-publishing service yet.
 
 ## Start with a small, complete change
 

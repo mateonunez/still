@@ -91,7 +91,8 @@ export const catalog = {
   catalogVersion: 1,
   updatedAt: '2026-10-05',
   appAvailability: 'development-preview',
-  installation: 'Built into Still. Enable and configure each source in Settings → Plugins. No public app download yet.',
+  installation:
+    'Built into Still. Enable and configure each source in Settings → Plugins. The experimental preview is available; see download instructions and known limits.',
   communityPublishing: false,
   automaticUpdates: false,
   plugins,

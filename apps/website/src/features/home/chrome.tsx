@@ -14,7 +14,7 @@ export function Header() {
         <Link href="/plugins">Plugins</Link>
         <Link href="/developers">Developers</Link>
         <Link className="nav-pill" href="/download">
-          Beta status <span aria-hidden="true">↗</span>
+          Try the preview <span aria-hidden="true">↗</span>
         </Link>
       </nav>
     </header>
@@ -39,7 +39,7 @@ export function Footer() {
         <Link href="/changelog">Changelog</Link>
         <Link href="/license">MIT license</Link>
       </nav>
-      <span className="footer-note">Native macOS · MIT licensed · In development</span>
+      <span className="footer-note">Native macOS · MIT licensed · Experimental preview</span>
     </footer>
   );
 }

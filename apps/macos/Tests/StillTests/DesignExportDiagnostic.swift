@@ -20,13 +20,15 @@ import Testing
     _ = NSApplication.shared
     let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
     CTFontManagerRegisterFontsForURL(root.appendingPathComponent("design/fonts/InstrumentSerif-Regular.ttf") as CFURL, .process, nil)
-    let output = root.appendingPathComponent("out/verification/design-refinement")
+    let marketing = ProcessInfo.processInfo.environment["STILL_EXPORT_MARKETING"] == "1"
+    let output = root.appendingPathComponent(marketing ? "out/verification/marketing-native" : "out/verification/design-refinement")
     try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
     let scratch = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
     defer { try? FileManager.default.removeItem(at: scratch) }
     let store = NativePluginStore(root: scratch)
     try store.prepareMissingConfigurations()
-    for id in [NativePluginID.worldClock, .macPulse] {
+    let sourceIDs: [NativePluginID] = marketing ? [.worldClock] : [.worldClock, .macPulse]
+    for id in sourceIDs {
         var config = NativePluginConfiguration(plugin: id); config.enabled = true; config.visible = true
         try store.write(config)
     }

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { release } from '@/content/release';
 import { pageMetadata, site } from '@/content/site';
 import { Preview } from '@/features/home/preview';
 import { plugins } from '@/features/plugins/catalog';
@@ -48,14 +49,14 @@ export default function Home() {
             <br className="desktop-break" /> Bring only the details you want into view.
           </p>
           <div className="hero-actions">
-            <a className="button-primary" href="#preview">
-              Explore Still <span aria-hidden="true">↓</span>
-            </a>
-            <Link className="text-link" href="/download">
-              Beta status <span aria-hidden="true">↗</span>
+            <Link className="button-primary" href="/download">
+              Try the preview <span aria-hidden="true">↗</span>
             </Link>
+            <a className="text-link" href={release.repository}>
+              View on GitHub <span aria-hidden="true">↗</span>
+            </a>
           </div>
-          <p className="hero-footnote">Native macOS · MIT licensed · In development</p>
+          <p className="hero-footnote">Universal Mac preview · MIT licensed · Not notarized</p>
         </div>
         <div className="hero-aside">
           <div className="orb" aria-hidden="true" />
@@ -69,6 +70,22 @@ export default function Home() {
         </div>
       </section>
       <Preview />
+      <section className="launch-media" aria-labelledby="launch-media-title">
+        <p className="eyebrow">THE NATIVE EDITOR, IN VIEW</p>
+        <h2 id="launch-media-title">Two themes. Your composition.</h2>
+        <video controls preload="none" poster="/media/editor-glass-dark.png" width="1280" height="800">
+          <source src="/media/still-showcase.mp4" type="video/mp4" />
+          <track kind="captions" src="/media/still-showcase.vtt" srcLang="en" label="English" default />
+          <a href="/media/still-showcase.mp4">Download the visual showcase</a>
+        </video>
+        <p>
+          Native SwiftUI view exports from the development build. A visual showcase, not a recording of gestures,
+          authentication or live source connections.
+        </p>
+        <a className="text-link" href="/media/showcase-transcript.txt">
+          Read the transcript ↗
+        </a>
+      </section>
       <section className="intro">
         <p className="eyebrow">LESS NOISE. MORE INTENTION.</p>
         <h2>
@@ -160,9 +177,9 @@ export default function Home() {
           </p>
         </details>
         <details>
-          <summary>Can I try the beta?</summary>
+          <summary>Can I try Still today?</summary>
           <p>
-            The beta is being prepared for end users. There is no public app download yet.{' '}
+            An experimental preview is available for Apple Silicon and Intel. It is ad-hoc signed and not notarized.{' '}
             <Link href="/download">See availability and compatibility</Link>, or{' '}
             <Link href="/changelog">follow development</Link>.
           </p>
@@ -175,9 +192,9 @@ export default function Home() {
           <br />
           <em>A little more yours.</em>
         </h2>
-        <p>Still is in development. Explore the screen today; follow its path to an end-user beta.</p>
+        <p>Try the experimental preview. Build with the open-source app and developer SDK.</p>
         <Link className="button-primary" href="/download">
-          See beta status <span aria-hidden="true">↗</span>
+          Try the preview <span aria-hidden="true">↗</span>
         </Link>
         <p className="closing-note">Porcelain and Glass · Ten native plugins · MIT licensed</p>
       </section>

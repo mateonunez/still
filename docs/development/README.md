@@ -41,3 +41,5 @@ The [end-user beta preparation](private-beta-preparation.md) records release inp
 The [brand and copy phase](marketing-and-license.md) aligns the product message, website workflow and repository materials, adds the MIT license and public license notices, and preserves the current development/availability boundary. [Verification](../verification/marketing-and-license.md) separates the built-site audit from browser and remote delivery.
 
 [Semantic preview delivery](preview-releases.md) uses an explicit prerelease tag, separate universal packaging and manual app updates. [Release procedure](../guides/github-releases.md) retains the experimental/Gatekeeper boundary.
+
+[Public preview launch](public-preview-launch.md) aligns repository visibility, real downloads, licensed visual assets and human/agent copy. Social announcements remain drafts for manual publication.

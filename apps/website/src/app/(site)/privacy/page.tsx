@@ -30,7 +30,7 @@ const content: ArticleContent = {
     },
     {
       title: 'Local packages have a clear boundary.',
-      text: 'Importing a template or metadata package does not connect a source. Still validates its manifest, renders approved cards and runs no package code. A local metadata producer must be started separately and retains its own system permissions. Disabling it in Still removes its connection and displayed facts; it does not revoke that external program’s system access. The public catalog documents native modules and SDK resources; it has no account, submission or purchase flow. There is no public app release.',
+      text: 'Importing a template or metadata package does not connect a source. Still validates its manifest, renders approved cards and runs no package code. A local metadata producer must be started separately and retains its own system permissions. Disabling it in Still removes its connection and displayed facts; it does not revoke that external program’s system access. The public catalog documents native modules and SDK resources; it has no account, submission or purchase flow. Experimental app previews and source are public on GitHub.',
     },
   ],
 };

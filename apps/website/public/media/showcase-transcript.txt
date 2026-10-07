@@ -1,0 +1,8 @@
+Still — A little space to step away.
+
+0–4 seconds: Porcelain light. Native editor with clock and local time widget.
+4–8 seconds: Porcelain dark. The same native editor composition.
+8–12 seconds: Glass light. Still-owned opaque scenery.
+12–16 seconds: Glass dark. Experimental preview available at meet-still.app.
+
+Silent visual showcase made from offscreen SwiftUI/AppKit view exports in a development diagnostic. Not a recording of interaction, authentication or live integrations. Scratch configuration; no conversations, account data or private project details. The app preview is ad-hoc signed, not notarized, and is not the macOS security lock.

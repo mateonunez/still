@@ -10,7 +10,13 @@ Cover your desktop. Keep your Mac awake. Bring only the details you want into vi
 
 [Meet Still](https://meet-still.app) · [Native plugins](https://meet-still.app/plugins) · [Developer SDK](https://meet-still.app/developers) · [MIT license](LICENSE)
 
-**Experimental preview.** [0.1.0-preview.2](https://github.com/mateonunez/still/releases/tag/v0.1.0-preview.2) provides a universal Mac archive, checksum and known limits. It is ad-hoc signed, not Developer ID signed or notarized. The repository remains private; download access follows repository access. No public native download, published npm package or working Homebrew install command exists yet. [Preview release guide](docs/guides/github-releases.md)
+**Experimental preview.** [0.1.0-preview.2](https://github.com/mateonunez/still/releases/tag/v0.1.0-preview.2) provides a universal Mac archive, checksum and known limits. It is ad-hoc signed, not Developer ID signed or notarized. The source and preview are public. No published npm package or working Homebrew install command exists yet. [Preview release guide](docs/guides/github-releases.md)
+
+## A look at the native editor
+
+<p align="center"><img src="apps/website/public/media/editor-glass-dark.png" alt="Glass dark native editor view with clock and local time widget" width="100%" /></p>
+
+Offscreen native SwiftUI view export with a scratch configuration, not recorded interaction. [16-second visual showcase](https://meet-still.app/media/still-showcase.mp4) · [Launch assets and copy](docs/marketing/launch-kit.md)
 
 ## Your kind of quiet
 

@@ -30,7 +30,7 @@ const content: ArticleContent = {
     },
     {
       title: 'Can I download it now?',
-      text: 'A public app download is not available. The native candidate is being tested before signing, notarization and distribution. The end-user beta will list verified compatibility and known limitations. Original code and documentation are MIT licensed; source access remains private during development.',
+      text: 'An experimental universal preview is available on GitHub Releases, alongside MIT-licensed source. It is ad-hoc signed, not notarized. See /download for checksums, installation and known limits. The signed end-user beta comes later.',
     },
   ],
 };

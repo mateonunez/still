@@ -1,50 +1,56 @@
-# Still — development launch kit
+# Still — public preview launch kit
 
-Draft copy for future use. No messages have been sent and no public native app release is announced.
+Prepared 2026-10-07. Draft posts for manual publication. No social messages or community submissions have been sent.
 
-## Short introduction
+## One line
 
-Still is a native Mac app for the moments between. Cover your desktop with Porcelain or Glass, keep the Mac awake while the screen is active, and arrange a few useful widgets around your clock. Return with system authentication. Original code is MIT licensed; the app is in development.
+A little space to step away. An open-source native Mac privacy curtain, with keep-awake and configurable widgets.
 
-## Development post
+## Short announcement
 
-Meet Still: a little space to step away.
+Meet Still. A little space to step away.
 
-A native Mac screen with Porcelain and Glass themes, configurable widgets and an intentional way back. Keep agent quota, a build, your next event or Spotify playback in view—only when you choose.
+Cover your desktop with Porcelain or Glass. Keep your Mac awake while Still is active. Arrange the clock and useful widgets, including agent quota and Spotify playback.
 
-The end-user beta is being prepared. Explore the designs, plugin catalog and developer SDK at https://meet-still.app.
+Native SwiftUI. Open source under MIT. The experimental universal Mac preview is available now.
 
-Still is a visual privacy curtain, not the macOS security lock. There is no public app download yet.
+https://meet-still.app
+https://github.com/mateonunez/still
 
-## Demo storyboard
+Preview, not the macOS security lock. This build is ad-hoc signed and not notarized; read the installation notes and known limits before trying it.
 
-1. Show the desktop, then activate Still from the menu bar.
-2. Show Porcelain and Glass in the exact app candidate, with clear light/dark transitions.
-3. Move and resize two widgets, connect a real permitted source and save the arrangement.
-4. Demonstrate the actual authenticated return.
-5. End with the product name, domain and current beta availability.
+## Longer introduction
 
-Use a clean setup with permission to show every item. No private conversations, account data or calendar/project details. Demonstrations of task progress or awake endurance need actual observed evidence. Do not use a web illustration as footage of the native app. Captions and transcripts accompany the demo.
+I built Still for the moments when my Mac is working and I want to step away.
 
-## End-user beta announcement template
+It gives the desktop a calmer face: Porcelain or Glass, a clock, and only the widgets I choose. Still requests that the Mac and display stay awake while covered. The editor supports Grid and Free composition, and ten native plugins have their own settings.
 
-Use only after the signed/notarized artifact, actual download and tested compatibility are available. Replace all bracketed fields and verify the resulting claims.
+The Agents plugin brings Codex and Claude quota and optional advisory activity together. Spotify reads the local app when permitted. Calendar, system metrics, build/deploy status and local clocks are part of the collection. Sources need configuration and may be unavailable; no conversations or approval decisions appear in Still.
 
-Still [version] is ready to try.
+Still is open source under MIT. The first delivered preview is 0.1.0-preview.2, with a universal ZIP, checksums and release notes. The preview is not notarized, and native compatibility, gestures, accessibility and installation still need testing. Still is visual privacy, not the macOS security lock.
 
-Make a little space to step away: choose Porcelain or Glass, arrange your native widgets and return through macOS authentication.
+Try it, inspect the code, and report focused feedback:
+https://meet-still.app/download
+https://github.com/mateonunez/still/issues
 
-Download: [verified release URL]
-Tested on: [actual OS/hardware matrix]
-Release notes and limitations: [published release notes URL]
-Feedback: [working support channel]
+## Visual assets
 
-This is a beta. Still covers your desktop for visual privacy; use the macOS security lock to secure your session. Updates use the documented manual replacement flow.
+- Social card: https://meet-still.app/opengraph-image
+- Downloadable social PNG: https://meet-still.app/media/still-social.png
+- 16-second visual showcase: https://meet-still.app/media/still-showcase.mp4
+- Captions: https://meet-still.app/media/still-showcase.vtt
+- Transcript: https://meet-still.app/media/showcase-transcript.txt
+- Four native editor view exports: /media/editor-porcelain-light.png, /media/editor-porcelain-dark.png, /media/editor-glass-light.png and /media/editor-glass-dark.png
 
-## Launch checklist
+The images come from offscreen SwiftUI/AppKit diagnostic exports with a scratch configuration. The showcase is a sequence of those views, not recorded interactions or authentication. It contains no conversations, accounts, agent quotas, event titles or project details. Never describe it as footage demonstrating Touch ID, gesture privacy, animated resizing or live integration.
 
-- Keep the website, app, README and social image on the same message.
-- Replace illustrative assets with real release footage only after permission/privacy review.
-- Verify the download, version/checksum, compatibility, update instructions and support route before promoting installation.
-- Review search discovery in Search Console. Measure real installation and repeat use only once the relevant data and consent exist.
-- Evaluate Mac utility, maker/developer and creator communities with specific demos; publish manually through approved accounts. No bulk outreach or fabricated endorsement.
+## Real interaction recording brief
+
+For a later native recording: activate Still on a clean desktop, change themes, move/resize widgets, save, and demonstrate actual authenticated return. Use permitted source data only. Retain captions and describe unresolved behavior. No task-progress or awake-endurance claim without observations.
+
+## Publication order
+
+1. Share the preview on personal channels with the short announcement and the visual showcase.
+2. Invite opt-in users to report version, OS, architecture and a focused reproduction on GitHub.
+3. Share relevant plugin/SDK examples in developer communities, following each community’s rules. No bulk outreach or fabricated endorsements.
+4. Reserve a broader beta campaign for signed/notarized delivery and clean-install acceptance. Public preview availability does not establish beta readiness.

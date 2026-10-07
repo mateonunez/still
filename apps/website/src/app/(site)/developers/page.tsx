@@ -16,8 +16,8 @@ export default function DeveloperPage() {
       </h1>
       <p className="article-lead">{developerIntro}</p>
       <p>
-        Authoring resources are public. Native import and connection require access to the development app; a public app
-        download is not available yet.
+        Authoring resources and source are public. Try native import and connection in the experimental preview, with
+        its documented limitations.
       </p>
       <nav className="developer-assets" aria-label="SDK resources">
         <a href="/sdk/plugin-manifest-v1.schema.json" download>

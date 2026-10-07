@@ -4,7 +4,7 @@ export const dynamic = 'force-static';
 export function GET() {
   const text = [
     `# Still — Developer and agent guide`,
-    `Native macOS visual privacy curtain, not the macOS security lock. In development; no public app download or guaranteed supported hardware matrix.`,
+    `Native macOS visual privacy curtain, not the macOS security lock. Public MIT source and experimental preview at https://github.com/mateonunez/still/releases/tag/v0.1.0-preview.2. Ad-hoc signed, not notarized; no guaranteed supported hardware matrix.`,
     developerIntro,
     ...developerSections.map((section) => `## ${section.title}\n${section.text}`),
     `## Resources\nhttps://meet-still.app/sdk/plugin-manifest-v1.schema.json\nhttps://meet-still.app/sdk/plugin-snapshot-v1.schema.json\nhttps://meet-still.app/sdk/local-signals/manifest.json\nhttps://meet-still.app/sdk/porcelain-rail/manifest.json\nhttps://meet-still.app/sdk/publish-sample.mjs\nhttps://meet-still.app/plugins/catalog.json\nhttps://meet-still.app/license\nhttps://meet-still.app/sdk/LICENSE`,

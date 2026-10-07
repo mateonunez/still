@@ -1,6 +1,6 @@
 # Still roadmap
 
-Updated 2026-10-06. Native development preview; no signed/notarized beta or public download. The Next.js site is live. Search Console setup was reported complete; indexing/rankings are not established.
+Updated 2026-10-07. Public MIT source and experimental preview 0.1.0-preview.2; no signed/notarized beta. The Next.js site is live. Search Console setup was reported complete; indexing/rankings are not established.
 
 | Priority | Next milestone | Acceptance |
 | --- | --- | --- |

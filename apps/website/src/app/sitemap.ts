@@ -21,12 +21,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/how-it-works',
         '/download',
         '/support',
+        '/privacy',
+        '/plugins',
         '/license',
         '/changelog',
         '/developers',
         '/plugins/agents',
       ].includes(path)
-        ? '2026-10-06T00:00:00Z'
+        ? '2026-10-07T00:00:00Z'
         : '2026-10-05T00:00:00Z',
     ),
   }));

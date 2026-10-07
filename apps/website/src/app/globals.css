@@ -982,3 +982,25 @@ h3 {
     filter: none;
   }
 }
+
+.launch-media {
+  padding: 5rem 0;
+}
+.launch-media h2 {
+  margin-bottom: 2rem;
+}
+.launch-media video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  background: var(--background);
+}
+.launch-media p:not(.eyebrow) {
+  max-width: 70ch;
+  color: var(--textSecondary);
+  margin-top: 1rem;
+}
+.checksum-text {
+  overflow-wrap: anywhere;
+}

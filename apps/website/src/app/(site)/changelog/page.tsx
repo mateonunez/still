@@ -5,9 +5,13 @@ const content: ArticleContent = {
   title: 'Small steps. Thoughtful details.',
   description:
     'Still development field notes: Porcelain, native authentication, inactivity and current desktop coverage work.',
-  eyebrow: 'FIELD NOTES · OCTOBER 6, 2026',
-  lead: 'A public notebook for an app taking shape. Development progress is not a release announcement.',
+  eyebrow: 'FIELD NOTES · OCTOBER 7, 2026',
+  lead: 'A public notebook for an app taking shape. Experimental releases and development progress, with their known limits.',
   sections: [
+    {
+      title: 'An open-source preview, ready to explore.',
+      text: 'Still 0.1.0-preview.2 is available on GitHub with a universal Mac ZIP, checksum and explicit limitations. The source repository is public under MIT. Tagged previews are checked and packaged automatically; app updates remain manual. This ad-hoc build is not Developer ID signed or notarized, and clean-Mac installation acceptance remains open.',
+    },
     {
       title: 'One voice. An MIT foundation.',
       text: 'The product story now centers on “A little space to step away.” The website explains the everyday workflow, keeps beta availability clear and publishes the MIT license alongside font notices. Compatibility targets include macOS 14+ and both architectures; real older-system and Intel acceptance remain open. The beta is being prepared for end users, not a fixed small cohort.',

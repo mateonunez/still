@@ -122,8 +122,19 @@ for (const name of ['plugin-manifest-v1.schema.json', 'plugin-snapshot-v1.schema
 for (const path of ['/llms.txt', '/llms-full.txt']) {
   const response = await fetchRoute(path);
   assert.ok(response.headers.get('content-type')?.startsWith('text/plain'));
-  assert.ok((await response.text()).includes('no public app download'));
+  const text = await response.text();
+  assert.ok(text.includes('experimental preview') && text.includes('not notarized'));
 }
+for (const resource of [
+  '/media/still-showcase.mp4',
+  '/media/still-showcase.vtt',
+  '/media/showcase-transcript.txt',
+  '/media/still-social.png',
+]) {
+  await fetchRoute(resource);
+}
+const downloadHTML = await (await fetchRoute('/download')).text();
+assert.ok(downloadHTML.includes('Still-0.1.0-preview.2-universal.zip') && downloadHTML.includes('SHA256SUMS'));
 const image = Buffer.from(await (await fetchRoute('/opengraph-image')).arrayBuffer());
 assert.ok(image.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])), 'Share image must be PNG');
 assert.equal(image.readUInt32BE(16), 1200, 'Share image width');

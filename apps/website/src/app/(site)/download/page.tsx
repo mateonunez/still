@@ -1,36 +1,79 @@
+import { release } from '@/content/release';
 import { pageMetadata } from '@/content/site';
-import { Article, type ArticleContent } from '@/features/support/article';
 
-const content: ArticleContent = {
-  title: 'Your next pause starts here.',
-  description:
-    'Still beta availability: a native Mac privacy screen with configurable widgets and MIT-licensed code. Direct download is being prepared; no public installer yet.',
-  eyebrow: 'AVAILABILITY',
-  lead: 'An end-user beta is being prepared. There is no public app download yet.',
-  sections: [
-    {
-      title: 'Made for the people who use it.',
-      text: 'The beta will bring Porcelain and Glass, ten optional native plugins and a full-screen editor to end users. We’re testing screen coverage, recovery, accessibility and installation before making a download available. There is no announced release date.',
-    },
-    {
-      title: 'Updates, deliberately.',
-      text: 'Initial beta updates are planned as explicit manual replacements of a verified signed app, preserving local settings. Automatic app and plugin updates are deferred. Versioned release notes and compatibility will accompany each available build.',
-    },
-    {
-      title: 'A broad target. Tested compatibility.',
-      text: 'We’re targeting macOS 14 and later on Apple Silicon and Intel. Intel compilation has passed, while native runtime checks so far come from Apple Silicon on macOS 26. Each release will list its tested combinations; the target is not a supported-hardware guarantee.',
-    },
-    {
-      title: 'Direct to your Mac.',
-      text: 'The plan is a signed, notarized app download outside the Mac App Store. Homebrew will be considered after the normal installation path is verified. No installer, purchase or working Homebrew command is available today.',
-    },
-    {
-      title: 'MIT licensed. Still in development.',
-      text: 'Original code and documentation use the MIT license. The source repository remains private during development, and fonts retain their own licenses. Follow the changelog for progress; download access, release timing and final compatibility are still being prepared.',
-    },
-  ],
-};
-export const metadata = pageMetadata('Download and availability', content.description, '/download');
-export default function Page() {
-  return <Article content={content} />;
+export const metadata = pageMetadata(
+  'Download the experimental preview',
+  'Download Still’s universal Mac preview. Open-source under MIT, with Porcelain and Glass, configurable widgets, checksums and explicit compatibility limits.',
+  '/download',
+);
+export default function DownloadPage() {
+  return (
+    <main id="main" className="article">
+      <p className="eyebrow">EXPERIMENTAL PREVIEW · {release.version}</p>
+      <h1>Your next pause starts here.</h1>
+      <p className="article-lead">Try Still on your Mac. This preview is ad-hoc signed and not notarized by Apple.</p>
+      <nav className="developer-assets" aria-label="Preview downloads">
+        <a className="button-primary" href={release.download}>
+          Download for Mac ↗
+        </a>
+        <a href={release.notes}>Release notes and known limits ↗</a>
+        <a href={release.checksum}>SHA256 checksums ↗</a>
+      </nav>
+      <section>
+        <h2>A preview, with clear boundaries.</h2>
+        <p>
+          Porcelain and Glass, a full-screen editor and ten configurable native plugins are available to explore. Still
+          is visual privacy, not the macOS security lock. Desktop gestures during activation or system-password handoff
+          can expose underlying windows. Authentication, accessibility, multi-display and prolonged keep-awake checks
+          remain incomplete.
+        </p>
+      </section>
+      <section>
+        <h2>Apple Silicon and Intel. A broad target.</h2>
+        <p>
+          The ZIP includes a universal app and universal helpers, compiled with a macOS 14 deployment target. Runtime
+          checks so far come from Apple Silicon on macOS 26; older macOS and Intel runtime compatibility are not
+          certified. Use the release notes for the exact build and tested boundaries.
+        </p>
+      </section>
+      <section>
+        <h2>Open it deliberately.</h2>
+        <ol>
+          <li>Download and extract the ZIP. Quit any other Still instance.</li>
+          <li>Move Still.app to Applications and open it. Back up custom layouts before replacing an older version.</li>
+          <li>
+            macOS may block this unidentified, unnotarized preview. If you trust the source, Apple’s per-app “Open
+            Anyway” action may be available in System Settings → Privacy &amp; Security. Managed Macs may prohibit it.
+            Never disable Gatekeeper globally.
+          </li>
+        </ol>
+        <p>
+          <a href="https://support.apple.com/en-us/102445">Apple’s guidance on opening apps safely ↗</a>
+        </p>
+      </section>
+      <section>
+        <h2>Verify the download.</h2>
+        <p>Download SHA256SUMS beside the ZIP and run:</p>
+        <pre>
+          <code>{'shasum -a 256 -c SHA256SUMS'}</code>
+        </pre>
+        <p className="checksum-text">ZIP SHA256: {release.sha256}</p>
+      </section>
+      <section>
+        <h2>Updates stay in your hands.</h2>
+        <p>
+          Each tagged preview has a semantic version, release notes and checksums. Download the next version manually,
+          quit Still and replace the app. Automatic app/plugin updates and Homebrew installation are not available. The
+          signed, notarized beta comes later.
+        </p>
+      </section>
+      <section>
+        <h2>Open source. MIT licensed.</h2>
+        <p>
+          <a href={release.repository}>Read the source, report an issue or contribute on GitHub ↗</a>. Fonts retain
+          their own licenses. No account or purchase is required.
+        </p>
+      </section>
+    </main>
+  );
 }

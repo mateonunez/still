@@ -6,7 +6,7 @@ export const site = {
   descriptor: 'A calm screen and keep-awake app for Mac.',
   origin: 'https://meet-still.app',
   description:
-    'Cover your desktop. Keep your Mac awake. Make room for the details you choose. Still is a native Mac app with Porcelain and Glass themes and configurable widgets. In development.',
+    'Cover your desktop. Keep your Mac awake. Make room for the details you choose. Still is a native Mac app with Porcelain and Glass themes and configurable widgets. Open source, with an experimental preview available.',
   indexable: process.env.VERCEL_ENV === 'production' || process.env.STILL_INDEXABLE === 'true',
 };
 

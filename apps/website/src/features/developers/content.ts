@@ -1,7 +1,7 @@
 export const developerSections = [
   {
     title: 'MIT licensed. Ready to build on.',
-    text: 'Still’s original code, schemas and starter resources use the MIT license. Preserve the copyright and license notice when sharing copies. Bundled fonts retain their own licenses. Source access remains private during development; the public SDK resources do not imply a public app download or package publication.',
+    text: 'Still’s original code, schemas and starter resources use the MIT license. Preserve the copyright and license notice when sharing copies. Bundled fonts retain their own licenses. Source and experimental app previews are public on GitHub; package publication is separate.',
   },
   {
     title: 'Two extension paths.',
@@ -33,7 +33,7 @@ export const developerSections = [
   },
   {
     title: 'Distribution and updates.',
-    text: 'The public catalog documents built-in modules; it is not a remote installer. The app, workspace CLI and validator are not publicly distributed yet. No working npx or Homebrew installation command is advertised. Community submissions, package upgrades and automatic app/plugin updates are not available. Initial beta updates will use an explicit manual replacement flow once signed artifacts exist.',
+    text: 'The public catalog documents built-in modules; it is not a remote installer. The experimental app is distributed through GitHub Releases; the workspace CLI and validator are available from source, not as published npm packages. No working npx or Homebrew installation command is advertised. Community submissions, package upgrades and automatic app/plugin updates are not available. Initial beta updates will use an explicit manual replacement flow once signed artifacts exist.',
   },
 ] as const;
 export const developerIntro =

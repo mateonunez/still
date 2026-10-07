@@ -5,7 +5,7 @@ import { pageMetadata } from '@/content/site';
 
 export const metadata = pageMetadata(
   'MIT license and font notices',
-  'Still uses the MIT license for original code and documentation. Instrument Serif and Inter retain their SIL Open Font Licenses. Source access remains private during development.',
+  'Still uses the MIT license for original code and documentation. Instrument Serif and Inter retain their SIL Open Font Licenses. Source is public on GitHub.',
   '/license',
 );
 
@@ -17,8 +17,8 @@ export default async function LicensePage() {
       <h1>A small app. A permissive license.</h1>
       <p className="article-lead">Still’s original code and documentation are licensed under MIT.</p>
       <p>
-        The source repository remains private during development. Licensing does not imply a public source repository, a
-        published installer or a working package command.
+        The source repository is public on GitHub. Experimental previews are available; the MIT license does not certify
+        compatibility, notarization or package publication.
       </p>
       <section>
         <h2>MIT License</h2>
