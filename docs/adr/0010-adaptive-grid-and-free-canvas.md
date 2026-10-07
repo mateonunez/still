@@ -11,3 +11,7 @@ New scenes/reset use Grid. Existing records without a layout key decode as Free.
 Gestures use a named canvas coordinate space, so moving a view does not change its drag reference. Grid centers freeze during a drag and reflow on release. Settling respects Reduce Motion; native controls offer keyboard alternatives. Small computed SwiftUI subviews keep the editor's generated view types manageable.
 
 Imported metadata still uses the supported protocol-v1 templates. This native composition decision does not change their wire contract or enable sources. Interactive native gestures, material rendering, accessibility and dense-display acceptance remain separate from geometry tests and view exports.
+
+## Interaction refinement — 2026-10-07
+
+Grid now highlights a destination and commits insertion on a successful drop. Hovering does not mutate persistent order. Free alignment guides indicate proximity without quantizing movement. Resizing from the trailing handle keeps the leading/top edges fixed, uses one-to-one horizontal pointer translation and commits the resulting measured center. Automatic collision fitting still resumes at release; dense-layout settling and physical interaction acceptance remain open.

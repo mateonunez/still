@@ -1,9 +1,9 @@
 # Personalize your Still screen
 
-The current local design candidate is `out/Still-polish.app`. Quit any other Still instance before opening this candidate:
+Resolve the current local candidate from its hash-verified manifest. Quit any other Still instance before opening it:
 
 ```sh
-open out/Still-design.app --args --editor
+open "$(node scripts/native-candidate.mjs --path)" --args --editor
 ```
 
 ## Make the screen yours
@@ -12,11 +12,11 @@ open out/Still-design.app --args --editor
 - **Add widget:** opens the gallery. Connected widgets can be added; existing widgets and disconnected sources are labeled. Connect and configure a source in Settings → Plugins first. Adding a widget does not grant permissions.
 - **Select a module:** click it or use the selection picker at the bottom. **Adjust** opens its inspector. Clock controls offer Serif, Rounded and Minimal type, plus date and message visibility.
 - **Widget details:** the inspector can show or hide source details for an individual module. Expanded Task Watch cards show up to four tasks; compact cards show one and a remaining-task count.
-- **Grid:** drag widgets using the native macOS drag preview. Passing over another widget rearranges the grid immediately. The clock keeps its own region. Adjust a widget to change the shared automatic-column/continuous-width preference.
-- **Free:** drag modules to position them. Resize the selected module with its handle or use Adjust → Module width. Height follows content. The other centers stay stable during pointer movement; fitting resumes on release.
+- **Grid:** drag widgets using the native macOS drag preview. A dashed outline marks the destination; order changes only when you drop onto a widget. The clock keeps its own region. Adjust a widget to change the shared automatic-column/continuous-width preference.
+- **Free:** drag modules to position them. Resize the selected module with its handle or use Adjust → Module width. The handle follows horizontal pointer movement one to one, keeping the leading/top edges fixed while height follows content. The other centers stay stable during pointer movement; fitting resumes on release.
 - **Keyboard:** the selection picker, movement menu and width slider provide alternatives to dragging. Grid up/down moves across a row; Free menu actions move by 2.5 percent of the viewport. Escape dismisses the active inspector or returns to Settings. Done returns to Settings.
 
-Changes are saved locally. A live Grid reorder is saved as it happens; canceling the native drag does not undo reorders already made. Switching Grid/Free preserves saved free coordinates and widths. Reset arrangement and presets are available in Adjust; applying a preset replaces the scene positions.
+Changes are saved locally. Grid hovering does not save a new order; insertion commits on a valid drop. Switching Grid/Free preserves saved free coordinates and widths. Reset arrangement and presets are available in Adjust; applying a preset replaces the scene positions.
 
 ## Materials and displays
 
@@ -28,4 +28,4 @@ There is one main scene. Secondary displays remain opaque. Small screens can sti
 
 Check dragging, release/cancel, repeated reordering, continuous resizing, restart persistence, both themes in Light/Dark, accessibility preferences and multiple displays. Also repeat Touch ID/password and activation-time trackpad trials. Successful build/tests do not establish interaction smoothness, privacy coverage or release readiness.
 
-Free movement shows nearby edge/center alignment guides. Explicit widths can use the available viewport rather than a percentage-based card limit. Grid clock scale adapts to module count.
+Free movement shows nearby edge/center alignment guides without magnetic snapping. Explicit widths remain continuous within the viewport and current 180–600-point limits. Grid clock scale adapts to module count.

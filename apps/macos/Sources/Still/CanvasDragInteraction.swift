@@ -8,23 +8,32 @@ private let canvasModuleType = UTType(exportedAs: "co.mateonunez.still.canvas-mo
 struct CanvasGridDrag: ViewModifier {
     let id: String
     let enabled: Bool
+    let accent: Color
     @Binding var source: String?
     @Binding var lastTarget: String?
     var select: () -> Void
     var reorder: (String, String) -> Void
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @ViewBuilder func body(content: Content) -> some View {
-        if enabled {
-            content.onDrag {
-                source = id; lastTarget = nil; select()
-                let provider = NSItemProvider()
-                provider.registerDataRepresentation(forTypeIdentifier: canvasModuleType.identifier, visibility: .ownProcess) { completion in
-                    completion(Data(id.utf8), nil); return nil
+        Group {
+            if enabled {
+                content.onDrag {
+                    source = id; lastTarget = nil; select()
+                    let provider = NSItemProvider()
+                    provider.registerDataRepresentation(forTypeIdentifier: canvasModuleType.identifier, visibility: .ownProcess) { completion in
+                        completion(Data(id.utf8), nil); return nil
+                    }
+                    return provider
                 }
-                return provider
-            }
-            .onDrop(of: [canvasModuleType], delegate: CanvasInsertionDrop(target: id, source: $source, lastTarget: $lastTarget, reduceMotion: reduceMotion, reorder: reorder))
-        } else { content }
+                .onDrop(of: [canvasModuleType], delegate: CanvasInsertionDrop(target: id, source: $source, lastTarget: $lastTarget, reduceMotion: reduceMotion, reorder: reorder))
+                .overlay {
+                    if source != nil && source != id && lastTarget == id {
+                        RoundedRectangle(cornerRadius: 22).stroke(accent, style: StrokeStyle(lineWidth: 2, dash: [6, 4]))
+                            .allowsHitTesting(false).accessibilityHidden(true)
+                    }
+                }
+            } else { content }
+        }.onChange(of: enabled) { _, enabled in if !enabled { source = nil; lastTarget = nil } }
     }
 }
 
@@ -38,11 +47,14 @@ private struct CanvasInsertionDrop: DropDelegate {
     func dropEntered(info: DropInfo) {
         guard validateDrop(info: info), let source, source != target, lastTarget != target else { return }
         lastTarget = target
-        withAnimation(reduceMotion ? nil : .snappy(duration: 0.25, extraBounce: 0)) { reorder(source, target) }
     }
+    func dropExited(info: DropInfo) { if lastTarget == target { lastTarget = nil } }
     func dropUpdated(info: DropInfo) -> DropProposal? { DropProposal(operation: .move) }
     func performDrop(info: DropInfo) -> Bool {
         guard validateDrop(info: info) else { return false }
+        if let source, source != target {
+            withAnimation(reduceMotion ? nil : .smooth(duration: 0.24)) { reorder(source, target) }
+        }
         source = nil; lastTarget = nil; return true
     }
 }

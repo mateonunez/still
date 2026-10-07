@@ -204,3 +204,9 @@ Public product assets need explicit provenance. A sequence of native view export
 # Website measurement
 
 Keep analytics environment gating and public privacy copy aligned. Verify project activation, production script loading, accepted intake and dashboard reporting separately. Aggregate page visits do not establish successful downloads, native installation or feature adoption. Never add private source data to website events or marketing recordings.
+
+## Canvas interaction continuity
+
+Test continuity at the shared pointer/layout seam, including entry and exit from alignment thresholds. Guide visibility must not quantize pointer coordinates. Freeze neighboring frames during a Free gesture and suppress implicit animation in the active preview. Keep resize origin/width mathematics shared between preview and committed placement; text wrapping must not recenter the gesture anchor.
+
+A system Grid drag should not persist order while hovering. Highlight the destination and commit once on a valid drop. Tests and callback inspection do not prove macOS drag cancellation or subjective fluidity: record those against an exact candidate, including keyboard alternatives, reduced motion and dense-layout settling.
