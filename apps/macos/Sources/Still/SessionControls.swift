@@ -81,8 +81,8 @@ final class SessionControls: ObservableObject {
     }
 
     private func refresh() {
-        running = energy.isRunning
-        issue = energy.failure?.message ?? platformIssue
+        publish(\.running, energy.isRunning)
+        publish(\.issue, energy.failure?.message ?? platformIssue)
         if running {
             let minutes = max(1, Int(ceil(energy.remaining / 60)))
             energyStatus = "Awake session · \(minutes)m left"

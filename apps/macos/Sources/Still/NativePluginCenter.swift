@@ -179,14 +179,14 @@ final class NativePluginCenter: ObservableObject {
             if requestingSpotify { cancelSpotifyAuthorization() }
             if !suspended { for id in installed { cancel(id) }; taskReceipt = nil; taskRevision = 0; rotateTasks() }
             suspended = true
-            for id in installed where configurations[id]?.enabled == true { cards[id] = NativePluginCard(id, state: .paused, detail: "Source paused") }
+            for id in installed where configurations[id]?.enabled == true { publish(\.cards[id], NativePluginCard(id, state: .paused, detail: "Source paused")) }
             return
         }
         if suspended { lastFetch = [:] }; suspended = false
         for id in installed where configurations[id]?.enabled == true {
             guard let config = configurations[id] else { continue }
             if let deadline = deadlines[id], ProcessInfo.processInfo.systemUptime >= deadline { cards[id] = NativePluginCard(id, state: .unavailable, detail: "Source data expired. Refresh or check its connection."); deadlines[id] = nil }
-            if let value = cards[id] { cards[id] = value.current(now: Date()) }
+            if let value = cards[id] { publish(\.cards[id], value.current(now: Date())) }
             guard fetching[id] == nil, Date().timeIntervalSince(lastFetch[id] ?? .distantPast) >= id.refreshSeconds else { continue }
             lastFetch[id] = Date()
             switch id {

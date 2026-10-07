@@ -40,7 +40,7 @@ private struct StillServiceSurface: ViewModifier {
         } else {
             content.background {
                 Rectangle().fill(.regularMaterial)
-                    .overlay(palette.surface.opacity(0.72))
+                    .overlay(palette.surface.opacity(theme == .glass ? 0.3 : 0.72))
                     .ignoresSafeArea()
             }
         }

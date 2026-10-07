@@ -2,7 +2,7 @@ import AppKit
 import StillPluginKit
 import StillWidgets
 
-struct ExtensionCard: Identifiable {
+struct ExtensionCard: Identifiable, Equatable {
     let id: String
     let title: String
     let kind: PluginCapability
@@ -69,9 +69,9 @@ final class PluginCenter: ObservableObject {
     private func save() { if persist { UserDefaults.standard.set(enabled.sorted(), forKey: "StillLocalPlugins") } }
 
     func tick(available: Bool) {
-        guard available else { sessions.keys.forEach { sessions[$0]?.clear() }; cards = []; return }
+        guard available else { sessions.keys.forEach { sessions[$0]?.clear() }; publish(\.cards, []); return }
         let now = Date(), uptime = ProcessInfo.processInfo.systemUptime
-        cards = manifests.filter { enabled.contains($0.id) }.flatMap { manifest -> [ExtensionCard] in
+        let next = manifests.filter { enabled.contains($0.id) }.flatMap { manifest -> [ExtensionCard] in
             guard var session = sessions[manifest.id] else { return [] }
             if let data = try? store.readSnapshot(manifest.id) {
                 switch session.accept(data, now: now, uptime: uptime) {
@@ -89,5 +89,6 @@ final class PluginCenter: ObservableObject {
                 return ExtensionCard(id: manifest.id + "." + widget.id, title: manifest.name, kind: widget.kind, quota: quota, observedAt: observed, state: fact?.state?.rawValue, detail: fact == nil ? "Local metadata unavailable" : (current?.isSample == true ? "Sample · developer metadata" : "Local producer metadata"), count: fact?.count, isSample: current?.isSample ?? false)
             }
         }
+        publish(\.cards, next)
     }
 }
