@@ -210,3 +210,9 @@ Keep analytics environment gating and public privacy copy aligned. Verify projec
 Test continuity at the shared pointer/layout seam, including entry and exit from alignment thresholds. Guide visibility must not quantize pointer coordinates. Freeze neighboring frames during a Free gesture and suppress implicit animation in the active preview. Keep resize origin/width mathematics shared between preview and committed placement; text wrapping must not recenter the gesture anchor.
 
 A system Grid drag should not persist order while hovering. Highlight the destination and commit once on a valid drop. Tests and callback inspection do not prove macOS drag cancellation or subjective fluidity: record those against an exact candidate, including keyboard alternatives, reduced motion and dense-layout settling.
+
+## Repository distribution and copy parity
+
+Resolve and inspect one immutable tree; install that same tree through the host's normative validator. CLI and Settings must share compatibility, review and receipt semantics. Never use JavaScript validation as an untracked approximation of Swift validation. Installation, configuration, connection, OS permission and visibility are independent states. Preserve configuration on failed updates and revoke consumption before removal.
+
+A catalog listing, version string or digest is not publisher authentication. Documentation, landing pages and posts must match the actual package publication and tested install path. Clearly label planned commands/features; gate launch copy on a real clean-install recording. Public channels have different readiness/participation requirements and should not share an indiscriminate launch blast.

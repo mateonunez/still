@@ -51,7 +51,7 @@ Visit `http://127.0.0.1:3000`. The local `/preview` illustrates designs with sam
 
 ## Build on Still
 
-Start with the [plugin developer guide](docs/guides/plugin-development.md), [native collection](docs/guides/native-plugins.md) or [public SDK](https://meet-still.app/developers). The catalog documents built-in plugins; community publishing, remote installers and automatic updates are future work.
+Start with the [plugin developer guide](docs/guides/plugin-development.md), [native collection](docs/guides/native-plugins.md) or [public SDK](https://meet-still.app/developers). The catalog documents built-in plugins. [Repository-first discovery and reviewed CLI/Settings installation](docs/development/repository-marketplace.md) are the next ecosystem direction; remote installation and automatic updates are not available yet.
 
 [Contributing](CONTRIBUTING.md) · [Developer practices](docs/development/practices.md) · [Architecture](docs/architecture.md) · [Roadmap](docs/roadmap.md)
 

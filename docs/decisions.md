@@ -26,3 +26,7 @@ Local development uses `co.mateonunez.still.development`; `co.mateonunez.still` 
 The beta is intended for opt-in end users, without an arbitrary small-cohort limit. Repository visibility is now public; experimental releases are separate from the signed beta. Compatibility targets, tested combinations and downloadable artifact availability remain distinct; see [compatibility research](research/macos-compatibility.md) and [beta preparation](development/private-beta-preparation.md).
 
 Native account quota widgets are implemented locally using Codex app-server and a Claude status-line bridge. D14 now has a constrained declarative v1; arbitrary runner/assets/actions and marketplace remain future scope. See [ADR 0007](adr/0007-native-account-quota-widgets.md) and [local evidence](verification/native-live-widgets.md).
+
+## Repository marketplace direction — 2026-10-07
+
+D15: repository-first distribution with installation through a published npx CLI or Settings is requested scope. The public catalog must not be the only installation route. Skills, Codex and Claude inform the experience, without implying runtime compatibility. [ADR 0011](adr/0011-repository-first-plugin-distribution.md) and the [product plan](development/repository-marketplace.md) define the proposed implementation and acceptance sequence. No remote installation, package publication or richer executable runtime is delivered by this decision.

@@ -54,11 +54,15 @@ export default function PluginsPage() {
         ))}
       </div>
       <section className="catalog-community">
-        <p className="eyebrow">A FOUNDATION FOR WHAT COMES NEXT</p>
-        <h2>Small plugins. A clear contract.</h2>
+        <p className="eyebrow">REPOSITORY-FIRST · IN DEVELOPMENT</p>
+        <h2>Your screen. Your sources. Your plugins.</h2>
         <p>
-          Build a local metadata source or Porcelain template with the declarative SDK. The catalog is the first step
-          toward a marketplace; community publishing, accounts and payments are not available yet.
+          We’re building a way to discover compatible Still packages in a repository and add them from Settings or the
+          command line. The catalog will help you find plugins, without becoming the only place to install them.
+        </p>
+        <p>
+          Today, start with the native collection or build a local metadata source or Porcelain template with the
+          declarative SDK. Repository installation and package updates are not available yet.
         </p>
         <Link className="button-primary" href="/developers">
           Build for Still <span aria-hidden="true">↗</span>

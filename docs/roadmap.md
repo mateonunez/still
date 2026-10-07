@@ -17,6 +17,7 @@ Success is a reproducible installation or accepted behavior, not traffic or star
 | [Native editor refinement #1](https://github.com/mateonunez/still/issues/1) | Continuous movement/resize, predictable editing, keyboard/accessibility and real interaction evidence |
 | [Installation and compatibility #2](https://github.com/mateonunez/still/issues/2) | Fresh launch, architecture/OS matrix, manual replacement and recovery |
 | [Plugin source reliability #3](https://github.com/mateonunez/still/issues/3) | Calendar/Spotify consent and revocation, agent freshness, source absence and reconnect |
+| [Repository marketplace #4](https://github.com/mateonunez/still/issues/4) | Read-only discovery first; shared reviewed CLI/Settings installation, source receipts, configuration and explicit updates |
 
 The [first-use guide](https://meet-still.app/start) and [preview feedback form](https://github.com/mateonunez/still/issues/new?template=preview-feedback.yml) connect actual user experience to this work. Analytics dashboard delivery was reported working; visit metrics remain separate from installation and product acceptance.
 
@@ -67,3 +68,9 @@ The interaction candidate is `Still-review`; a hash-verified build manifest remo
 ## Continuous editor interaction
 
 Guide-threshold jumps and resize recentering have deterministic regression coverage. Grid insertion commits at drop, with a visible destination outline; Free pointer previews suppress settling animation. The separate `Still-review` candidate is prepared for physical trials. [Evidence](verification/editor-interaction.md) distinguishes geometry tests and native-view exports from pointer, cancellation, accessibility and dense-layout acceptance. Issue #1 remains open.
+
+## Repository-first ecosystem and launch channels
+
+Repository installation from Settings and a published npx entry point is now requested scope. The [product plan](development/repository-marketplace.md) starts with bounded discovery and compatibility, then reviewed import/receipts, updates/revocation, richer host-rendered configuration/widgets and public discovery. These are planned capabilities, not a published remote installer. The native collection and local v1 SDK remain distinct.
+
+[Channel planning](marketing/launch-channels.md) prioritizes accurate GitHub/landing material now, Show HN after tryable-install evidence and Product Hunt after reliable end-user onboarding. HN text/posting remains maker-written/manual under its rules. GitHub Trending is a possible discovery outcome, not a submission destination. Signing remains the final native beta gate.

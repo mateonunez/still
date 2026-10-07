@@ -91,3 +91,7 @@ pnpm typecheck
 ```
 
 Test unsupported versions, unknown/private fields, oversized files, symlinks, undeclared facts, stale/future dates, old connection/revision, empty replacement, reconnect and revocation. Inspect real import/enable/disable and Sample labelling in the native Hub. Verify keyboard, VoiceOver, light/dark, reduced materials, long labels and displays separately. Fixtures/builds do not prove real client delivery, physical trackpad coverage or authentication. [Native acceptance guide](pre-release-native-checks.md).
+
+## Repository distribution roadmap
+
+Repository-first discovery and reviewed CLI/Settings installation are planned. Continue using the supported local package format; no remote installer or public npm command is available yet. See [repository workflow](repository-plugins.md) and [implementation issue](https://github.com/mateonunez/still/issues/4).

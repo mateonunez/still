@@ -198,12 +198,12 @@ export default function Home() {
           <li>
             <h3>Next · Make the everyday reliable.</h3>
             <p>
-              Refine editor movement, multi-display behavior, authentication and source connections through real
-              testing.
+              Refine native interactions and source connections through real testing. Build repository-first plugin
+              discovery, with reviewed installation from Settings and the CLI.
             </p>
           </li>
           <li>
-            <h3>Then · A smoother way to install.</h3>
+            <h3>Then · Broader distribution.</h3>
             <p>
               Personal Developer ID signing, notarization and clean-install checks before the beta. Automatic updates
               follow a defined release contract.

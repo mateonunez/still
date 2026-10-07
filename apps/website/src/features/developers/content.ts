@@ -32,6 +32,10 @@ export const developerSections = [
     text: 'The downloadable publisher below sends a 60-second sample and exits; it does not observe a real agent. Sample cards remain visibly labelled. Real sources must use isSample: false only when backed by actual provider evidence. Test malformed/oversized data, old revisions, expiry, reconnect, empty snapshots and disconnect before sharing a package.',
   },
   {
+    title: 'Repository-first, without a central gatekeeper.',
+    text: 'The next extension path is repository-based discovery and reviewed installation from Settings or the CLI. A compatible package should not need a public catalog listing first. The plan separates installation, configuration and source access, records the exact source commit, and makes compatibility failures readable for people and agents. This flow is in development; the current SDK still uses local declarative imports. Skills, Codex and Claude package formats are not automatically Still-compatible.',
+  },
+  {
     title: 'Distribution and updates.',
     text: 'The public catalog documents built-in modules; it is not a remote installer. The experimental app is distributed through GitHub Releases; the workspace CLI and validator are available from source, not as published npm packages. No working npx or Homebrew installation command is advertised. Community submissions, package upgrades and automatic app/plugin updates are not available. Initial beta updates will use an explicit manual replacement flow once signed artifacts exist.',
   },
