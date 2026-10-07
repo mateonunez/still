@@ -12,7 +12,7 @@ export default function DownloadPage() {
       <p className="eyebrow">EXPERIMENTAL PREVIEW · {release.version}</p>
       <h1>Your next pause starts here.</h1>
       <p className="article-lead">Try Still on your Mac. This preview is ad-hoc signed and not notarized by Apple.</p>
-      <nav className="developer-assets" aria-label="Preview downloads">
+      <nav className="download-actions" aria-label="Preview downloads">
         <a className="button-primary" href={release.download}>
           Download for Mac ↗
         </a>
