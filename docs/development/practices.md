@@ -201,3 +201,6 @@ Keep VERSION and its tag identical; validate before building and never interpola
 ## Public launch media
 
 Public product assets need explicit provenance. A sequence of native view exports must stay labelled as such; never imply recorded authentication, pointer behavior or connected source data. Use scratch stores and inspect media for private information before tracking it. Provide captions/transcript, native playback controls and no autoplay. Verify the actual anonymous download against the release checksum after changing repository visibility. Check contrast on real CTA surfaces; generic link-container styles can override button backgrounds. Keep draft announcements separate from social publication.
+# Website measurement
+
+Keep analytics environment gating and public privacy copy aligned. Verify project activation, production script loading, accepted intake and dashboard reporting separately. Aggregate page visits do not establish successful downloads, native installation or feature adoption. Never add private source data to website events or marketing recordings.
