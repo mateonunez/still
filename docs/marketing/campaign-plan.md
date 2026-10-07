@@ -22,7 +22,7 @@ Show HN is a candidate once trying the app is straightforward: its [official gui
 
 ## Publication record
 
-Campaign copy and assets are prepared; no X, blog or hub announcement has been published in this phase. Record each publication URL, date, artifact version and asset used here after verifying the live result. Record observed engagement and issue outcomes; do not invent impressions or conversion rates.
+The introductory article has been delivered to `mateonunez/website` as commit `199e9af`, with production publication tracked in the verification report. X and hub announcements remain unpublished. Record observed engagement and issue outcomes; do not invent impressions or conversion rates.
 
 ## Art
 
