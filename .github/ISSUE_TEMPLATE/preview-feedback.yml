@@ -25,9 +25,9 @@ body:
     attributes:
       label: Mac architecture
       options:
+        - Not sure
         - Apple Silicon
         - Intel
-        - Not sure
     validations:
       required: true
   - type: dropdown
@@ -35,11 +35,11 @@ body:
     attributes:
       label: Installation result
       options:
+        - Not tested
         - Opened successfully
         - macOS blocked opening
         - Opened but failed or crashed
         - Built from source
-        - Not tested
     validations:
       required: true
   - type: textarea
