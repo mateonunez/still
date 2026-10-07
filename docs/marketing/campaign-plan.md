@@ -22,7 +22,7 @@ Show HN is a candidate once trying the app is straightforward: its [official gui
 
 ## Publication record
 
-The introductory article has been delivered to `mateonunez/website` as commit `199e9af`, with production publication tracked in the verification report. X and hub announcements remain unpublished. Record observed engagement and issue outcomes; do not invent impressions or conversion rates.
+The introductory article has been delivered to `mateonunez/website` as commit `199e9af`, with production publication tracked in the verification report. The [X introduction thread](https://x.com/mmateonunez/status/2107754726720761864) was published on 2026-10-07; exact copy and follow-up are recorded in [the announcement](x-announcement.md). Hub submissions remain unpublished. Record observed engagement and issue outcomes; do not invent impressions or conversion rates.
 
 ## Art
 

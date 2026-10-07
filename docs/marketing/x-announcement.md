@@ -1,6 +1,11 @@
 # X preview announcement
 
-Prepared for the personal account. Not published.
+Published on @mmateonunez, 2026-10-07 at 10:47 Europe/Rome.
+
+- Main post: https://x.com/mmateonunez/status/2107754726720761864
+- Thread follow-up: https://x.com/mmateonunez/status/2107754728822096009
+
+The cover includes descriptive alt text and X's Made with AI disclosure. Publication was verified in the live conversation view. Screenshot evidence is stored locally at `out/verification/marketing/x-launch.png`.
 
 ## Main post
 
