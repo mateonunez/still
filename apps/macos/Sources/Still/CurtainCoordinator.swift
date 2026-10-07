@@ -209,6 +209,7 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
         let screen = CurtainDisplay.mainScreen?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1440, height: 900)
         let window = NSWindow(contentRect: screen, styleMask: [.titled, .closable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
         window.title = "Edit Still screen"; window.titlebarAppearsTransparent = true; window.isReleasedWhenClosed = false
+        window.isOpaque = false; window.backgroundColor = .clear
         window.collectionBehavior = [.fullScreenPrimary]
         window.contentView = CurtainDisplay.hostingView(ScreenEditorView(center: nativePlugins, presentation: presentation, finish: { [weak self, weak window] in window?.close(); self?.showWidgets() }), viewport: screen.size)
         window.setFrame(screen, display: false)
@@ -397,8 +398,8 @@ final class CurtainCoordinator: NSObject, NSMenuDelegate {
             let panel = CurtainPanel(contentRect: screen.frame, styleMask: [.borderless], backing: .buffered, defer: false)
             panel.title = "Still — \(presentation.theme.title)"
             panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary, .ignoresCycle, .canJoinAllApplications]
-            panel.isOpaque = true
-            panel.backgroundColor = .windowBackgroundColor
+            panel.isOpaque = !presentation.theme.isTranslucent
+            panel.backgroundColor = presentation.theme.isTranslucent ? .clear : .windowBackgroundColor
             panel.hasShadow = false
             panel.isReleasedWhenClosed = false
             panel.hidesOnDeactivate = false

@@ -172,7 +172,7 @@ struct CurtainView: View {
             .padding(.horizontal, max(32, geometry.size.width * 0.055))
             .padding(.vertical, 40)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(palette.background)
+            .background { StillSceneBackground(theme: presentation.theme, palette: palette) }
             .overlay {
                 if presentation.widgetLayout == "canvas" {
                     ScreenCanvasView(cards: presentation.nativeCards, composition: presentation.composition, palette: palette, selection: .constant(""), reservedFooter: reservedFooter)

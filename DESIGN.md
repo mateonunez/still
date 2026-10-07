@@ -9,10 +9,10 @@ Read [brand fundamentals](docs/brand-fundamentals.md) and [the design system](do
 - Keep brand colors separate from semantic warning/error states. Pair status color with text.
 - Generate prototype tokens and check contrast with the documented scripts.
 - Respect appearance, motion, transparency, contrast and accessibility preferences.
-- Use native Liquid Glass for selected controls on macOS 26, with standard controls on older systems. Service windows may use restrained vibrancy; Reduce Transparency and increased-contrast surfaces remain solid. The curtain remains fully opaque. Do not force focus, hide keyboard focus or add ornamental animation.
+- Use native Liquid Glass for selected controls on macOS 26, with standard controls on older systems. Service windows may use restrained vibrancy; Reduce Transparency and increased-contrast surfaces remain solid. The Porcelain curtain remains fully opaque; the Glass curtain blurs the desktop behind it in light and dark, and falls back to opaque scenery under Reduce Transparency or Increase Contrast. Do not force focus, hide keyboard focus or add ornamental animation.
 - Preserve the user's activity privacy. Agent cards are optional, anonymous and advisory; marketplace features remain future scope.
 - Use real product evidence for screenshots, claims, compatibility and installation.
 
-Glass is the second official native theme: Still-owned opaque scenery, restrained within-window content materials and native Liquid Glass controls. Keep the functional glass layer separate from content; do not nest decorative glass effects. See [Apple guidance](docs/research/liquid-glass.md) and [personalization](docs/guides/screen-personalization.md).
+Glass is the second official native theme: a heavily blurred, tinted view of the desktop behind Still, restrained within-window content materials and native Liquid Glass controls. Keep the functional glass layer separate from content; do not nest decorative glass effects. See [Apple guidance](docs/research/liquid-glass.md) and [personalization](docs/guides/screen-personalization.md).
 
 The browser prototype is a design artifact. It is not the native app or the Next.js production landing.
