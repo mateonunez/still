@@ -5,7 +5,7 @@ const content: ArticleContent = {
   title: 'A quieter screen. A clear boundary.',
   description:
     'How the Still website and current native development app handle privacy, authentication and local preferences.',
-  eyebrow: 'PRIVACY · OCTOBER 5, 2026',
+  eyebrow: 'PRIVACY · OCTOBER 7, 2026',
   lead: 'Still is being built around local preferences and system-owned authentication.',
   sections: [
     {
@@ -14,7 +14,7 @@ const content: ArticleContent = {
     },
     {
       title: 'On this website.',
-      text: 'This site has no account, email signup, payment form or advertising analytics. Local fonts are served with the site. Hosting on Vercel involves ordinary request processing and hosting logs; visiting a website is not anonymous to its hosting provider.',
+      text: 'The production website uses Vercel Web Analytics to understand aggregate visits, pages and referring sites, with device/browser and approximate location information. Vercel describes this service as cookie-free, using a temporary visitor hash rather than cross-site personal identifiers. Still removes query strings and fragments from page-view URLs before sending them. No custom events, session replay or native-app telemetry are added. Local development and preview deployments do not load this integration. Local fonts are served with the site; hosting also involves ordinary request processing and logs. There is no account, email signup, payment form or advertising tracker.',
     },
     {
       title: 'In the development app.',

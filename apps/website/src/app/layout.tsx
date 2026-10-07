@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import { site } from '@/content/site';
+import { WebsiteAnalytics } from '@/features/analytics/website-analytics';
 import './globals.css';
 
 const display = localFont({
@@ -25,6 +26,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
           Skip to content
         </a>
         {children}
+        {process.env.VERCEL_ENV === 'production' && <WebsiteAnalytics />}
       </body>
     </html>
   );

@@ -1016,3 +1016,59 @@ h3 {
 .download-actions .button-primary {
   margin-top: 0;
 }
+
+.native-gallery,
+.preview-roadmap {
+  padding: 5rem 0;
+}
+.native-gallery h2,
+.preview-roadmap h2 {
+  font-family: var(--font-display), serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
+  line-height: 1.05;
+}
+.gallery-intro,
+.gallery-provenance,
+.native-gallery figcaption p,
+.preview-roadmap li p {
+  color: var(--textSecondary);
+  max-width: 70ch;
+}
+.native-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  margin: 2.5rem 0;
+}
+.native-gallery figure {
+  margin: 0;
+}
+.native-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+}
+.native-gallery figcaption {
+  padding: 1rem 0;
+}
+.native-gallery h3,
+.preview-roadmap h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+.preview-roadmap ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin-top: 2.5rem;
+}
+@media (max-width: 720px) {
+  .native-gallery-grid,
+  .preview-roadmap ol {
+    grid-template-columns: 1fr;
+  }
+}

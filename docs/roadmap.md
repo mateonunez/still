@@ -2,6 +2,14 @@
 
 Updated 2026-10-07. Public MIT source and experimental preview 0.1.0-preview.2; no signed/notarized beta. The Next.js site is live. Search Console setup was reported complete; indexing/rankings are not established.
 
+## Now, next, then
+
+- **Now:** gather actionable preview feedback, clarify the download experience and show the four official native theme appearances. Production-only Vercel Web Analytics measures aggregate page visits; website metrics are not app usage or proof of successful installation.
+- **Next:** prioritize editor movement and resizing, physical desktop/privacy and multi-display acceptance, authentication recovery and reliable plugin setup. Capture actual interaction footage with permitted data. Build a verified compatibility matrix from real installations.
+- **Then:** complete personal Developer ID signing/notarization and clean-install acceptance. Design automatic updates around authenticated release metadata, safe rollback/recovery and clearly separated preview/stable channels before implementation. Community package publishing follows a defined review, permissions and provenance contract.
+
+Success is a reproducible installation or accepted behavior, not traffic or stars. No release date is promised. Use GitHub issues to turn observed feedback into focused work; retain signing as the final beta gate.
+
 | Priority | Next milestone | Acceptance |
 | --- | --- | --- |
 | 1 | Physical desktop privacy | Exact-candidate slow/fast/partial three-finger swipes, Mission Control, multiple displays and recovery; document any exposed frame. Public API restrictions do not prove gesture coverage. |
@@ -44,4 +52,4 @@ Porcelain and Glass are the two official native themes. A contextual editor, wid
 
 ## Refinement and signing review
 
-The latest candidate is `Still-polish`; a hash-verified build manifest removes ambiguous output selection. Theme persistence, visible agent-signal expiry, measured Free alignment, adaptive clock scale and progressive Settings disclosure are implemented. The website now illustrates Porcelain/Glass while imported v1 templates remain Porcelain-only. [Refinement evidence](verification/pre-beta-refinement.md) and the [beta handoff](guides/beta-handoff.md) record automated checks, blocked live reads and exact-candidate physical gates. Signing/notarization and public native distribution have not started.
+The latest candidate is `Still-polish`; a hash-verified build manifest removes ambiguous output selection. Theme persistence, visible agent-signal expiry, measured Free alignment, adaptive clock scale and progressive Settings disclosure are implemented. The website now illustrates Porcelain/Glass while imported v1 templates remain Porcelain-only. [Refinement evidence](verification/pre-beta-refinement.md) and the [beta handoff](guides/beta-handoff.md) record automated checks, blocked live reads and exact-candidate physical gates. Signing/notarization have not started. Public experimental ad-hoc preview distribution is available through GitHub Releases; it remains separate from the beta.

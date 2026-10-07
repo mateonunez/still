@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { release } from '@/content/release';
 import { pageMetadata, site } from '@/content/site';
+import { NativeGallery } from '@/features/home/native-gallery';
 import { Preview } from '@/features/home/preview';
 import { plugins } from '@/features/plugins/catalog';
 
@@ -86,6 +87,7 @@ export default function Home() {
           Read the transcript ↗
         </a>
       </section>
+      <NativeGallery />
       <section className="intro">
         <p className="eyebrow">LESS NOISE. MORE INTENTION.</p>
         <h2>
@@ -184,6 +186,41 @@ export default function Home() {
             <Link href="/changelog">follow development</Link>.
           </p>
         </details>
+      </section>
+      <section className="preview-roadmap" aria-labelledby="preview-roadmap-title">
+        <p className="eyebrow">BUILT IN THE OPEN</p>
+        <h2 id="preview-roadmap-title">A preview with a clear next step.</h2>
+        <ol>
+          <li>
+            <h3>Now · Try and shape it.</h3>
+            <p>Two themes, ten native plugins and a configurable screen. Share focused feedback from your Mac.</p>
+          </li>
+          <li>
+            <h3>Next · Make the everyday reliable.</h3>
+            <p>
+              Refine editor movement, multi-display behavior, authentication and source connections through real
+              testing.
+            </p>
+          </li>
+          <li>
+            <h3>Then · A smoother way to install.</h3>
+            <p>
+              Personal Developer ID signing, notarization and clean-install checks before the beta. Automatic updates
+              follow a defined release contract.
+            </p>
+          </li>
+        </ol>
+        <div className="download-actions">
+          <a className="text-link" href={`${release.repository}/issues`}>
+            Share preview feedback ↗
+          </a>
+          <a className="text-link" href={`${release.repository}/blob/main/docs/roadmap.md`}>
+            Read the roadmap ↗
+          </a>
+          <a className="text-link" href="https://mateonunez.co/blog/still-a-little-space-to-step-away/">
+            Why I built Still ↗
+          </a>
+        </div>
       </section>
       <section className="closing">
         <p className="eyebrow">BUILT FOR THE MOMENTS BETWEEN</p>
