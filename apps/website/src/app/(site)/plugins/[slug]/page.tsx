@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const plugin = plugins.find((item) => item.slug === slug);
   if (!plugin) notFound();
-  return pageMetadata(`${plugin.name} plugin for Still`, plugin.summary, `/plugins/${slug}`);
+  return pageMetadata(`${plugin.name} plugin`, plugin.summary, `/plugins/${slug}`);
 }
 export default async function PluginPage({ params }: Props) {
   const { slug } = await params;

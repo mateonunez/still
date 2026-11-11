@@ -10,8 +10,22 @@ export const site = {
   indexable: process.env.VERCEL_ENV === 'production' || process.env.STILL_INDEXABLE === 'true',
 };
 
+/** The home page showcase video, shared by its markup, share metadata, structured data and sitemap. */
+export const showcase = {
+  title: 'Still — A little space to step away',
+  description:
+    'A 16-second silent showcase of the Still native editor in Porcelain and Glass, light and dark. Native SwiftUI view exports from the development build.',
+  url: '/media/still-showcase.mp4',
+  poster: '/media/editor-glass-dark.png',
+  width: 1280,
+  height: 800,
+  duration: 16,
+  uploadDate: '2026-10-07T09:41:45+02:00',
+};
+
 export function pageMetadata(title: string, description: string, path: string): Metadata {
   const url = `${site.origin}${path}`;
+  const imageAlt = `Still — ${site.tagline} ${site.descriptor}`;
   return {
     title: path === '/' ? { absolute: title } : title,
     description,
@@ -29,10 +43,10 @@ export function pageMetadata(title: string, description: string, path: string): 
           url: '/opengraph-image',
           width: 1200,
           height: 630,
-          alt: `Still — ${site.tagline} ${site.descriptor}`,
+          alt: imageAlt,
         },
       ],
     },
-    twitter: { card: 'summary_large_image', title, description, images: ['/opengraph-image'] },
+    twitter: { card: 'summary_large_image', title, description, images: [{ url: '/opengraph-image', alt: imageAlt }] },
   };
 }

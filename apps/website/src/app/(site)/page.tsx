@@ -1,11 +1,26 @@
+import type { Metadata } from 'next';
+import { getImageProps } from 'next/image';
 import Link from 'next/link';
 import { release } from '@/content/release';
-import { pageMetadata, site } from '@/content/site';
+import { pageMetadata, showcase, site } from '@/content/site';
 import { NativeGallery } from '@/features/home/native-gallery';
 import { Preview } from '@/features/home/preview';
 import { plugins } from '@/features/plugins/catalog';
 
-export const metadata = pageMetadata('Still — A calm screen and keep-awake app for Mac', site.description, '/');
+const base = pageMetadata('Still — A calm screen and keep-awake app for Mac', site.description, '/');
+export const metadata: Metadata = {
+  ...base,
+  openGraph: {
+    ...base.openGraph,
+    videos: [
+      { url: `${site.origin}${showcase.url}`, type: 'video/mp4', width: showcase.width, height: showcase.height },
+    ],
+  },
+};
+// The raw poster is a 2.8 MB PNG; serve it through the image optimizer like the gallery does.
+const {
+  props: { src: poster },
+} = getImageProps({ src: showcase.poster, alt: '', width: showcase.width, height: showcase.height });
 const benefits = [
   [
     '01',
@@ -27,10 +42,39 @@ const benefits = [
 export default function Home() {
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: site.name,
-    url: site.origin,
-    description: site.description,
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        name: site.name,
+        url: site.origin,
+        description: site.description,
+      },
+      {
+        '@type': 'SoftwareApplication',
+        name: site.name,
+        url: site.origin,
+        description: site.description,
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'macOS',
+        softwareVersion: release.version,
+        downloadUrl: release.download,
+        license: `${site.origin}/license`,
+        isAccessibleForFree: true,
+        image: `${site.origin}/opengraph-image`,
+        author: { '@type': 'Person', name: 'Mateo Nunez', url: 'https://mateonunez.co' },
+      },
+      {
+        '@type': 'VideoObject',
+        name: showcase.title,
+        description: showcase.description,
+        contentUrl: `${site.origin}${showcase.url}`,
+        thumbnailUrl: `${site.origin}${showcase.poster}`,
+        uploadDate: showcase.uploadDate,
+        duration: `PT${showcase.duration}S`,
+        width: showcase.width,
+        height: showcase.height,
+      },
+    ],
   };
   return (
     <main id="main">
@@ -74,10 +118,10 @@ export default function Home() {
       <section className="launch-media" aria-labelledby="launch-media-title">
         <p className="eyebrow">THE NATIVE EDITOR, IN VIEW</p>
         <h2 id="launch-media-title">Two themes. Your composition.</h2>
-        <video controls preload="none" poster="/media/editor-glass-dark.png" width="1280" height="800">
-          <source src="/media/still-showcase.mp4" type="video/mp4" />
+        <video controls preload="none" poster={poster} width={showcase.width} height={showcase.height}>
+          <source src={showcase.url} type="video/mp4" />
           <track kind="captions" src="/media/still-showcase.vtt" srcLang="en" label="English" default />
-          <a href="/media/still-showcase.mp4">Download the visual showcase</a>
+          <a href={showcase.url}>Download the visual showcase</a>
         </video>
         <p>
           Native SwiftUI view exports from the development build. A visual showcase, not a recording of gestures,
@@ -217,7 +261,7 @@ export default function Home() {
           <a className="text-link" href={`${release.repository}/blob/main/docs/roadmap.md`}>
             Read the roadmap ↗
           </a>
-          <a className="text-link" href="https://mateonunez.co/blog/still-a-little-space-to-step-away/">
+          <a className="text-link" href="https://mateonunez.co/blog/still-a-little-space-to-step-away">
             Why I built Still ↗
           </a>
         </div>
