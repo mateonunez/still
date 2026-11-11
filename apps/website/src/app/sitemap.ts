@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { site } from '@/content/site';
+import { showcase, site } from '@/content/site';
 import { plugins } from '@/features/plugins/catalog';
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -16,22 +16,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...plugins.map((plugin) => `/plugins/${plugin.slug}`),
   ].map((path) => ({
     url: `${site.origin}${path}`,
-    lastModified: new Date(
-      [
-        '/',
-        '/how-it-works',
-        '/download',
-        '/start',
-        '/support',
-        '/privacy',
-        '/plugins',
-        '/license',
-        '/changelog',
-        '/developers',
-        '/plugins/agents',
-      ].includes(path)
-        ? '2026-10-07T00:00:00Z'
-        : '2026-10-05T00:00:00Z',
-    ),
+    // No lastModified: deployments carry no Git history, and a hand-kept date goes stale silently.
+    ...(path === '/'
+      ? {
+          videos: [
+            {
+              title: showcase.title,
+              description: showcase.description,
+              thumbnail_loc: `${site.origin}${showcase.poster}`,
+              content_loc: `${site.origin}${showcase.url}`,
+              duration: showcase.duration,
+              publication_date: showcase.uploadDate,
+            },
+          ],
+        }
+      : {}),
   }));
 }
