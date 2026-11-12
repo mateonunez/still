@@ -28,6 +28,10 @@ Pushes to main should create production builds after the Git integration is veri
 
 Search Console setup was reported complete on 2026-10-04. Inspect sitemap processing and page indexing in Search Console; production HTTP checks alone do not prove search inclusion. Indexing and ranking can take time and are not established by a passing build. Experimental ad-hoc preview downloads are public through GitHub Releases. Developer ID/notarized distribution, clean-Mac installation and the support matrix remain pending.
 
+## Dependency maintenance
+
+For a targeted Next.js security update, use `pnpm --filter @still/website update next@<reviewed-version>` and commit the lockfile. Check both production and full dependency audits, then run the existing lint/type/contrast/plugin/build and local HTTP verifiers. Keep native releases, deployment promotion and unrelated framework upgrades separate. See [the November 2026 verification](../verification/website-dependency-security.md) for one tested update and its remaining delivery boundary.
+
 ## Catalog and SDK build inputs
 
 The website prebuild generates public metadata from `plugins/mateonunez`, copies schemas from `schemas` and starters from `examples/plugins`. Include these canonical sources in Vercel uploads; generated public copies alone do not satisfy prebuild. `node scripts/verify-site-server.mjs` checks an owned local production server. Production requires `node scripts/verify-website.mjs https://meet-still.app --indexable`; omit the indexable flag for previews.
