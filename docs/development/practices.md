@@ -62,6 +62,8 @@ Compose typed metadata per route; canonical origin is meet-still.app. Keep a sin
 
 Vercel root apps/website needs sourceFilesOutsideRootDirectory for canonical tokens and the prebuild generator. CLI uploads use .vercelignore to exclude env files, native builds, binaries and unnecessary private artifacts. Read credentials through CLI authentication, never print tokens or copy local env files. Validate production via scripts/verify-website.mjs, then inspect actual mobile/desktop and keyboard behavior. CI success, Vercel READY, domain TLS, correct HTML and real search indexing are separate evidence levels.
 
+Website dependency updates should remain scoped to the affected workspace and supported transitive resolutions. Run both `pnpm audit --prod --json` and `pnpm audit --json`, retain the existing check/type/brand/plugin/build gates, and run `node scripts/verify-site-server.mjs`. An empty registry audit is not a complete security assessment. Preserve preview noindex and separately verify the canonical production deployment after an approved merge.
+
 ## AppKit regression learned in Step 1A
 
 Set `NSPanel.level` after configuring `isFloatingPanel`: the original order reset the level to `.normal`. Verify the getter in the live app, not only the assignment in source. The runtime probe checks panel count, frames, visibility flags, actual window level, font registration and synthetic subprocess progress; these remain structural evidence rather than a desktop coverage test.
